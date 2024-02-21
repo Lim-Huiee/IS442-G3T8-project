@@ -1,4 +1,5 @@
 import React from "react";
+import ControlledCarousel from "./section-components/carousel";
 
 export const Header = (props) => {
   return (
@@ -7,6 +8,7 @@ export const Header = (props) => {
         <div className="overlay">
           <div className="container">
             <div className="row">
+              <ControlledCarousel></ControlledCarousel>
               <div className="col-md-8 col-md-offset-2 intro-text">
                 <h1>
                   {props.data ? props.data.title : "Loading"}
@@ -17,7 +19,7 @@ export const Header = (props) => {
                   href="#features"
                   className="btn btn-custom btn-lg page-scroll"
                 >
-                  Learn More
+                  View events
                 </a>{" "}
               </div>
             </div>
