@@ -30,14 +30,16 @@ export const Navigation = (props) => {
                 </a> */}
               </li>
               <li class="nav-item">
-                <a href="#about" className="page-scroll">
+              <Link to="/about"> About </Link>
+                {/* <a href="#about" className="page-scroll">
                   About
-                </a>
+                </a> */}
               </li>
               <li class="nav-item">
-                <a href="#portfolio" className="page-scroll">
+                <Link to="/faqs"> FAQs </Link>
+                {/* <a href="#portfolio" className="page-scroll">
                   Gallery
-                </a>
+                </a> */}
               </li>
               <li class="nav-item">
                 <Link to="/contactPage"> Contact </Link>
