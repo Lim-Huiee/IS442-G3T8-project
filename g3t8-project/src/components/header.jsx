@@ -6,7 +6,7 @@ export const Header = (props) => {
     <header id="header">
       <div className="intro">
             <div className="row">
-              <div className="col-12">
+              <div className="col-12 p-0">
                 <ControlledCarousel data={props.data ? props.data : "Loading"}></ControlledCarousel>
               </div>
               {/* move this button somewhere else later */}

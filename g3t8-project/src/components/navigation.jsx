@@ -13,7 +13,9 @@ export const Navigation = (props) => {
           >
             <span class="navbar-toggler-icon"></span>
           </button>
-          <Link to="/" className="navbar-brand"> Ticketmistress </Link>
+          <Link to="/"> 
+            <img src="img/ticketmistress-logo.jpg"></img>
+          </Link>
           {" "}
         </div>
 
