@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 export const Login = ({handleAction}) => {
 
@@ -33,12 +33,9 @@ export const Login = ({handleAction}) => {
       error.passwordError = "Password should not be empty"
     }
 
-    if (error.emailError && error.passwordError) {
-      setErrors(error);
-    } else {
-      //proceed to send to backend
-    }
+    setErrors(error);
 
+    //if no error, proceed to send to backend
   }
 
   return (
