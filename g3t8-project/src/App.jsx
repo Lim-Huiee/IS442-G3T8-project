@@ -10,6 +10,7 @@ import "./App.css";
 import { Home } from "./components/views/homePage";
 import { EventsViewPage } from "./components/views/eventsViewPage";
 import { ContactPage } from "./components/views/contactPage";
+import {LoginRegisterPage} from "./components/views/loginRegisterPage";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -25,6 +26,7 @@ const App = () => {
             <Route exact path="/" element={ <Home />} />
             <Route path="/eventsView" element={ <EventsViewPage />} />
             <Route path="/contactPage" element={ <ContactPage />} />
+            <Route path="/loginRegisterPage" element={ <LoginRegisterPage />} />
           </Routes>
       </Router>
     </div>

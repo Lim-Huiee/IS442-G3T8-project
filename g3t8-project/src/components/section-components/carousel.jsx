@@ -65,7 +65,7 @@ function ControlledCarousel(props) {
                 }
             </div>
             <div class="carousel-caption d-none d-md-block">            
-                <a href="#features" className="btn btn-custom btn-lg page-scroll ">View events</a>
+                <a href="/eventsView" className="btn btn-custom btn-lg page-scroll ">View events</a>
             </div>
             <a className="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>

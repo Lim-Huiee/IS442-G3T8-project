@@ -49,6 +49,12 @@ export const Navigation = (props) => {
                   {/* Contact */}
                 {/* </a> */}
               </li>
+              <li class="nav-item">
+                <Link to="/loginRegisterPage"> Login/Register </Link>
+                {/* <a href="#contact" className="page-scroll"> */}
+                  {/* Contact */}
+                {/* </a> */}
+              </li>
             </ul>
           </div>
         </div>
