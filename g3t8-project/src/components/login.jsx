@@ -36,6 +36,10 @@ export const Login = ({handleAction}) => {
     setErrors(error);
 
     //if no error, proceed to send to backend
+    if (Object.keys(error).length === 0) {
+      //proceed to send to backend
+      console.log("backend");
+    }
   }
 
   return (
