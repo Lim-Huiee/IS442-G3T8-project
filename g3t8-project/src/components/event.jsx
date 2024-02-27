@@ -1,15 +1,16 @@
-import { Image } from "./image";
+import { EventListing } from "./eventListing";
 import React from "react";
 
-export const Gallery = (props) => {
+export const Event = (props) => {
   return (
     <div id="portfolio" className="text-center">
       <div className="container">
         <div className="section-title">
-          <h2>Gallery</h2>
+          <h2>Top picks</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
+            <b>
+              Experience diverse, top-tier events for unforgettable moments
+            </b>
           </p>
         </div>
         <div className="row">
@@ -18,13 +19,8 @@ export const Gallery = (props) => {
               ? props.data.map((d, i) => (
                   <div
                     key={`${d.title}-${i}`}
-                    className="col-sm-6 col-md-4 col-lg-4"
-                  >
-                    <Image
-                      title={d.title}
-                      largeImage={d.largeImage}
-                      smallImage={d.smallImage}
-                    />
+                    className="col-xs-12 col-sm-6 col-md-4">
+                    <EventListing id={i} title={d.title} date={d.date} image={d.image}></EventListing>
                   </div>
                 ))
               : "Loading..."}

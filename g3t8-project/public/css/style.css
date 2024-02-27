@@ -355,7 +355,8 @@ header .intro-text {
   padding: 100px 0;
 }
 .portfolio-item {
-  margin: 1px -15px 0 -14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding: 0;
 }
 .portfolio-item .hover-bg {
@@ -373,7 +374,8 @@ header .intro-text {
     rgba(99, 114, 255, 0.8) 0%,
     rgba(92, 169, 251, 0.8) 100%
   );
-  padding: 30% 0 0;
+  padding: 10% 0 10%;
+  vertical-align: middle;
   height: 100%;
   width: 100%;
   opacity: 0;

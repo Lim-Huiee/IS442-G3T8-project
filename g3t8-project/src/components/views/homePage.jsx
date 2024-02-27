@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigation } from "./../navigation";
 import { Header } from "./../header";
 import { About } from "./../about";
-import { Gallery } from "./../gallery";
+import { Event } from "../event";
 import { Testimonials } from "./../testimonials";
 import { Team } from "./../Team";
 import JsonData from "./../../data/data.json";
@@ -22,8 +22,8 @@ export const Home = () => {
             <div className="row">
                 <div className="container-fluid">
                     <Header data={landingPageData.Header} />
+                    <Event data={landingPageData.TopPicks} />
                     <About data={landingPageData.About} />
-                    <Gallery data={landingPageData.Gallery} />
                     <Testimonials data={landingPageData.Testimonials} />
                     <Team data={landingPageData.Team} />
                 </div>
