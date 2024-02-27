@@ -23,9 +23,11 @@ export const LoginRegisterPage = (props) => {
   }
 
   return (
-    <div style={{backgroundImage: "url(img/LoginRegisterBg.jpg)", height:"100%"}}>
+    <div style={{backgroundImage: "url(img/LoginRegisterBg.jpg)", height:"100%", backgroundRepeat: "no-repeat", backgroundSize:"cover", backgroundPosition: "center"}}>
       <Navigation/>
-      {renderComponent()}
+      <div style={{marginTop: "30px"}}>
+        {renderComponent()}
+      </div>
     </div>
   );
 };
