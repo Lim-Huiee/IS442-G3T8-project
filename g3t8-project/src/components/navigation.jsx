@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 export const Navigation = (props) => {
   return (
-    <nav id="menu" className="navbar navbar-default navbar-sticky-top navbar-expand-md">
+    <nav id="menu" className="navbar navbar-default navbar-sticky-top navbar-expand-md my-0">
         <div className="navbar-header">
           <button
             type="button"

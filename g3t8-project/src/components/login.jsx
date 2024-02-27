@@ -38,6 +38,7 @@ export const Login = ({handleAction}) => {
     //if no error, proceed to send to backend
     if (Object.keys(error).length === 0) {
       //proceed to send to backend
+      //expects a JWT token
       console.log("backend");
     }
   }
