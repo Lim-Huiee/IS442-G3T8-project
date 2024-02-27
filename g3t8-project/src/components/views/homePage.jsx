@@ -5,6 +5,7 @@ import { About } from "./../about";
 import { Event } from "../event";
 import { Testimonials } from "./../testimonials";
 import { Team } from "./../Team";
+import { Footer } from "../footer";
 import JsonData from "./../../data/data.json";
 import "./../../App.css";
 
@@ -20,13 +21,14 @@ export const Home = () => {
                 <Navigation />
             </div>
             <div className="row">
-                <div className="container-fluid">
                     <Header data={landingPageData.Header} />
                     <Event data={landingPageData.TopPicks} />
+                    <Testimonials data={landingPageData.Testimonials}/>
                     <About data={landingPageData.About} />
-                    <Testimonials data={landingPageData.Testimonials} />
                     <Team data={landingPageData.Team} />
-                </div>
+            </div>
+            <div className="row">
+                <Footer></Footer>
             </div>
         </div>
     );

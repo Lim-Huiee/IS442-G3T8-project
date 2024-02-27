@@ -3,9 +3,9 @@ import React from "react";
 export const Testimonials = (props) => {
   return (
     <div id="testimonials">
-      <div className="container">
+      <div className="container p-0">
         <div className="section-title text-center">
-          <h2>What our clients say</h2>
+          <h2>Review Hub</h2>
         </div>
         <div className="row">
           {props.data
