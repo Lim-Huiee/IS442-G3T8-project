@@ -10,9 +10,6 @@ export const Footer = (props) => {
                     <Link to="/eventsView"> All Events</Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/about"> About </Link>
-                </li>
-                <li className="nav-item">
                     <Link to="/faqs"> FAQs </Link>
                 </li>
                 <li className="nav-item">
