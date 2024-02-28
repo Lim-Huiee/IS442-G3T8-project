@@ -15,8 +15,10 @@ export const ContactPage = () => {
     return (
         <div>
             <Navigation />
-            <PageTitle pageTitle={"Get In Touch with Us"} />
-            <Contact data={landingPageData.Contact} />
+            <div style={{minHeight:"100vh"}}>
+                <PageTitle pageTitle={"Get In Touch with Us"} />
+                <Contact data={landingPageData.Contact} />
+            </div>
             <Footer />
         </div>
     )
