@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigation } from "./../navigation";
 import { Header } from "./../header";
 import { About } from "./../about";
-import { Event } from "../event";
+import { TopPicks } from "../topPicks";
 import { Testimonials } from "./../testimonials";
 import { Team } from "./../Team";
 import { Footer } from "../footer";
@@ -22,7 +22,7 @@ export const Home = () => {
             </div>
             <div className="row">
                     <Header data={landingPageData.Header} />
-                    <Event data={landingPageData.TopPicks} />
+                    <TopPicks data={landingPageData.TopPicks} />
                     <Testimonials data={landingPageData.Testimonials}/>
                     <About data={landingPageData.About} />
                     <Team data={landingPageData.Team} />

@@ -1,7 +1,7 @@
 import { EventListing } from "./eventListing";
 import React from "react";
 
-export const Event = (props) => {
+export const TopPicks = (props) => {
   return (
     <div id="portfolio" className="text-center">
       <div className="container">
