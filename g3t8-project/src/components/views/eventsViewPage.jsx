@@ -15,9 +15,11 @@ export const EventsViewPage = () => {
 
     return (
         <div>
-            <Navigation />
-            <PageTitle pageTitle={"All Events"} />
-            <Services data={landingPageData.Services} />
+            <div style={{minHeight:"100vh"}}>
+                <Navigation />
+                <PageTitle pageTitle={"Events"}  pageView={"All Events"} filterShow={"true"}/>
+                <Services data={landingPageData.TopPicks} />
+            </div>
             <Footer></Footer>
         </div>
     )

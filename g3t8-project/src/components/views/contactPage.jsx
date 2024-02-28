@@ -16,7 +16,7 @@ export const ContactPage = () => {
         <div>
             <Navigation />
             <div style={{minHeight:"100vh"}}>
-                <PageTitle pageTitle={"Get In Touch with Us"} />
+                <PageTitle pageTitle={"Get In Touch with Us"} pageView={""} filterShow={"false"}/>
                 <Contact data={landingPageData.Contact} />
             </div>
             <Footer />
