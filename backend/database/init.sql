@@ -11,7 +11,7 @@ CREATE TABLE `USER` (
     `amount_avail` DECIMAL(10, 2) NOT NULL DEFAULT 1000
 );
 
-CREATE TABLE `ORDER` (
+CREATE TABLE `ORDERS` (
     `order_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
     `status` ENUM('pending', 'processing', 'delivered', 'cancelled pending refund', 'refunded') NOT NULL DEFAULT 'pending',
@@ -30,11 +30,11 @@ CREATE TABLE `EVENT` (
 CREATE TABLE `TICKET` (
     `ticket_id` INT AUTO_INCREMENT PRIMARY KEY,
     `event_id` INT NOT NULL,
-    `order_id` INT NOT NULL
+    `order_id` INT NOT NULL,
     `price` DECIMAL(10, 2) NOT NULL DEFAULT 0,
     `cancellation_fee` DECIMAL(10, 2) NOT NULL DEFAULT 0,
-    CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`)
-    CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDER(`order_id`)
+    CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`),
+    CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`)
 );
 
 -- Dummy data for the USER table
@@ -46,15 +46,15 @@ INSERT INTO `USER` (`email`, `name`, `password`, `role`, `amount_avail`) VALUES
 ('to@tm.com', 'ticket man', 'password5', 'ticketing officer', 0);
 
 -- Dummy data for the ORDER table
-INSERT INTO `ORDER` (`user_id`, `total_amount`, `status`) VALUES
-(1, 100, 'delivered'),
-(2, 200, 'pending'),
-(3, 300, 'pending'),
-(2, 400, 'refunded'),
-(3, 500, 'delivered');
+INSERT INTO `ORDERS` (`user_id`, `status`) VALUES
+(1, 'delivered'),
+(2, 'pending'),
+(3, 'pending'),
+(2, 'refunded'),
+(3, 'delivered');
 
 -- Dummy data for the EVENT table
-INSERT INTO `EVENT` (`event_name`, `venue`, `datetime`, `ticket_prices`, `num_tickets_avail`, `event_details`) VALUES
+INSERT INTO `EVENT` (`event_name`, `venue`, `datetime`, `num_tickets_avail`, `event_details`) VALUES
 ('Kyuhyun Asia', 'Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 'A Kyuhyun concert.'),
 ('Ed Sheeran', 'National Stadium', '2024-02-16 20:00:00', 500, 'Doing Math with JJ Lin.'),
 ('StayC Teenfresh', 'The Star Theatre', '2024-02-16 20:00:00', 300, 'A StayC concert.'),
