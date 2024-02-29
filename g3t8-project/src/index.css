@@ -23,19 +23,23 @@ code {
   justify-content: space-between;
   cursor: pointer;
   background-color: #e1e9f0;
+  transition: background-color 0.7s ease;
 }
 
 .accordion-title:hover {
   background-color: #c8cdcf;
+  transition: background-color 0.7s ease;
 }
 
 .accordion-title,
 .accordion-content {
   padding: 2rem;
+  transition: background-color 0.7s ease;
 }
 
 .accordion-content {
   background-color: #f2f6f8;
+  transition: background-color 0.7s ease; /* Adjust the duration and easing function for a slower transition */
 }
 
 @media screen and (max-width: 700px) {
@@ -45,5 +49,6 @@ code {
 
   .accordion {
     width: 90%;
+    transition: width 10s ease; /* Adjust the duration and easing function for a smoother width transition */
   }
 }
