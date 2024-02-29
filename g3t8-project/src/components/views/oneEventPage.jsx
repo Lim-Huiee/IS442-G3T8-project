@@ -1,0 +1,30 @@
+import React, { useState, useEffect } from "react";
+import { Navigation } from "../navigation";
+import { EventBanner } from "../section-components/eventBanner";
+import { InfoBlock } from "../section-components/infoBlock";
+import { useLocation} from 'react-router-dom';
+import { Footer } from "../footer";
+import JsonData from "../../data/data.json";
+import "./../../App.css";
+
+export const OneEventPage = () => {
+
+  const location = useLocation()
+  const data = location.state;
+
+  const [landingPageData, setLandingPageData] = useState({});
+  useEffect(() => {
+      setLandingPageData(JsonData);
+  }, []);
+
+  return (
+    <div>
+        <Navigation/>
+        <EventBanner pageTitle={data.title} date={data.date} venue="National Stadium, Singapore" image={data.image} price="$128"/>
+        <InfoBlock bgColor={"#FFFFFF"} sectionTitle="Ticket policy" listedRules={landingPageData.TicketPolicy} />
+        <InfoBlock bgColor={"#f6f6f6"} sectionTitle="Admission Policy" listedRules={landingPageData.AdmissionPolicy} />
+        <InfoBlock bgColor={"#FFFFFF"} sectionTitle="Cancellation & Refund" listedRules={landingPageData.CancellationPolicy} />
+        <Footer/>
+    </div>
+  );
+};

@@ -4,7 +4,6 @@ export const Register = ({handleAction}) => {
 
   const [values, setValues] = useState({
     name: '',
-    address: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -39,9 +38,6 @@ export const Register = ({handleAction}) => {
     //check if name and address is empty
     if (values.name === "") {
         error.nameError = "Name should not be empty"
-    }
-    if (values.address === "") {
-        error.addressError = "Address should not be empty"
     }
     
     if (values.email === "") {
@@ -100,17 +96,6 @@ export const Register = ({handleAction}) => {
                           onChange={handleInput}>
                         </input>
                         {errors.emailError && <span className="text-danger">{errors.emailError}</span>}
-                    </div>
-                    <br/>
-                    <div className="input-group">
-                        <input 
-                          className="form-control" 
-                          name="address"
-                          value={values.address} 
-                          placeholder={"Enter your address"} 
-                          onChange={handleInput}>
-                        </input>
-                        {errors.addressError && <span className="text-danger">{errors.addressError}</span>}
                     </div>
                     <br/>
                     <div className="inupt-group">
