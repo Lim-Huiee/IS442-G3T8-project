@@ -11,3 +11,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.accordion {
+  max-width: 1000px;
+  margin: 2rem auto;
+}
+
+.accordion-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+  background-color: #e1e9f0;
+}
+
+.accordion-title:hover {
+  background-color: #c8cdcf;
+}
+
+.accordion-title,
+.accordion-content {
+  padding: 2rem;
+}
+
+.accordion-content {
+  background-color: #f2f6f8;
+}
+
+@media screen and (max-width: 700px) {
+  body {
+    font-size: 18px;
+  }
+
+  .accordion {
+    width: 90%;
+  }
+}
