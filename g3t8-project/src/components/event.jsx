@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { EventListing } from "./eventListing";
 
-export const Services = ({data, handleView}) => {
+export const Event = ({data, handleView}) => {
   
   const [values, setValues] = useState({
     dropdownFilter: '',

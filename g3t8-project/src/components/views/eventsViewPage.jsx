@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigation } from "../navigation";
-import { Services } from "../services";
+import { Event } from "../event";
 import { PageTitle } from "../section-components/pageTitle";
 import { Footer } from "../footer";
 import JsonData from "../../data/data.json";
@@ -27,7 +27,7 @@ export const EventsViewPage = () => {
             <div style={{minHeight:"100vh"}}>
                 <Navigation />
                 <PageTitle pageTitle={"Events"}  pageView={view} filterShow={"true"}/>
-                <Services data={landingPageData.TopPicks} handleView={handleView} />
+                <Event data={landingPageData.TopPicks} handleView={handleView} />
             </div>
             <Footer></Footer>
         </div>
