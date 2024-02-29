@@ -11,7 +11,6 @@ export const LoginRegisterPage = (props) => {
 
   const handleAction = (action) => {
     setAction(action);
-    console.log(action);
   }
 
   const renderComponent = () => {

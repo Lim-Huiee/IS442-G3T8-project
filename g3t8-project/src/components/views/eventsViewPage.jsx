@@ -9,16 +9,25 @@ import "./../../App.css";
 
 export const EventsViewPage = () => {
     const [landingPageData, setLandingPageData] = useState({});
+    
     useEffect(() => {
         setLandingPageData(JsonData);
     }, []);
+
+    const [view, setView] = useState("All Events");
+
+    const handleView = (view) => {
+        console.log(view);
+        setView(view);
+    }
+    //pass dropdown filter to parent and call backend, pass in data as per dropdown filtered data. 
 
     return (
         <div>
             <div style={{minHeight:"100vh"}}>
                 <Navigation />
-                <PageTitle pageTitle={"Events"}  pageView={"All Events"} filterShow={"true"}/>
-                <Services data={landingPageData.TopPicks} />
+                <PageTitle pageTitle={"Events"}  pageView={view} filterShow={"true"}/>
+                <Services data={landingPageData.TopPicks} handleView={handleView} />
             </div>
             <Footer></Footer>
         </div>

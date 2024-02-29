@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { EventListing } from "./eventListing";
 
-export const Services = (props) => {
+export const Services = ({data, handleView}) => {
   
   const [values, setValues] = useState({
     dropdownFilter: '',
@@ -17,18 +17,8 @@ export const Services = (props) => {
         searchBar: event.target.value
       }
     ))
-    //display event that fits the date... backend? 
   }
   
-  // const filterEvent = props.data.filter((el) => {
-  //   if (values.searchBar.length > 0) {
-  //       let searchInputValue = values.searchBar.toLowerCase();
-  //       return el.title.toLowerCase().match(searchInputValue);
-  //   } else {
-  //     return el;
-  //   }
-  // }) 
-
   return (
       <div className="container">
         <div className="row">
@@ -46,10 +36,12 @@ export const Services = (props) => {
                 Filter view
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item value="All Events">All Events</Dropdown.Item>
-                <Dropdown.Item value="1 month">Events in a month</Dropdown.Item>
-                <Dropdown.Item value="3 month">Events in 3 months</Dropdown.Item>
-                <Dropdown.Item value="6 month">Events in 6 months</Dropdown.Item>
+                <Dropdown.Item onClick={()=> handleView("All Events")}>All Events</Dropdown.Item>
+                <Dropdown.Item onClick={()=> handleView("Events in a month")}>Events in a month</Dropdown.Item>
+                <Dropdown.Item onClick={()=> handleView("Events in 3 months")}>Events in 3 months</Dropdown.Item>
+                <Dropdown.Item onClick={()=> handleView("Events in 6 months")}>Events in 6 months</Dropdown.Item>
+                <Dropdown.Item onClick={()=> handleView("Future events (available after 6 months)")}>Future events (available after 6 months)</Dropdown.Item>
+                <Dropdown.Item onClick={()=> handleView("Past events (happening in 24 hours)")}>Past events (happening in 24 hours)</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </div>
@@ -57,8 +49,15 @@ export const Services = (props) => {
 
         <div className="row mt-5">
           <div className="portfolio-items">
-            {props.data
-              ? props.data.map((d, i) => (
+            {data
+              ? data.filter((el) => {
+                if (values.searchBar.length > 0) {
+                  let searchInputValue = values.searchBar.toLowerCase();
+                  return el.title.toLowerCase().match(searchInputValue);
+                } else {
+                  return el;
+                }
+              }).map((d, i) => (
                   <div
                     key={`${d.title}-${i}`}
                     className="col-xs-12 col-sm-6 col-md-4">
