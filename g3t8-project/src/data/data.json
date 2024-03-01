@@ -25,22 +25,26 @@
   "TopPicks": [
     {
       "title": "Ed Sheeren +-=÷x tour",
-      "date": "16 Feb 2024",
+      "date": ["16 Feb 2024"],
+      "venue": "National Stadium, Singapore",
       "image": "img/carousel/carousel1.jpg"
     },
     {
       "title": "2024 Kyuhyun Asia Tour",
-      "date": "30 Mar 2024",
+      "date": ["30 Mar 2024"],
+      "venue": "National Stadium, Singapore",
       "image": "img/carousel/carousel2.jpg"
     },
     {
       "title": "StayC 1st World Tour | TenFresh",
-      "date": "16 Feb 2024",
+      "date": ["16 Feb 2024"],
+      "venue": "National Indoor Stadium, Singapore",
       "image": "img/carousel/carousel3.jpg"
     },
     {
       "title": "Disney on Ice",
-      "date": "9 - 17 Mar 2024",
+      "date": ["9 Mar 2024", "10 Mar 2024", "11 Mar 2024", "12 Mar 2024"],
+      "venue": "National Stadium, Singapore",
       "image": "img/carousel/carousel4.jpg"
     }
   ],

@@ -17,7 +17,6 @@ export const EventsViewPage = () => {
     const [view, setView] = useState("All Events");
 
     const handleView = (view) => {
-        console.log(view);
         setView(view);
     }
     //pass dropdown filter to parent and call backend, pass in data as per dropdown filtered data. 

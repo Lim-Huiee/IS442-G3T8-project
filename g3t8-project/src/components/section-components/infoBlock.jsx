@@ -13,7 +13,7 @@ export const InfoBlock = ({sectionTitle, listedRules, bgColor}) => {
             <ol>
                 {listedRules
                 ? listedRules.map((d, i) => (
-                    <li>{d}</li>
+                    <li key={i}>{d}</li>
                     ))
                 : "Loading..."}
             </ol>
