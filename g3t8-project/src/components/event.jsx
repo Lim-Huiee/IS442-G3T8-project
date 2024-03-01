@@ -61,7 +61,7 @@ export const Event = ({data, handleView}) => {
                   <div
                     key={`${d.title}-${i}`}
                     className="col-xs-12 col-sm-6 col-md-4">
-                    <EventListing id={i} title={d.title} date={d.date} image={d.image} venue={d.venue}></EventListing>
+                    <EventListing data={d}></EventListing>
                   </div>
                 ))
               : "Loading..."}

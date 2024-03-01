@@ -20,7 +20,7 @@ export const OneEventPage = () => {
   return (
     <div>
         <Navigation/>
-        <EventBanner pageTitle={data.title} date={data.date} venue={data.venue} image={data.image} price="$128"/>        
+        <EventBanner data={data}/>        
         <InfoBlock bgColor={"#FFFFFF"} sectionTitle="Ticket policy" listedRules={landingPageData.TicketPolicy} />
         <InfoBlock bgColor={"#f6f6f6"} sectionTitle="Admission Policy" listedRules={landingPageData.AdmissionPolicy} />
         <InfoBlock bgColor={"#FFFFFF"} sectionTitle="Cancellation & Refund" listedRules={landingPageData.CancellationPolicy} />
