@@ -54,7 +54,7 @@ export const FaqPage = () => {
                 <PageTitle pageTitle={"FAQ"} />
                 {data.map(({ category, items }) => (
                     <div key={category}>
-                        <h3 className="text-center">{category}</h3>
+                        <h2 className="text-center pt-5">{category}</h2>
                         <div className="accordion">
                             {items.map(({ qn, ans }) => (
                                 <Accordion qn={qn} ans={ans} />
@@ -63,7 +63,7 @@ export const FaqPage = () => {
                     </div>
                 ))}
                 <div >
-                    <h3 className="text-center">FOR MORE ENQUIRIES</h3>
+                    <h3 className="text-center pt-5">FOR MORE ENQUIRIES</h3>
                     <button className="btn btn-custom btn-lg align-center" style={{ display: "block", margin: "20px auto 20px auto" }} onClick={() => window.location.href = "/contactPage"}>Click Here</button>
                 </div>
             </div>
