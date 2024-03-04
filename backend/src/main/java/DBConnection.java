@@ -68,7 +68,7 @@ public class DBConnection {
 
     public static void main(String[] args) {
 
-        /// ==================== Testing of User class =======================================
+        /// ==================== Testing of User/TicketOfficer class =======================================
         try {
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
@@ -82,7 +82,8 @@ public class DBConnection {
                 System.out.println(User.login("user 1","password1"));        //login success
                 System.out.println(User.login("user 1","password2"));            // login fail, returns null because login() returns object
 
-                System.out.println(User.login("ticket man","password5"));     // TICKET OFFICER LOGIN
+                System.out.println(User.login("ticket man","password5"));     // ticket officer  login, returns ticket officer object
+                System.out.println(User.login("event man","password4"));     // event manager login, returns event manager object
 
                 System.out.println(User.register("Dehou","pwpwpw","Dehou@gmail.com"));  // Register successfully if u run the first time. Else, username exists
                 System.out.println(User.register("Dehouhehexd","asd","haha"));           // invalid email

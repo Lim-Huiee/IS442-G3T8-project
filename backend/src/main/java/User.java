@@ -108,6 +108,8 @@ public class User {
                     // If the role is "ticketing officer", return a TicketOfficer object
                     // Additional attributes specific to TicketOfficer may need to be retrieved
                     return new TicketOfficer(userID, userName, userPassword, userEmail);
+                } else if ("event manager".equals(role)) {
+                    return new EventManager(userID, userName, userPassword, userEmail);
                 } else {
                     // Otherwise, return a regular User object
                     return new User(userID, userName, userPassword, userEmail);
@@ -155,9 +157,8 @@ public class User {
                 if (!isValidEmail(email)) {
                     return "Invalid email format. Please enter a valid email address.";
                 }
-
                 // Username is available, proceed with registration
-                // Insert the new user into the database
+                // Insert the new user into the database, init.sql already specified default amount to be 1000
                 String insertQuery = "INSERT INTO user (name, password, email) VALUES (?, ?, ?)";
                 insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
                 insertStatement.setString(1, name);
