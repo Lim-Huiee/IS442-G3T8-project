@@ -81,7 +81,7 @@ public class DBConnection {
                 System.out.println(user.getPassword());  // prints password1
                 System.out.println(user.getEmail());    // prints user1@abc
 
-                customer = User.login("user 1","password1");        //customer login, returns customer object
+                customer = User.login("user 2","password2");        //customer login, returns object
                 System.out.println(User.login("user 1","password2"));            // login fail, returns null because login() returns object
 
                 System.out.println(User.login("ticket man","password5"));     // ticket officer  login, returns user object
@@ -93,7 +93,7 @@ public class DBConnection {
 
                 if(customer instanceof Customer){
                     Customer c = (Customer) customer;
-                    System.out.println(c.getAmountAvail());                         // class cast, testing getAmountAvail() for customer 
+                    System.out.println(c.getAmountAvail());          // class cast, testing getAmountAvail() for customer 
             }
                 
             } else {

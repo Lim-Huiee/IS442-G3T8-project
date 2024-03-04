@@ -4,7 +4,7 @@ USE TICKETMISTRESS;
 
 CREATE TABLE `USER` (
     `user_id` INT AUTO_INCREMENT PRIMARY KEY,
-    `email` VARCHAR(255) NOT NULL UNIQUE,
+    `email` VARCHAR(200) NOT NULL UNIQUE,
     `name` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `role` ENUM('customer', 'event manager', 'ticketing officer') NOT NULL DEFAULT 'customer',
@@ -20,6 +20,7 @@ CREATE TABLE `ORDERS` (
 
 CREATE TABLE `EVENT` (
     `event_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `event_type` VARCHAR(255) NOT NULL,
     `event_name` VARCHAR(255) NOT NULL,
     `venue` VARCHAR(255) NOT NULL,
     `datetime` DATETIME NOT NULL,
@@ -54,11 +55,11 @@ INSERT INTO `ORDERS` (`user_id`, `status`) VALUES
 (3, 'delivered');
 
 -- Dummy data for the EVENT table
-INSERT INTO `EVENT` (`event_name`, `venue`, `datetime`, `num_tickets_avail`, `event_details`) VALUES
-('Kyuhyun Asia', 'Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 'A Kyuhyun concert.'),
-('Ed Sheeran', 'National Stadium', '2024-02-16 20:00:00', 500, 'Doing Math with JJ Lin.'),
-('StayC Teenfresh', 'The Star Theatre', '2024-02-16 20:00:00', 300, 'A StayC concert.'),
-('Disney On Ice', 'Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 'ice ice baby.');
+INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `num_tickets_avail`, `event_details`) VALUES
+('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 'A Kyuhyun concert.'),
+('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 'Doing Math with JJ Lin.'),
+('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 'A StayC concert.'),
+('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 'ice ice baby.');
 
 -- Dummy data for the TICKET table
 INSERT INTO `TICKET` (`event_id`, `order_id`, `price`, `cancellation_fee`) VALUES
