@@ -111,8 +111,8 @@ public class User {
                 } else if ("event manager".equals(role)) {
                     return new EventManager(userID, userName, userPassword, userEmail);
                 } else {
-                    // Otherwise, return a regular User object
-                    return new User(userID, userName, userPassword, userEmail);
+                    // Otherwise, return a Customer object
+                    return new Customer(userID, userName, userPassword, userEmail);
                 }
             } else {
                 // No matching user found
