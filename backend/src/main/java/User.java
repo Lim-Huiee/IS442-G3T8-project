@@ -48,10 +48,13 @@ public class User {
         return DBConnection.dbGetUserById(userID);
     } 
 
-    public String login(String name){
-        return "Login Successful"; 
+    public String login(String name, String password){
+        return "Login Successful!!"; // will probably need to direct to DBConnection.login()
     }
 
+    public String register(String name, String password){
+        return "Registered!";   /// will probably need to direct to DBConnection.register()
+    }
 
 
     // toString method to represent User object as string

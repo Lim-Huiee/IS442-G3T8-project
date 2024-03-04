@@ -13,7 +13,7 @@ public class DBConnection {
     private static Connection connection; // Declare the connection variable at the class level
 
     // Establish the database connection
-    private static void establishConnection() throws ClassNotFoundException, SQLException {
+    public static void establishConnection() throws ClassNotFoundException, SQLException {
         Class.forName(MYSQL_JDBC_DRIVER_CLASS);
         connection = DriverManager.getConnection(MYSQL_DB_URL, MYSQL_DB_USER, MYSQL_DB_USER_PASSWORD);
     }
@@ -66,8 +66,6 @@ public class DBConnection {
 
     public static void main(String[] args) {
         try {
-            establishConnection(); // Establish the connection
-
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
             if (user != null) {
@@ -79,15 +77,13 @@ public class DBConnection {
             } else {
                 System.out.println("User not found.");
 }
-
             // Other method invocations
             // insertUser(newUser);
             // updateUser(existingUser);
             // deleteUser(userId);
 
-            //closeConnection(); // Close the connection, not necessary because already closed in method
-        } catch (SQLException | ClassNotFoundException se) {
-            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
