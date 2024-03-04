@@ -78,11 +78,11 @@ public class User {
 }
 
     public String login(String name, String password){
-        return "Login Successful!!"; // will probably need to direct to DBConnection.login()
+        return "Login Successful!!"; // use DBConnection to check against users table for correct credentials
     }
 
     public String register(String name, String password){
-        return "Registered!";   /// will probably need to direct to DBConnection.register()
+        return "Registered!";   /// use DBConnection to check against users table for existing credentials, create new credentials
     }
 
 
