@@ -1,17 +1,17 @@
 public class User {
-    private String username;
+    private String name;
     private String password;
     private int userID;
     private String email;
 
-    public User(int userID, String username, String password, String email){
-        this.username = username;
+    public User(int userID, String name, String password, String email){
+        this.name = name;
         this.password = password;
         this.userID = userID;
         this.email = email;
     }
 
-    // Getters and setters for userID, username, password, and email
+    // Getters and setters for userID, name, password, and email
     public int getUserID() {
         return userID;
     }
@@ -20,12 +20,12 @@ public class User {
         this.userID = userID;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -48,12 +48,18 @@ public class User {
         return DBConnection.dbGetUserById(userID);
     } 
 
+    public String login(String name){
+        return "Login Successful"; 
+    }
+
+
+
     // toString method to represent User object as string
     @Override
     public String toString() {
         return "User{" +
                 "userID=" + userID +
-                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 '}';    

@@ -71,7 +71,11 @@ public class DBConnection {
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
             if (user != null) {
-                System.out.println(user.toString());
+                System.out.println(user.toString());    // prints object
+                System.out.println(user.getName()); // prints User 1
+                System.out.println(user.getUserID());   // prints 1
+                System.out.println(user.getPassword());  // prints password1
+                System.out.println(user.getEmail());    // prints user1@abc
             } else {
                 System.out.println("User not found.");
 }
@@ -81,7 +85,7 @@ public class DBConnection {
             // updateUser(existingUser);
             // deleteUser(userId);
 
-            closeConnection(); // Close the connection
+            //closeConnection(); // Close the connection, not necessary because already closed in method
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
         }
