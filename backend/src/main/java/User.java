@@ -1,6 +1,8 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User {
     private String name;
@@ -84,7 +86,7 @@ public class User {
         return user;
     }
     
-    public static String login(String name, String password){
+    public static String login(String name, String password){          // STATIC because associated with User class,  not with instance of user class
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
@@ -121,10 +123,66 @@ public class User {
     }
     
 
-    public String register(String name, String password){
-        return "Registered!";   /// use DBConnection to check against users table for existing credentials, create new credentials
+    public static String register(String name, String password, String email) {
+        PreparedStatement checkStatement = null;
+        ResultSet checkResultSet = null;
+        PreparedStatement insertStatement = null;
+
+        try {
+            // Check if the username already exists
+            DBConnection.establishConnection();
+            String checkQuery = "SELECT * FROM user WHERE name = ?";
+            checkStatement = DBConnection.getConnection().prepareStatement(checkQuery);
+            checkStatement.setString(1, name);  // sets to first parameter of register(), which is name
+            checkResultSet = checkStatement.executeQuery();
+
+            if (checkResultSet.next()) {
+                // Username already exists
+                return "Username already exists. Please choose a different one.";
+            } else {
+                // Check if the email is valid
+                if (!isValidEmail(email)) {
+                    return "Invalid email format. Please enter a valid email address.";
+                }
+
+                // Username is available, proceed with registration
+                // Insert the new user into the database
+                String insertQuery = "INSERT INTO user (name, password, email) VALUES (?, ?, ?)";
+                insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
+                insertStatement.setString(1, name);
+                insertStatement.setString(2, password);
+                insertStatement.setString(3, email);
+                insertStatement.executeUpdate();
+
+                return "Registered successfully!";
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "An error occurred while attempting to register.";
+        } finally {
+            try {
+                if (checkResultSet != null) {
+                    checkResultSet.close();
+                }
+                if (checkStatement != null) {
+                    checkStatement.close();
+                }
+                if (insertStatement != null) {
+                    insertStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    private static boolean isValidEmail(String email) {
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
     // toString method to represent User object as string
     @Override
