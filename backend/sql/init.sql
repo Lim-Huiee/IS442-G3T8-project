@@ -26,14 +26,14 @@ CREATE TABLE `EVENT` (
     `datetime` DATETIME NOT NULL,
     `total_tickets` INT NOT NULL, 
     `num_tickets_avail` INT NOT NULL DEFAULT 0,
-    `event_details` TEXT
+    `event_details` TEXT,
+    `price` DECIMAL(10, 2) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `TICKET` (
     `ticket_id` INT AUTO_INCREMENT PRIMARY KEY,
     `event_id` INT NOT NULL,
     `order_id` INT NOT NULL,
-    `price` DECIMAL(10, 2) NOT NULL DEFAULT 0,
     `cancellation_fee` DECIMAL(10, 2) NOT NULL DEFAULT 0,
     CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`),
     CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`)
@@ -56,16 +56,16 @@ INSERT INTO `ORDERS` (`user_id`, `status`) VALUES
 (3, 'delivered');
 
 -- Dummy data for the EVENT table
-INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`) VALUES
-('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.'),
-('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.'),
-('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.'),
-('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.');
+INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`) VALUES
+('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.', 50),
+('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.',100),
+('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70),
+('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.',90);
 
 -- Dummy data for the TICKET table
-INSERT INTO `TICKET` (`event_id`, `order_id`, `price`, `cancellation_fee`) VALUES
-(1, 1, 100, 4),
-(2, 2, 150, 10),
-(3, 3, 200, 0),
-(1, 4, 250, 4),
-(2, 5, 300, 10);
+INSERT INTO `TICKET` (`event_id`, `order_id`,  `cancellation_fee`) VALUES
+(1, 1, 4),
+(2, 2, 10),
+(3, 3, 10),
+(1, 4, 4),
+(2, 5, 10);

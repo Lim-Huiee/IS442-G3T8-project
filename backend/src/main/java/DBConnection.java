@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class DBConnection {
     private static String MYSQL_JDBC_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
@@ -85,8 +86,6 @@ public class DBConnection {
                 System.out.println(User.login("user 1","password2"));            // login fail, returns null because login() returns object
 
                 System.out.println(User.login("ticket man","password5"));     // ticket officer  login, returns user object
-                System.out.println(User.login("event man","password4"));     // event manager login, returns user object
-
                 System.out.println(User.register("Dehou","pwpwpw","Dehou@gmail.com"));  // Register successfully if u run the first time. Else, username exists
                 System.out.println(User.register("Dehouhehexd","asd","haha"));           // invalid email
 
@@ -108,5 +107,33 @@ public class DBConnection {
             e.printStackTrace();
         }
         // ====================== END OF TESTING USER CLASS ==================================
+        // ======================== start testing of event manager class ====================
+        User eventManager = null;
+        try {
+            eventManager=User.login("event man","password4");     // event manager login, returns user object
+
+            if (eventManager != null){
+                if(eventManager instanceof EventManager){
+                    EventManager em = (EventManager) eventManager;
+                    String eventType = "Concert";
+                    String eventName = "Taylor Swift Concert";
+                    String venue = "National Stadium";
+                    LocalDateTime eventDateTime = LocalDateTime.of(2024, 12, 31, 20, 0); // Example datetime
+                    int numTotalTickets = 1000;
+                    int numTicketsAvailable = 1000;
+                    String eventDetails = "A typical  Event";
+                    int ticketPrice = 90;
+                    String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets, numTicketsAvailable,eventDetails,ticketPrice);          
+                    System.out.println(result);
+                }
+            }
+            
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        
+        // =========================== END TESTING OF EVENT MANAGER CLASS====================
+
     }
 }
