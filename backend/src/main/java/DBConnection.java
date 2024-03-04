@@ -127,6 +127,10 @@ public class DBConnection {
                     System.out.println(result);
                 }
             }
+
+            if (eventManager instanceof EventManager){   // FOR TESTING ONLY/ can change to check instanceof Customer, it won't print "pass". 
+                System.out.println("pass");            //Verifies access control, means customer wont access eventManager etc
+            }
             
         } catch (Exception e){
             e.printStackTrace();
