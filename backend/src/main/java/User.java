@@ -1,3 +1,8 @@
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
 public class User {
     private String name;
     private String password;
@@ -44,9 +49,33 @@ public class User {
         this.email = email;
     }
 
-    public static User getUserByID(int userID) {
-        return DBConnection.dbGetUserById(userID);
-    } 
+    public static User getUserByID(int userId) {
+    try {
+        DBConnection.establishConnection();
+        String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+        PreparedStatement statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+        statement.setInt(1, userId);
+        ResultSet resultSet = statement.executeQuery();
+
+        User user = null;
+        if (resultSet.next()) {
+            int userID = resultSet.getInt("user_id");
+            String name = resultSet.getString("name");
+            String password = resultSet.getString("password");
+            String email = resultSet.getString("email");
+            user = new User(userID, name, password, email);
+        }
+
+        resultSet.close();
+        statement.close();
+        DBConnection.closeConnection();
+
+        return user;
+    } catch (SQLException | ClassNotFoundException se) {
+        se.printStackTrace();
+        return null;
+    }
+}
 
     public String login(String name, String password){
         return "Login Successful!!"; // will probably need to direct to DBConnection.login()

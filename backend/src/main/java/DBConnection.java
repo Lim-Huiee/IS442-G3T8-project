@@ -1,7 +1,5 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBConnection {
@@ -18,8 +16,13 @@ public class DBConnection {
         connection = DriverManager.getConnection(MYSQL_DB_URL, MYSQL_DB_USER, MYSQL_DB_USER_PASSWORD);
     }
 
+    // Getter method to provide access to the connection
+    public static Connection getConnection() {
+        return connection;
+    }
+
     // Close the database connection
-    private static void closeConnection() {
+    public static void closeConnection() {
         try {
             if (connection != null) {
                 connection.close();
@@ -29,14 +32,13 @@ public class DBConnection {
         }
     }
 
-    public static User dbGetUserById(int userId) {
+    /* public static User dbGetUserById(int userId) {
         User user = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try {
             establishConnection();
-
             String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
             statement = connection.prepareStatement(sqlQuery);
             statement.setInt(1, userId);
@@ -62,7 +64,7 @@ public class DBConnection {
         }
 
         return user;
-    }
+    } */
 
     public static void main(String[] args) {
         try {
