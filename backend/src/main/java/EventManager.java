@@ -3,9 +3,7 @@ public class EventManager extends User{
         super(userID, name, password, email);
     }
 
-    public String createEvent(){
-
-        
+    public String createEvent(String eventID, String eventType, String eventName, String Venue, String dateTime, int ticketPrice, int numTotalTickets, int numTicketsAvailable){
         return "";
     }
     public String updateEvent(){

@@ -24,6 +24,7 @@ CREATE TABLE `EVENT` (
     `event_name` VARCHAR(255) NOT NULL,
     `venue` VARCHAR(255) NOT NULL,
     `datetime` DATETIME NOT NULL,
+    `total_tickets` INT NOT NULL, 
     `num_tickets_avail` INT NOT NULL DEFAULT 0,
     `event_details` TEXT
 );
@@ -55,11 +56,11 @@ INSERT INTO `ORDERS` (`user_id`, `status`) VALUES
 (3, 'delivered');
 
 -- Dummy data for the EVENT table
-INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `num_tickets_avail`, `event_details`) VALUES
-('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 'A Kyuhyun concert.'),
-('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 'Doing Math with JJ Lin.'),
-('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 'A StayC concert.'),
-('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 'ice ice baby.');
+INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`) VALUES
+('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.'),
+('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.'),
+('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.'),
+('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.');
 
 -- Dummy data for the TICKET table
 INSERT INTO `TICKET` (`event_id`, `order_id`, `price`, `cancellation_fee`) VALUES
