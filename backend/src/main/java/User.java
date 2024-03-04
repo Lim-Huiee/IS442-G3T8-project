@@ -86,7 +86,7 @@ public class User {
         return user;
     }
     
-    public static String login(String name, String password){          // STATIC because associated with User class,  not with instance of user class
+    public static User login(String name, String password) {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
@@ -98,15 +98,27 @@ public class User {
             resultSet = statement.executeQuery();
     
             if (resultSet.next()) {
-                // Credentials match, login successful
-                return "Login Successful!!";
+                int userID = resultSet.getInt("user_id");
+                String userName = resultSet.getString("name");
+                String userEmail = resultSet.getString("email");
+                String userPassword = resultSet.getString("password");
+                String role = resultSet.getString("role");
+    
+                if ("ticketing officer".equals(role)) {
+                    // If the role is "ticketing officer", return a TicketOfficer object
+                    // Additional attributes specific to TicketOfficer may need to be retrieved
+                    return new TicketOfficer(userID, userName, userPassword, userEmail);
+                } else {
+                    // Otherwise, return a regular User object
+                    return new User(userID, userName, userPassword, userEmail);
+                }
             } else {
                 // No matching user found
-                return "Invalid credentials. Please try again.";
+                return null;
             }
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
-            return "An error occurred while attempting to log in.";
+            return null;
         } finally {
             try {
                 if (resultSet != null) {
@@ -122,7 +134,6 @@ public class User {
         }
     }
     
-
     public static String register(String name, String password, String email) {
         PreparedStatement checkStatement = null;
         ResultSet checkResultSet = null;
