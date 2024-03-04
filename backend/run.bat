@@ -1,1 +1,1 @@
-java -cp "lib/mysql-connector-j-8.3.0.jar;src/main/java" DBConnection
+java -cp "lib/mysql-connector-j-8.3.0.jar;target/classes" DBConnection
