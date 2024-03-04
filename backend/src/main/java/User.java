@@ -2,7 +2,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 public class User {
     private String name;
     private String password;
@@ -50,36 +49,77 @@ public class User {
     }
 
     public static User getUserByID(int userId) {
-    try {
-        DBConnection.establishConnection();
-        String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
-        PreparedStatement statement = DBConnection.getConnection().prepareStatement(sqlQuery);
-        statement.setInt(1, userId);
-        ResultSet resultSet = statement.executeQuery();
-
         User user = null;
-        if (resultSet.next()) {
-            int userID = resultSet.getInt("user_id");
-            String name = resultSet.getString("name");
-            String password = resultSet.getString("password");
-            String email = resultSet.getString("email");
-            user = new User(userID, name, password, email);
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setInt(1, userId);
+            resultSet = statement.executeQuery();
+    
+            if (resultSet.next()) {
+                int userID = resultSet.getInt("user_id");
+                String name = resultSet.getString("name");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                user = new User(userID, name, password, email);
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
-        resultSet.close();
-        statement.close();
-        DBConnection.closeConnection();
-
         return user;
-    } catch (SQLException | ClassNotFoundException se) {
-        se.printStackTrace();
-        return null;
     }
-}
-
-    public String login(String name, String password){
-        return "Login Successful!!"; // use DBConnection to check against users table for correct credentials
+    
+    public static String login(String name, String password){
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT * FROM user WHERE name = ? AND password = ?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setString(1, name);
+            statement.setString(2, password);
+            resultSet = statement.executeQuery();
+    
+            if (resultSet.next()) {
+                // Credentials match, login successful
+                return "Login Successful!!";
+            } else {
+                // No matching user found
+                return "Invalid credentials. Please try again.";
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "An error occurred while attempting to log in.";
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
+    
 
     public String register(String name, String password){
         return "Registered!";   /// use DBConnection to check against users table for existing credentials, create new credentials

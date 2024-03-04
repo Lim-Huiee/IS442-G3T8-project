@@ -67,6 +67,8 @@ public class DBConnection {
     } */
 
     public static void main(String[] args) {
+
+        /// ==================== Testing of User class =======================================
         try {
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
@@ -76,6 +78,9 @@ public class DBConnection {
                 System.out.println(user.getUserID());   // prints 1
                 System.out.println(user.getPassword());  // prints password1
                 System.out.println(user.getEmail());    // prints user1@abc
+
+                System.out.println(User.login("user 1","password1"));        //login success
+                System.out.println(User.login("user 1","password2"));            // login fail
             } else {
                 System.out.println("User not found.");
 }
@@ -87,5 +92,6 @@ public class DBConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // ====================== END OF TESTING USER CLASS ==================================
     }
 }
