@@ -99,6 +99,8 @@ public class DBConnection {
                     String addTicketingOfficerResult = em.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
                     System.out.println(addTicketingOfficerResult);
 
+                    // view sale statistics test
+                    System.out.println(em.viewSaleStatistics());
                 }
             }
 

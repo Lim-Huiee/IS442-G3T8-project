@@ -2,6 +2,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventManager extends User{
     private static String addTicketOfficerRole = "ticketing officer";
@@ -133,10 +135,6 @@ public class EventManager extends User{
         }
     }
 
-    public String viewSaleStatistics(){       // not sure what this does for now, will implement next time
-        // generates number of tickets sold per event + revenue generated
-        return "";
-    }
     public String addTicketingOfficer(String name, String password, String email) {
         PreparedStatement checkStatement = null;
         ResultSet checkResultSet = null;
@@ -189,6 +187,70 @@ public class EventManager extends User{
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public String viewSaleStatistics() {
+        try {
+            DBConnection.establishConnection(); // Establish database connection
+    
+            String sqlQuery = "SELECT event_name, (num_tickets_avail - total_tickets) AS tickets_sold, (num_tickets_avail - total_tickets) * price AS revenue " +
+                              "FROM event";
+            PreparedStatement statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            ResultSet resultSet = statement.executeQuery();
+    
+            StringBuilder statistics = new StringBuilder();
+            statistics.append("Event Name\tTickets Sold\tRevenue\n");
+    
+            while (resultSet.next()) {
+                String eventName = resultSet.getString("event_name");
+                int ticketsSold = resultSet.getInt("tickets_sold");
+                int revenue = resultSet.getInt("revenue");
+    
+                // Replace null revenue with 0
+                if (resultSet.wasNull()) {
+                    revenue = 0;
+                }
+    
+                statistics.append(eventName).append("\t").append(ticketsSold).append("\t").append(revenue).append("\n");
+            }
+    
+            // Close resources
+            resultSet.close();
+            statement.close();
+            DBConnection.closeConnection();
+    
+            return statistics.toString();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return "Failed to fetch sale statistics.";
+        }
+    }
+    
+    
+
+    public static class EventStatistics {
+        private String eventName;
+        private int ticketsSold;
+        private int revenue;
+
+        public EventStatistics(String eventName, int ticketsSold, int revenue) {
+            this.eventName = eventName;
+            this.ticketsSold = ticketsSold;
+            this.revenue = revenue;
+        }
+
+        // Getters for event statistics
+        public String getEventName() {
+            return eventName;
+        }
+
+        public int getTicketsSold() {
+            return ticketsSold;
+        }
+
+        public int getRevenue() {
+            return revenue;
         }
     }
 
