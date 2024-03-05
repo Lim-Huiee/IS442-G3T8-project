@@ -158,7 +158,7 @@ public class User {
                     return "Invalid email format. Please enter a valid email address.";
                 }
                 // Username is available, proceed with registration
-                // Insert the new user into the database, init.sql already specified default amount to be 1000
+                // Insert the new user into the database, init.sql already specified default amount to be 1000, role to be default customer
                 String insertQuery = "INSERT INTO user (name, password, email) VALUES (?, ?, ?)";
                 insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
                 insertStatement.setString(1, name);

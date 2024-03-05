@@ -19,18 +19,17 @@ public class EventManager extends User{
             if (numTotalTickets>numTicketsAvailable){
                 return "Number of Total Tickets cannot be less than number of tickets available!";
             }
-            String checkQuery = "SELECT COUNT(*) FROM event WHERE event_name = ? AND venue = ? AND datetime = ?";
+            String checkQuery = "SELECT COUNT(*) FROM event WHERE event_name = ? AND datetime = ?";
             statement = DBConnection.getConnection().prepareStatement(checkQuery);
             statement.setString(1, eventName);
-            statement.setString(2, venue);
-            statement.setObject(3, dateTime);
+            statement.setObject(2, dateTime);
 
             resultSet = statement.executeQuery();
             resultSet.next();
             int count = resultSet.getInt(1);
 
             if (count > 0) {
-                return "Event with similar attributes already exists.";
+                return "Event already exists.";
             }
 
             String sqlQuery = "INSERT INTO event (event_type, event_name, venue, datetime, total_tickets, num_tickets_avail,event_details,price) " +
@@ -75,7 +74,7 @@ public class EventManager extends User{
             String sqlQuery = "UPDATE event SET event_type=?,event_name=?, venue=?, datetime=?, total_tickets=?, num_tickets_avail=?, event_details=?, price=? WHERE event_id=?";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
 
-            // Set parameters for the SQL statement, position of ? corresponds with index below
+            // Set parameters for the SQL statement, position of ? above corresponds with index below
             statement.setString(1, eventType);
             statement.setString(2, eventName);
             statement.setString(3, venue);
@@ -99,11 +98,38 @@ public class EventManager extends User{
             DBConnection.closeConnection(); // Close the database connection
         }
     }
-        
     
-    public String deleteEvent(){
-        return "";
+    public String deleteEvent(int eventID) {
+        PreparedStatement statement = null;
+    
+        try {
+            DBConnection.establishConnection(); // Establish database connection
+    
+            String sqlQuery = "DELETE FROM event WHERE event_id=?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+    
+            // Set parameter for the SQL statement
+            statement.setInt(1, eventID);
+    
+            // Execute the SQL statement
+            int rowsAffected = statement.executeUpdate();
+    
+            // Close the statement
+            statement.close();
+    
+            if (rowsAffected > 0) {
+                return "Event deleted successfully.";
+            } else {
+                return "No event found with the given ID.";
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return "Failed to delete event.";
+        } finally {
+            DBConnection.closeConnection(); // Close the database connection
+        }
     }
+
     public String viewSaleStatistics(){
         return "";
     }

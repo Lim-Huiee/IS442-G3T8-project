@@ -92,13 +92,20 @@ public class DBConnection {
                     String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets, numTicketsAvailable,eventDetails,ticketPrice);          
                     System.out.println(result);            //creates new event in DB, will print "event exists" if you run it a 2nd time
 
-                    // updates venue of taylow swift event
+                    // updates venue of taylor swift event
                     String updateResult = em.updateEvent(5, eventType,eventName, "my house", eventDateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
                     System.out.println(updateResult);
+
+                   
+                   
+                    /* // delete taylor swift event      ==================== uncomment this part to test delete =============
+                    String deleteResult = em.deleteEvent(5);
+                    System.out.println(deleteResult);  */
+
                 }
             }
 
-// int eventID, String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice
+//update event parameters: int eventID, String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice
 
             if (eventManager instanceof EventManager){   // FOR TESTING ONLY/ can change to check instanceof Customer, it won't print "pass". 
                 System.out.println("pass");            //Verifies access control, means customer wont access eventManager etc
