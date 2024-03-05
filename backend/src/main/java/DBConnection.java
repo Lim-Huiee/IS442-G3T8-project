@@ -32,7 +32,6 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
-
     public static void main(String[] args) {
 
         /// ==================== Testing of User/TicketOfficer class =======================================
@@ -64,10 +63,6 @@ public class DBConnection {
             } else {
                 System.out.println("User not found.");
             }
-            // Other method invocations
-            // insertUser(newUser);
-            // updateUser(existingUser);
-            // deleteUser(userId);
 
         } catch (Exception e) {
             e.printStackTrace();

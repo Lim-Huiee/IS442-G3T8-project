@@ -102,11 +102,11 @@ public class EventManager extends User{
         }
     }
     
-    public String deleteEvent(int eventID) {
+    public String deleteEvent(int eventID) {  //=================== Will need to call refund() before deleting===============
         PreparedStatement statement = null;
     
         try {
-            DBConnection.establishConnection(); // Establish database connection
+            DBConnection.establishConnection(); // 
     
             String sqlQuery = "DELETE FROM event WHERE event_id=?";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
@@ -134,7 +134,7 @@ public class EventManager extends User{
     }
 
     public String viewSaleStatistics(){       // not sure what this does for now, will implement next time
-
+        // generates number of tickets sold per event + revenue generated
         return "";
     }
     public String addTicketingOfficer(String name, String password, String email) {
@@ -191,5 +191,7 @@ public class EventManager extends User{
             }
         }
     }
+
+
 }
 
