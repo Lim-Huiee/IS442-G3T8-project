@@ -124,7 +124,7 @@ public class DBConnection {
                     String eventDetails = "A typical  Event";
                     int ticketPrice = 90;
                     String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets, numTicketsAvailable,eventDetails,ticketPrice);          
-                    System.out.println(result);
+                    System.out.println(result);            //creates new event in DB, will print "event exists" if you run it a 2nd time
                 }
             }
 

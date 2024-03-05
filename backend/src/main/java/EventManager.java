@@ -1,4 +1,5 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -8,13 +9,28 @@ public class EventManager extends User{
     }
 
     public String createEvent(String eventType, String eventName, String venue, LocalDateTime  dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails,int ticketPrice) {
-        PreparedStatement statement = null;        
+        PreparedStatement statement = null;    
+        ResultSet resultSet = null;
+            
         try {
             DBConnection.establishConnection(); // Establish database connection
             // Prepare SQL statement for inserting new event
 
             if (numTotalTickets>numTicketsAvailable){
                 return "Number of Total Tickets cannot be less than number of tickets available!";
+            }
+            String checkQuery = "SELECT COUNT(*) FROM event WHERE event_name = ? AND venue = ? AND datetime = ?";
+            statement = DBConnection.getConnection().prepareStatement(checkQuery);
+            statement.setString(1, eventName);
+            statement.setString(2, venue);
+            statement.setObject(3, dateTime);
+
+            resultSet = statement.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            if (count > 0) {
+                return "Event with similar attributes already exists.";
             }
 
             String sqlQuery = "INSERT INTO event (event_type, event_name, venue, datetime, total_tickets, num_tickets_avail,event_details,price) " +
