@@ -4,6 +4,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class EventManager extends User{
+    private static String addTicketOfficerRole = "ticketing officer";
+    private static int amountAvail = 0;
+
     public EventManager(int userID, String name, String password, String email){
         super(userID, name, password, email);
     }
@@ -130,10 +133,63 @@ public class EventManager extends User{
         }
     }
 
-    public String viewSaleStatistics(){
+    public String viewSaleStatistics(){       // not sure what this does for now, will implement next time
+
         return "";
     }
-    public String addTicketingOfficer(){
-        return "";
+    public String addTicketingOfficer(String name, String password, String email) {
+        PreparedStatement checkStatement = null;
+        ResultSet checkResultSet = null;
+        PreparedStatement insertStatement = null;
+
+        try {
+            // Check if the username already exists
+            DBConnection.establishConnection();
+            String checkQuery = "SELECT * FROM user WHERE name = ?";
+            checkStatement = DBConnection.getConnection().prepareStatement(checkQuery);
+            checkStatement.setString(1, name);  // sets to first parameter of addTicketingOfficer(), which is name
+            checkResultSet = checkStatement.executeQuery();
+
+            if (checkResultSet.next()) {
+                // Username already exists
+                return "Username already exists. Please choose a different one.";
+            } else {
+                // Check if the email is valid
+                if (!isValidEmail(email)) {
+                    return "Invalid email format. Please enter a valid email address.";
+                }
+                // Username is available, proceed with registration
+                // Insert the new user into the database
+                String insertQuery = "INSERT INTO user (name, password, email, amount_avail, role) VALUES (?, ?, ?, ?, ?)";
+                insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
+                insertStatement.setString(1, name);
+                insertStatement.setString(2, password);
+                insertStatement.setString(3, email);
+                insertStatement.setInt(4, amountAvail); // setting amount_avail to 0
+                insertStatement.setString(5, addTicketOfficerRole); // setting role to 'ticketing officer'
+                insertStatement.executeUpdate();
+
+                return "Ticketing officer added successfully!";
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "An error occurred while attempting to add ticketing officer.";
+        } finally {
+            try {
+                if (checkResultSet != null) {
+                    checkResultSet.close();
+                }
+                if (checkStatement != null) {
+                    checkStatement.close();
+                }
+                if (insertStatement != null) {
+                    insertStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
+

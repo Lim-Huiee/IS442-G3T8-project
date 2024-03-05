@@ -95,12 +95,14 @@ public class DBConnection {
                     // updates venue of taylor swift event
                     String updateResult = em.updateEvent(5, eventType,eventName, "my house", eventDateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
                     System.out.println(updateResult);
-
-                   
-                   
+                  
                     /* // delete taylor swift event      ==================== uncomment this part to test delete =============
                     String deleteResult = em.deleteEvent(5);
                     System.out.println(deleteResult);  */
+
+                    //======================================= event manager adding ticket officer============================
+                    String addTicketingOfficerResult = em.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
+                    System.out.println(addTicketingOfficerResult);
 
                 }
             }
