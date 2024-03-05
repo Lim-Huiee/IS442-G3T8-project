@@ -33,40 +33,6 @@ public class DBConnection {
         }
     }
 
-    /* public static User dbGetUserById(int userId) {
-        User user = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-
-        try {
-            establishConnection();
-            String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
-            statement = connection.prepareStatement(sqlQuery);
-            statement.setInt(1, userId);
-            resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                int userID = resultSet.getInt("user_id");
-                String name = resultSet.getString("name");
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
-                user = new User(userID, name, password, email);
-            }
-        } catch (SQLException | ClassNotFoundException se) {
-            se.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null) resultSet.close();
-                if (statement != null) statement.close();
-                closeConnection();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
-
-        return user;
-    } */
-
     public static void main(String[] args) {
 
         /// ==================== Testing of User/TicketOfficer class =======================================
@@ -125,8 +91,14 @@ public class DBConnection {
                     int ticketPrice = 90;
                     String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets, numTicketsAvailable,eventDetails,ticketPrice);          
                     System.out.println(result);            //creates new event in DB, will print "event exists" if you run it a 2nd time
+
+                    // updates venue of taylow swift event
+                    String updateResult = em.updateEvent(5, eventType,eventName, "my house", eventDateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+                    System.out.println(updateResult);
                 }
             }
+
+// int eventID, String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice
 
             if (eventManager instanceof EventManager){   // FOR TESTING ONLY/ can change to check instanceof Customer, it won't print "pass". 
                 System.out.println("pass");            //Verifies access control, means customer wont access eventManager etc

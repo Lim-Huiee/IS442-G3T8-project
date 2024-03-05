@@ -66,9 +66,41 @@ public class EventManager extends User{
             DBConnection.closeConnection(); // Close the database connection
         }
     }
-    public String updateEvent(){
-        return "";
+    public String updateEvent(int eventID, String eventType,String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice) {
+        PreparedStatement statement = null;
+
+        try {
+            DBConnection.establishConnection(); // Establish database connection
+
+            String sqlQuery = "UPDATE event SET event_type=?,event_name=?, venue=?, datetime=?, total_tickets=?, num_tickets_avail=?, event_details=?, price=? WHERE event_id=?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+
+            // Set parameters for the SQL statement, position of ? corresponds with index below
+            statement.setString(1, eventType);
+            statement.setString(2, eventName);
+            statement.setString(3, venue);
+            statement.setObject(4, dateTime);
+            statement.setInt(5, numTotalTickets);
+            statement.setInt(6, numTicketsAvailable);
+            statement.setString(7, eventDetails);
+            statement.setInt(8, ticketPrice);
+            statement.setInt(9, eventID); 
+        
+            // Asks SQL to execute statement
+            statement.executeUpdate();
+            // Close the statement
+            statement.close();
+            return "Event updated successfully!";
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return "Failed to update event.";
+        } finally {
+            DBConnection.closeConnection(); // Close the database connection
+        }
     }
+        
+    
     public String deleteEvent(){
         return "";
     }
