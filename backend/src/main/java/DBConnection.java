@@ -1,43 +1,120 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.time.LocalDateTime;
 
 public class DBConnection {
     private static String MYSQL_JDBC_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     private static String MYSQL_DB_URL = "jdbc:mysql://localhost:3306/ticketmistress";
     private static String MYSQL_DB_USER = "root";
     private static String MYSQL_DB_USER_PASSWORD = "";
-    private static String SQL_QUERY = "Select * from user";
 
+    private static Connection connection; // Declare the connection variable at the class level
 
+    // Establish the database connection
+    public static void establishConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(MYSQL_JDBC_DRIVER_CLASS);
+        connection = DriverManager.getConnection(MYSQL_DB_URL, MYSQL_DB_USER, MYSQL_DB_USER_PASSWORD);
+    }
+
+    // Getter method to provide access to the connection
+    public static Connection getConnection() {
+        return connection;
+    }
+
+    // Close the database connection
+    public static void closeConnection() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
 
+        /// ==================== Testing of User/TicketOfficer class =======================================
         try {
-            Class.forName(MYSQL_JDBC_DRIVER_CLASS);
-        } catch (ClassNotFoundException e) {
-            System.out.println("Failed to load MySQL JDBC driver. Error: " + e.getMessage());
-            e.printStackTrace();
-            return;
-        }
-            
-        try(Connection connection = DriverManager.getConnection(MYSQL_DB_URL,MYSQL_DB_USER,MYSQL_DB_USER_PASSWORD)) {
+            // Usage example: retrieve user with ID 1
+            User user = User.getUserByID(1);
+            User customer = null;
 
-            Class.forName(MYSQL_JDBC_DRIVER_CLASS); 
-            Statement statement =connection.createStatement();  
-            ResultSet resultSet = statement.executeQuery(SQL_QUERY); 
+            if (user != null) {
+                System.out.println(user.toString());    // prints object
+                System.out.println(user.getName()); // prints User 1
+                System.out.println(user.getUserID());   // prints 1
+                System.out.println(user.getPassword());  // prints password1
+                System.out.println(user.getEmail());    // prints user1@abc
 
-            while(resultSet.next())  {
-                System.out.println(resultSet.getInt(1)+"  "+resultSet.getString(2));
-            }     
+                customer = User.login("user 2","password2");        //customer login, returns object
+                System.out.println(User.login("user 1","password2"));            // login fail, returns null because login() returns object
+
+                System.out.println(User.login("ticket man","password5"));     // ticket officer  login, returns user object
+                System.out.println(User.register("Dehou","pwpwpw","Dehou@gmail.com"));  // Register successfully if u run the first time. Else, username exists
+                System.out.println(User.register("Dehouhehexd","asd","haha"));           // invalid email
+
+
+                if(customer instanceof Customer){
+                    Customer c = (Customer) customer;
+                    System.out.println(c.getAmountAvail());          // class cast, testing getAmountAvail() for customer 
+            }
                 
-        } catch (ClassNotFoundException e) {
-            System.out.println("MySQL Driver class not found!");
+            } else {
+                System.out.println("User not found.");
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (SQLException e) {
-            System.out.println("Error occured while executing query: " + SQL_QUERY);
+        }
+        // ====================== END OF TESTING USER CLASS ==================================
+        // ======================== start testing of event manager class ====================
+        User eventManager = null;
+        try {
+            eventManager=User.login("event man","password4");     // event manager login, returns user object
+
+            if (eventManager != null){
+                if(eventManager instanceof EventManager){
+                    EventManager em = (EventManager) eventManager;
+                    String eventType = "Concert";
+                    String eventName = "Taylor Swift Concert";
+                    String venue = "National Stadium";
+                    LocalDateTime eventDateTime = LocalDateTime.of(2024, 12, 31, 20, 0); // Example datetime
+                    int numTotalTickets = 1000;
+                    int numTicketsAvailable = 1000;
+                    String eventDetails = "A typical  Event";
+                    int ticketPrice = 90;
+                    String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets, numTicketsAvailable,eventDetails,ticketPrice);          
+                    System.out.println(result);            //creates new event in DB, will print "event exists" if you run it a 2nd time
+
+                    // updates venue of taylor swift event
+                    String updateResult = em.updateEvent(5, eventType,eventName, "my house", eventDateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+                    System.out.println(updateResult);
+                  
+                    /* // delete taylor swift event      ==================== uncomment this part to test delete =============
+                    String deleteResult = em.deleteEvent(5);
+                    System.out.println(deleteResult);  */
+
+                    //======================================= event manager adding ticket officer============================
+                    String addTicketingOfficerResult = em.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
+                    System.out.println(addTicketingOfficerResult);
+
+                    // view sale statistics test
+                    System.out.println(em.viewSaleStatistics());
+                }
+            }
+
+//update event parameters: int eventID, String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice
+
+            if (eventManager instanceof EventManager){   // FOR TESTING ONLY/ can change to check instanceof Customer, it won't print "pass". 
+                System.out.println("pass");            //Verifies access control, means customer wont access eventManager etc
+            }
+            
+        } catch (Exception e){
             e.printStackTrace();
-        } 
+        }
+
+        // =========================== END TESTING OF EVENT MANAGER CLASS====================
+
     }
 }
