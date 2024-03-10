@@ -114,7 +114,6 @@ public class DBConnection {
             e.printStackTrace();
         }
 
-        
         // =========================== END TESTING OF EVENT MANAGER CLASS====================
 
     }

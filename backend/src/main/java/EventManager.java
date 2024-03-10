@@ -227,8 +227,6 @@ public class EventManager extends User{
         }
     }
     
-    
-
     public static class EventStatistics {
         private String eventName;
         private int ticketsSold;
