@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class DBConnection {
     private static String MYSQL_JDBC_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
@@ -136,6 +137,12 @@ public class DBConnection {
         System.out.println(testEvent.getEventDetails());
         System.out.println(testEvent.getTicketPrice());
 
+        System.out.println("------ Start of testing get Alll events-------");
+        ArrayList<Event> allEvents = Event.getAllEvents();
+        for (Event event:allEvents){
+            System.out.println(event.getEventName());
+        }
+    
         // ==============================END  TESTING FOR EVENT CLASS =========================================
 
     }
