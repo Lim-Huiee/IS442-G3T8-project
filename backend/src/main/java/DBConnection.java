@@ -103,7 +103,7 @@ public class DBConnection {
                     String addTicketingOfficerResult = em.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
                     System.out.println(addTicketingOfficerResult);
 
-                    // view sale statistics test
+                    // view sale statistics test, output is in readable format for testing, will amend output next time
                     System.out.println(em.viewSaleStatistics());
                 }
             }
@@ -124,12 +124,17 @@ public class DBConnection {
         // =============================START OF TESTING FOR EVENT CLASS=========================================
 
         System.out.println("=============================START OF TESTING FOR EVENT CLASS================");
-        Event testEvent =  Event.getEventByID(1);
+        Event testEvent =  Event.getEventByID(4);
         System.out.println(testEvent);
         System.out.println(testEvent.getEventID());
         System.out.println(testEvent.getEventType());
-
-
+        System.out.println(testEvent.getEventName());
+        System.out.println(testEvent.getVenue());
+        System.out.println(testEvent.getEventDateTime());
+        System.out.println(testEvent.getTotalTickets());
+        System.out.println(testEvent.getTicketsAvailable());
+        System.out.println(testEvent.getEventDetails());
+        System.out.println(testEvent.getTicketPrice());
 
         // ==============================END  TESTING FOR EVENT CLASS =========================================
 

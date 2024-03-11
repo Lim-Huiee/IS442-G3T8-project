@@ -34,7 +34,27 @@ public class Event {
     public String getEventType(){
         return eventType;
     }
-
+    public String getEventName(){
+        return eventName;
+    }
+    public String getVenue(){
+        return venue;
+    }
+    public LocalDateTime getEventDateTime(){
+        return eventDateTime;
+    }
+    public int getTotalTickets(){
+        return numTotalTickets;
+    }
+    public int getTicketsAvailable(){
+        return numTicketsAvailable;
+    }
+    public String getEventDetails(){
+        return eventDetails;
+    }
+    public int getTicketPrice(){
+        return ticketPrice;
+    }
  
     public static Event getEventByID(int searchEventID) {
         Event event = null;
