@@ -56,6 +56,15 @@ public class Event {
     public int getTicketPrice(){
         return ticketPrice;
     }
+
+
+    public int numTicketsSold(){
+        return numTotalTickets-numTicketsAvailable;
+    }
+
+    public int revenueEarned(){
+        return this.numTicketsSold()*ticketPrice;
+    }
  
     // not sure if need setter methods? 
 

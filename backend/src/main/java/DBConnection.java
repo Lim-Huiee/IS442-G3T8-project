@@ -92,8 +92,8 @@ public class DBConnection {
                     String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets, numTicketsAvailable,eventDetails,ticketPrice);          
                     System.out.println(result);            //creates new event in DB, will print "event exists" if you run it a 2nd time
 
-                    // updates venue of taylor swift event
-                    String updateResult = em.updateEvent(5, eventType,eventName, "my house", eventDateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+                    // update taylor swift event
+                    String updateResult = em.updateEvent(5, eventType,eventName, "my house", eventDateTime, numTotalTickets, 998, eventDetails, ticketPrice);
                     System.out.println(updateResult);
                   
                     /* // delete taylor swift event      ==================== uncomment this part to test delete =============
@@ -141,6 +141,9 @@ public class DBConnection {
         ArrayList<Event> allEvents = Event.getAllEvents();
         for (Event event:allEvents){
             System.out.println(event.getEventName());
+            System.out.println("Number of tickets sold is " + event.numTicketsSold());
+            System.out.println("Revenue is " + event.revenueEarned()+ "\n");
+        
         }
     
         // ==============================END  TESTING FOR EVENT CLASS =========================================
