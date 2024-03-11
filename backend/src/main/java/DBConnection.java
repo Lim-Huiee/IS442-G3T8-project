@@ -137,13 +137,12 @@ public class DBConnection {
         System.out.println(testEvent.getEventDetails());
         System.out.println(testEvent.getTicketPrice());
 
-        System.out.println("------ Start of testing get Alll events-------");
+        System.out.println("------ Start of testing get Alll bookable events-------");
         ArrayList<Event> allEvents = Event.getAllBookableEvents();
         for (Event event:allEvents){
             System.out.println(event.getEventName());
             System.out.println("Number of tickets sold is " + event.numTicketsSold());
             System.out.println("Revenue is " + event.revenueEarned()+ "\n");
-        
         }
     
         // ==============================END  TESTING FOR EVENT CLASS =========================================
