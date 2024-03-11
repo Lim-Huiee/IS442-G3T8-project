@@ -35,6 +35,7 @@ public class DBConnection {
     public static void main(String[] args) {
 
         /// ==================== Testing of User/TicketOfficer class =======================================
+        System.out.println("=============================Start OF TESTING FOR USER CLASS====================");
         try {
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
@@ -67,8 +68,11 @@ public class DBConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println("=============================END OF TESTING FOR USER CLASS====================");
         // ====================== END OF TESTING USER CLASS ==================================
         // ======================== start testing of event manager class ====================
+        System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
         User eventManager = null;
         try {
             eventManager=User.login("event man","password4");     // event manager login, returns user object
@@ -113,8 +117,21 @@ public class DBConnection {
         } catch (Exception e){
             e.printStackTrace();
         }
-
+        System.out.println("=============================END OF TESTING FOR EVENT MANAGER CLASS===========");
         // =========================== END TESTING OF EVENT MANAGER CLASS====================
+
+
+        // =============================START OF TESTING FOR EVENT CLASS=========================================
+
+        System.out.println("=============================START OF TESTING FOR EVENT CLASS================");
+        Event testEvent =  Event.getEventByID(1);
+        System.out.println(testEvent);
+        System.out.println(testEvent.getEventID());
+        System.out.println(testEvent.getEventType());
+
+
+
+        // ==============================END  TESTING FOR EVENT CLASS =========================================
 
     }
 }
