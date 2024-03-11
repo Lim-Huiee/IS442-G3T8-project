@@ -138,11 +138,17 @@ public class DBConnection {
         System.out.println(testEvent.getTicketPrice());
 
         System.out.println("------ Start of testing get Alll bookable events-------");
-        ArrayList<Event> allEvents = Event.getAllBookableEvents();
+         ArrayList<Event> allEvents= Event.getAllBookableEvents();
         for (Event event:allEvents){
             System.out.println(event.getEventName());
             System.out.println("Number of tickets sold is " + event.numTicketsSold());
             System.out.println("Revenue is " + event.revenueEarned()+ "\n");
+        }
+
+        System.out.println("------ Start of testing get upcoming bookable events-------");
+        ArrayList<Event> upcomingEvents = Event.getUpcomingEvents();
+        for (Event event:upcomingEvents){
+            System.out.println(event.getEventName());
         }
     
         // ==============================END  TESTING FOR EVENT CLASS =========================================

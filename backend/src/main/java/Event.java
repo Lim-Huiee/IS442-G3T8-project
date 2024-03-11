@@ -162,6 +162,53 @@ public class Event {
         return events;
     }
 
+    public static ArrayList<Event> getUpcomingEvents() {
+        ArrayList<Event> events = new ArrayList<>();
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT * FROM event WHERE num_tickets_avail > 0 AND datetime > NOW() AND datetime > DATE_ADD(NOW(), INTERVAL 6 MONTH)";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            resultSet = statement.executeQuery();
+    
+            while (resultSet.next()) {
+                int retrievedEventID = resultSet.getInt("event_id");
+                String retrieveEventType = resultSet.getString("event_type");
+                String retrieveEventName = resultSet.getString("event_name");
+                String retrieveVenue = resultSet.getString("venue");
+    
+                Timestamp timestamp = resultSet.getTimestamp("datetime");
+                LocalDateTime retrieveEventDateTime = timestamp.toLocalDateTime();
+    
+                int retrieveNumTotalTickets = resultSet.getInt("total_tickets");
+                int retrieveNumTicketsAvailable = resultSet.getInt("num_tickets_avail");
+                String retrieveEventDetails = resultSet.getString("event_details");
+                int retrieveTicketPrice = resultSet.getInt("price");
+    
+                Event event = new Event(retrievedEventID, retrieveEventType, retrieveEventName, retrieveVenue,
+                        retrieveEventDateTime, retrieveNumTotalTickets, retrieveNumTicketsAvailable,
+                        retrieveEventDetails, retrieveTicketPrice);
+                events.add(event);
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return events;
+    }
+
     public static ArrayList<Event> getAllEvents() {
         ArrayList<Event> events = new ArrayList<>();
         ResultSet resultSet = null;
