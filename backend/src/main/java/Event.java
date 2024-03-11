@@ -115,13 +115,13 @@ public class Event {
         return event;
     }
 
-    public static ArrayList<Event> getAllEvents() {
+    public static ArrayList<Event> getAllBookableEvents() {
         ArrayList<Event> events = new ArrayList<>();
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
             DBConnection.establishConnection();
-            String sqlQuery = "SELECT * FROM event";
+            String sqlQuery = "SELECT * FROM event WHERE num_tickets_avail > 0 AND datetime > NOW() AND datetime < DATE_ADD(NOW(), INTERVAL 6 MONTH) AND TIMESTAMPDIFF(HOUR, NOW(), datetime) > 24";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             resultSet = statement.executeQuery();
 

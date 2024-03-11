@@ -192,7 +192,7 @@ public class EventManager extends User{
 
     public String viewSaleStatistics() {
         try {
-            ArrayList<Event> events = Event.getAllEvents();
+            ArrayList<Event> events = Event.getAllBookableEvents();
             StringBuilder statistics = new StringBuilder();
             statistics.append("Event Name\tTickets Sold\tRevenue\n");
 
