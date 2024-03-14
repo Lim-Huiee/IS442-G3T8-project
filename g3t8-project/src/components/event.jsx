@@ -1,32 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { EventListing } from "./eventListing";
-import axios from 'axios'; // Import Axios for making HTTP requests
 
-export const Event = ({ handleView }) => {
+
+export const Event = ({ data, handleView }) => {
 
   const [values, setValues] = useState({
     dropdownFilter: '',
     searchBar: ''
   });
-
-  const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    // Fetch events when the component mounts
-    async function fetchEvents() {
-      try {
-        const response = await axios.get('http://localhost:4567/get_all_bookable_events');
-        console.log('Response from server:', response.data); // Log the response data
-        setEvents(response.data); // Set the events state
-        // console.log(events);
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-    }
-    fetchEvents();
-  }, []); // Empty dependency array to run only once when the component mounts
-
 
   const handleFilter = (event) => {
     event.preventDefault();
@@ -56,11 +38,9 @@ export const Event = ({ handleView }) => {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => handleView("All Events")}>All Events</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleView("Events in a month")}>Events in a month</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleView("Events in 3 months")}>Events in 3 months</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleView("Events in 6 months")}>Events in 6 months</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleView("Future events (available after 6 months)")}>Future events (available after 6 months)</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleView("Past events (happening in 24 hours)")}>Past events (happening in 24 hours)</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleView("Bookable Events")}>Bookable Events</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleView("Upcoming events (available after 6 months)")}>Future events (available after 6 months)</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleView("Immediate events (happening in 24 hours)")}>Immediate events (happening in 24 hours)</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -68,8 +48,8 @@ export const Event = ({ handleView }) => {
 
       <div className="row mt-5">
       <div className="portfolio-items">
-  {events.length > 0
-    ? events.filter((el) => {
+  {data.length > 0
+    ? data.filter((el) => {
         if (values.searchBar.length > 0) {
           let searchInputValue = values.searchBar.toLowerCase();
           // Replace 'el.title' with the appropriate property name

@@ -3,9 +3,9 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { OneEventPage } from "./views/oneEventPage";
 import JsonData from "./../data/data.json";
 
-export const EventListing = (props) => {
+export const EventListing = ( props ) => {
   const navigate = useNavigate();
-
+  console.log(props);
   const handleClick = () => {
     navigate("/oneEventPage", { state: props.data });
   };

@@ -240,8 +240,6 @@ public static void main(String[] args) {
             return "";
         });
 
-
-
         post("/register", (req, res) -> {
             System.out.println("Request: " + req.body());
         
@@ -345,7 +343,31 @@ public static void main(String[] args) {
             return gson.toJson(bookableEvents);
         });
 
+        get("/get_all_events", (req, res) -> {
+            List<Event> getAllEvents = Event.getAllEvents();
+            //Gson gson = new Gson();
+            return gson.toJson(getAllEvents);
+        });
+
+        get("/get_upcoming_events", (req, res) -> {
+            List<Event> getUpcomingEvents = Event.getUpcomingEvents();
+            //Gson gson = new Gson();
+            return gson.toJson(getUpcomingEvents);
+        });
+
+        get("/get_immediate_events", (req, res) -> {
+            List<Event> getImmediateEvents = Event.getImmediateEvents();
+            //Gson gson = new Gson();
+            return gson.toJson(getImmediateEvents);
+        });
         
+        get("/get_event_status_by_id/:id", (req, res) -> {
+            String id = req.params(":id");
+            boolean eventStatus = Event.getEventStatusByID(Integer.parseInt(id));
+            //Gson gson = new Gson();
+            return eventStatus;
+        });
+
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DBConnection.closeConnection(); // Close database connection
