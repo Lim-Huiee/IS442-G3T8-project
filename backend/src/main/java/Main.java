@@ -12,10 +12,14 @@ import spark.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter; // Import the missing classes
-
+/* import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException; */
 
 import static spark.Spark.*;
 
@@ -51,11 +55,8 @@ public static void main(String[] args) {
             .create();
 
 
-        
         /// ==================== Testing of User/TicketOfficer class =======================================
-         // Serve static files from the resources/public folder
          
-        //staticFiles.externalLocation("src/main/resources/public");
         System.out.println("=============================Start OF TESTING FOR USER CLASS====================");
         try {
             // Usage example: retrieve user with ID 1
@@ -85,8 +86,7 @@ public static void main(String[] args) {
         }
 
         System.out.println("=============================END OF TESTING FOR USER CLASS====================");
-        // ====================== END OF TESTING USER CLASS ==================================
-        // ======================== start testing of event manager class ====================
+
         System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
         User eventManager = null;
         try {
@@ -168,6 +168,21 @@ public static void main(String[] args) {
         // Register CORS filter
         before("*", (request, response) -> CorsFilter.addCorsHeaders(request, response));
 
+        // CORS OPTIONS route
+        options("/*", (request, response) -> {
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        });
+
 
         // Define routes
         // Serve the default login page
@@ -181,37 +196,29 @@ public static void main(String[] args) {
         
             // Retrieve the request body as a string
             String requestBody = req.body();
-        
-            // Split the request body into individual parameters
-            String[] params = requestBody.split("&");
-        
+
+            // Decode the request body (if necessary)
+            requestBody = URLDecoder.decode(requestBody, StandardCharsets.UTF_8.toString());
+                  
             // Initialize variables to hold username and password
-            String username = null;
+            String email = null;
             String password = null;
         
             // Loop through the parameters and extract username and password
-            for (String param : params) {
-                String[] keyValue = param.split("=");
-                if (keyValue.length == 2) {
-                    String key = keyValue[0];
-                    String value = keyValue[1];
-            
-                    // Decode the value using URLDecoder
-                    value = URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
-            
-                    if (key.equals("username")) {
-                        username = value;
-                    } else if (key.equals("password")) {
-                        password = value;
-                    }
-                }
-            }
+             // Parse the JSON string to a JSON object
+            JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+
+            // Extract email from the JSON object
+            email = jsonObject.get("email").getAsString();
+
+            // Extract password from the JSON object
+            password = jsonObject.get("password").getAsString();
         
-            // Print the retrieved username and password (for debugging purposes)
-            System.out.println("Username: " + username);
+            // Now you can use the email and password variables as needed
+            System.out.println("Email: " + email);
             System.out.println("Password: " + password);
             
-            User user = User.login(username, password);
+            User user = User.login(email, password);
             if (user instanceof Customer){      
                 Customer c = (Customer) user;
                 req.session().attribute("user", c);
@@ -301,8 +308,6 @@ public static void main(String[] args) {
         });
 
         
-        
-
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DBConnection.closeConnection(); // Close database connection

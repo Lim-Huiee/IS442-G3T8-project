@@ -86,14 +86,14 @@ public class User {
         return user;
     }
     
-    public static User login(String name, String password) {
+    public static User login(String passedEmail, String password) {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
             DBConnection.establishConnection();
-            String sqlQuery = "SELECT * FROM user WHERE name = ? AND password = ?";
+            String sqlQuery = "SELECT * FROM user WHERE email = ? AND password = ?";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
-            statement.setString(1, name);
+            statement.setString(1, passedEmail);
             statement.setString(2, password);
             resultSet = statement.executeQuery();
     
