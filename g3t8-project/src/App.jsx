@@ -11,7 +11,7 @@ import { Home } from "./components/views/homePage";
 import { EventsViewPage } from "./components/views/eventsViewPage";
 import { ContactPage } from "./components/views/contactPage";
 import { LoginRegisterPage } from "./components/views/loginRegisterPage";
-import { FaqPage } from "./components/views/faqs";
+import { FaqPage } from "./components/views/faqPage";
 import { OneEventPage } from "./components/views/oneEventPage";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
@@ -29,7 +29,7 @@ const App = () => {
             <Route path="/eventsView" element={ <EventsViewPage />} />
             <Route path="/contactPage" element={ <ContactPage />} />
             <Route path="/loginRegisterPage" element={ <LoginRegisterPage />} />
-            <Route path="/faqs" element={ <FaqPage />} />
+            <Route path="/faqPage" element={ <FaqPage />} />
             <Route path="/oneEventPage" element={ <OneEventPage />} />
           </Routes>
       </Router>
