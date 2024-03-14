@@ -32,10 +32,6 @@ public static class CorsFilter {
 }
 
 
-
-
-
-
 public static class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
     @Override
     public void write(JsonWriter out, LocalDateTime value) throws IOException {
@@ -59,7 +55,7 @@ public static void main(String[] args) {
         /// ==================== Testing of User/TicketOfficer class =======================================
          // Serve static files from the resources/public folder
          
-        staticFiles.externalLocation("src/main/resources/public");
+        //staticFiles.externalLocation("src/main/resources/public");
         System.out.println("=============================Start OF TESTING FOR USER CLASS====================");
         try {
             // Usage example: retrieve user with ID 1
@@ -172,7 +168,6 @@ public static void main(String[] args) {
         // Register CORS filter
         before("*", (request, response) -> CorsFilter.addCorsHeaders(request, response));
 
-       
 
         // Define routes
         // Serve the default login page
@@ -274,24 +269,7 @@ public static void main(String[] args) {
             
             // Return the modified HTML content
             return htmlContent;
-        });    
-        // Define routes
-        /* get("/user_info", (req, res) -> {
-            res.redirect("/user_info.html");
-            return null;
-        });
-
-        get("/user_info_data", (req, res) -> {
-            // Retrieve user information from the session
-            User user = req.session().attribute("user");
-
-            // Set response type to JSON
-            res.type("application/json");
-            Gson gson = new Gson();
-            return gson.toJson(user);
-            
-        }); */
-        
+        });           
 
         get("/test", (req, res) -> {
             // Retrieve user information from the session
@@ -322,7 +300,7 @@ public static void main(String[] args) {
             return gson.toJson(bookableEvents);
         });
 
-        // Endpoint to handle user info requests
+        
         
 
         // Stop Spark server when the program exits
