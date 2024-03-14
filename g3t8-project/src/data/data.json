@@ -1,0 +1,203 @@
+{
+  "Header": {
+    "title": "Ticketmistress",
+    "paragraph": "We sell tickets.",
+    "images": [
+      "img/carousel/carousel1.jpg",
+      "img/carousel/carousel2.jpg",
+      "img/carousel/carousel3.jpg",
+      "img/carousel/carousel4.jpg"
+    ]
+  },
+  "About": {
+    "paragraph": "At Ticketmistress, we are dedicated to offer you seamless access to the best events. Our user-friendly interface, comprehensive listings, transparent pricing, and secure transactions ensure hassle-free ticket purchases.",
+    "Why": [
+      "Transparent Pricing",
+      "Secre Payment Processing",
+      "Hassle-free transaction"
+    ],
+    "Why2": [
+      "24/7 customer service",
+      "Comprehensive listing",
+      "User-friendly interface"
+    ]
+  },
+  "TopPicks": [
+    {
+      "title": "Ed Sheeren +-=÷x tour",
+      "image": "img/carousel/carousel1.jpg",
+      "shows": [
+        {
+          "date": "16 Feb 2024",
+          "venue": "National Stadium, Singapore",
+          "price": "$128",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "title": "2024 Kyuhyun Asia Tour",
+      "image": "img/carousel/carousel2.jpg",
+      "shows": [
+        {
+          "date": "30 Mar 2024",
+          "venue": "National Stadium, Singapore",
+          "price": "$258",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "title": "StayC 1st World Tour | TenFresh",
+      "image": "img/carousel/carousel3.jpg",
+      "shows": [
+        {
+          "date": "16 Feb 2024",
+          "venue": "National Indoor Stadium, Singapore",
+          "price": "$258",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "title": "Disney on Ice",
+      "image": "img/carousel/carousel4.jpg",
+      "shows": [
+        {
+          "date": "9 Mar 2024",
+          "venue": "National Stadium, Singapore",
+          "price": "$300",
+          "status": "active"
+        },
+        {
+          "date": "10 Mar 2024",
+          "venue": "National Indoor Stadium, Singapore",
+          "price": "$300",
+          "status": "inactive"
+        }
+      ]
+    }
+  ],
+  "Services": [
+    {
+      "icon": "fa fa-wordpress",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-cart-arrow-down",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-cloud-download",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-language",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-plane",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-pie-chart",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    }
+  ],
+  "Testimonials": [
+    {
+      "img": "img/testimonials/01.jpg",
+      "text": "Amazing platform! The user-friendly interface made finding and purchasing tickets a breeze. Highly recommend!",
+      "name": "John Doe"
+    },
+    {
+      "img": "img/testimonials/02.jpg",
+      "text": "Hassle-free and smooth process! Will definitely recommend it to my friends and family!",
+      "name": "Yu Sar Ding"
+    },
+    {
+      "img": "img/testimonials/03.jpg",
+      "text": "Impressed with the wide selection of events available on this platform! Ticket prices were reasonable and the digital delivery option was convenient!",
+      "name": "Anonymous"
+    }
+  ],
+  "Team": [
+    {
+      "img": "img/team/01.jpg",
+      "name": "Jeremy",
+      "job": "Backend developer"
+    },
+    {
+      "img": "img/team/02.jpg",
+      "name": "Dehou",
+      "job": "Backend developer"
+    },
+    {
+      "img": "img/team/03.jpg",
+      "name": "Kyla",
+      "job": "Backend developer"
+    },
+    {
+      "img": "img/team/04.jpg",
+      "name": "Pei Shyan",
+      "job": "Frontend developer"
+    },
+    {
+      "img": "img/team/04.jpg",
+      "name": "Meryl",
+      "job": "Frontend developer"
+    },
+    {
+      "img": "img/team/04.jpg",
+      "name": "Hui Ee",
+      "job": "Frontend developer"
+    }
+  ],
+  "Contact": {
+    "address": "80 Stamford Rd, Singapore 178902 ",
+    "phone": "6808 7960",
+    "email": "weSellTickets@ticketmistress.com"
+  },
+  "AdmissionPolicy": [
+    "Admission to show/venue by full ticket only. Printed/electronic tickets must be produced for admission.",
+    "There will be no admission for infants in arms and children below 12 years old.",
+    "Individuals aged 12 years old and above will be required to purchase a ticket for admission.",
+    "No professional photography and videography is allowed.",
+    "No outside food and beverages are allowed into the venue."
+  ],
+  "CancellationPolicy": [
+    "Customers can cancel their booking up to 48 hours before the event.",
+    "Cancellation fee applies."
+  ],
+  "TicketPolicy": [
+    "Limited to 4 tickets per transaction"
+  ],
+  "Features": [
+    {
+      "icon": "fa fa-comments-o",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-bullhorn",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-group",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-magic",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    }
+  ]
+}

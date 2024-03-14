@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #userInfo {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        #userInfo h2 {
+            margin-top: 0;
+        }
+        #userInfo p {
+            margin: 10px 0;
+        }
+        #userInfo strong {
+            font-weight: bold;
+        }
+        #userInfo span {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div id="userInfo">
+        <h2>User Information</h2>
+        <p><strong>User ID:</strong> <span id="userId">{{userId}}</span></p>
+        <p><strong>Email:</strong> <span id="userEmail">{{userEmail}}</span></p>
+    </div>
+</body>
+</html>
+ 
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #userInfo {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        #userInfo h2 {
+            margin-top: 0;
+        }
+        #userInfo p {
+            margin: 10px 0;
+        }
+        #userInfo strong {
+            font-weight: bold;
+        }
+        #userInfo span {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div id="userInfo">
+        <h2>User Information</h2>
+        <p><strong>User ID:</strong> <span id="userId"></span></p>
+        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Make a GET request to retrieve user information
+            fetch("/user_info_data")
+            .then(response => response.json())
+            .then(user => {
+                console.log(user);
+                // Populate user information into HTML elements
+                document.getElementById("userId").textContent = user.userID;
+                document.getElementById("userEmail").textContent = user.email;
+            })
+            .catch(error => {
+                console.error("Error fetching user information:", error);
+            });
+        });
+    </script>
+</body>
+</html> -->
