@@ -240,6 +240,44 @@ public static void main(String[] args) {
             return "";
         });
 
+
+
+        post("/register", (req, res) -> {
+            System.out.println("Request: " + req.body());
+        
+            // Retrieve the request body as a string
+            String requestBody = req.body();
+
+            // Decode the request body (if necessary)
+            requestBody = URLDecoder.decode(requestBody, StandardCharsets.UTF_8.toString());
+                  
+            // Initialize variables to hold username and password
+            String name = null;
+            String email = null;
+            String password = null;
+            String outcome = "";
+        
+            // Loop through the parameters and extract username and password
+             // Parse the JSON string to a JSON object
+            JsonObject jsonObject = JsonParser.parseString(requestBody).getAsJsonObject();
+
+            // Extract email from the JSON object
+            name = jsonObject.get("name").getAsString();
+            email = jsonObject.get("email").getAsString();
+
+            // Extract password from the JSON object
+            password = jsonObject.get("password").getAsString();
+        
+            // Now you can use the email and password variables as needed
+            System.out.println("Name: " + name);
+            System.out.println("Email: " + email);
+            System.out.println("Password: " + password);
+            
+            outcome = User.register(name,password,email);
+                        
+            return outcome;
+        });
+
         get("/user_info", (req, res) -> {
             // Retrieve user information from the session
             User user = req.session().attribute("user");

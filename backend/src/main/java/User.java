@@ -142,16 +142,16 @@ public class User {
         PreparedStatement insertStatement = null;
 
         try {
-            // Check if the username already exists
+            // Check if the email already exists
             DBConnection.establishConnection();
-            String checkQuery = "SELECT * FROM user WHERE name = ?";
+            String checkQuery = "SELECT * FROM user WHERE email = ?";
             checkStatement = DBConnection.getConnection().prepareStatement(checkQuery);
-            checkStatement.setString(1, name);  // sets to first parameter of register(), which is name
+            checkStatement.setString(1, email);  // sets to first parameter of register(), which is name
             checkResultSet = checkStatement.executeQuery();
 
             if (checkResultSet.next()) {
                 // Username already exists
-                return "Username already exists. Please choose a different one.";
+                return "Email already exists. Please choose a different one.";
             } else {
                 // Check if the email is valid
                 if (!isValidEmail(email)) {
