@@ -15,41 +15,44 @@ export const EventBanner = ( props ) => {
     return (
         <div className="container-fluid">
             <div className="row justify-content-center">
-                <div className="col text-center p-0">
+                {/* <div className="col text-center p-0">
                     <img src={props.data.image} className="w-100" alt="Loading..." />
-                </div>
+                </div> */}
             </div>
             <div className="row py-3" style={{backgroundColor:"#C0C0C0"}}>
                 <div className="container">
                     <div className="row">
                         <div className="col-8 text-left">
-                            <h2>{props.data.title}</h2>
+                            <h2>{props.data.eventName}</h2>
                             <h4>Date: 
-                                {props.data.shows.map((d,i) => {
+                                {/* {props.data.shows.map((d,i) => {
                                     if (i < props.data.shows.length-1) {
                                     return(<span key={i}>{d.date},</span>)
                                     } else {
                                     return(<span key={i}>{d.date}</span>)
                                     }
-                                })}
+                                })} */}
+                                <span> {props.data.eventDateTime ? props.data.eventDateTime.replace("T", " ") : "Loading..."}</span>
                             </h4>
                             <h4>Venue: 
-                                {props.data.shows.map((d,i) => {
+                                {/* {props.data.shows.map((d,i) => {
                                     if (i < props.data.shows.length-1) {
                                     return(<span key={i}>{d.venue},</span>)
                                     } else {
                                     return(<span key={i}>{d.venue}</span>)
                                     }
-                                })}
+                                })} */}
+                                <span> {props.data.venue}</span>
                             </h4>
                             <h4>Ticket price: 
-                                {props.data.shows.map((d,i) => {
+                                {/* {props.data.shows.map((d,i) => {
                                     if (i < props.data.shows.length-1) {
                                     return(<span key={i}>{d.price},</span>)
                                     } else {
                                     return(<span key={i}>{d.price}</span>)
                                     }
-                                })}
+                                })} */}
+                                <span> ${props.data.ticketPrice}</span>
                             </h4>
                         </div>
                         <div className="col text-end my-auto">

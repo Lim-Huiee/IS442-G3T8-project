@@ -3,8 +3,8 @@ Cors.class
 Main$LocalDateTimeTypeAdapter.class
 DBConnection.class
 EventManager.class
-Ticket.class
 TicketOfficer.class
+Ticket.class
 Customer.class
 Event.class
 User.class

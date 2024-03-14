@@ -4,16 +4,16 @@ import Table from 'react-bootstrap/Table';
 
 export const PurchaseTicketModal = ({show, handleClose, data}) => {
 
-    console.log(data);
+    // console.log(data);
 
     return (
         <div>
             <Modal show={show} onHide={handleClose} animation={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Find tickets - {data.title}</Modal.Title>
+                    <Modal.Title>Find tickets - {data.eventName}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Table stiped bordered>
+                    <Table striped bordered>
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -23,7 +23,7 @@ export const PurchaseTicketModal = ({show, handleClose, data}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.shows.map((d,i) => {
+                            {/* {data.shows.map((d,i) => {
                                 return (
                                     <tr>
                                         <td key={`${d}-${i}`}>{d.date}</td>
@@ -32,7 +32,13 @@ export const PurchaseTicketModal = ({show, handleClose, data}) => {
                                         <td key={i}> {d.status=="active"? <Button variant="primary">Buy Tickets</Button> : "Sold out"}</td>
                                     </tr>
                                 )
-                            })}
+                            })} */}
+                            <tr>
+                                <td>{data.eventDateTime ? data.eventDateTime.replace("T", " ") : "Loading..."}</td>
+                                <td>{data.venue}</td>
+                                <td>{data.ticketPrice}</td>
+                                <td> {data.numTicketsAvailable>0 ? <Button variant="primary">Buy Tickets</Button> : "Sold out"}</td>
+                            </tr>
                         </tbody>
                     </Table>
                 </Modal.Body>

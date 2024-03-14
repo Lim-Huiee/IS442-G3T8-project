@@ -14,18 +14,19 @@ export const Event = ({ handleView }) => {
 
   useEffect(() => {
     // Fetch events when the component mounts
+    async function fetchEvents() {
+      try {
+        const response = await axios.get('http://localhost:4567/get_all_bookable_events');
+        console.log('Response from server:', response.data); // Log the response data
+        setEvents(response.data); // Set the events state
+        // console.log(events);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    }
     fetchEvents();
   }, []); // Empty dependency array to run only once when the component mounts
 
-  const fetchEvents = async () => {
-    try {
-      const response = await axios.get('http://localhost:4567/get_all_bookable_events');
-      console.log('Response from server:', response.data); // Log the response data
-      setEvents(response.data); // Set the events state
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
 
   const handleFilter = (event) => {
     event.preventDefault();
