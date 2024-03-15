@@ -276,7 +276,7 @@ public static void main(String[] args) {
             return outcome;
         });
 
-        get("/user_info", (req, res) -> {
+        /* get("/user_info", (req, res) -> {
             // Retrieve user information from the session
             User user = req.session().attribute("user");
             User loggedInUser=null;
@@ -312,7 +312,7 @@ public static void main(String[] args) {
             
             // Return the modified HTML content
             return htmlContent;
-        });           
+        });   */         
 
         get("/test", (req, res) -> {
             // Retrieve user information from the session
