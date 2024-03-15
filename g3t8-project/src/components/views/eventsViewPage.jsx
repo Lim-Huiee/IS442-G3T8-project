@@ -5,24 +5,6 @@ import { PageTitle } from "../section-components/pageTitle";
 import { Footer } from "../footer";
 import JsonData from "../../data/data.json";
 import "./../../App.css";
-<<<<<<< HEAD
-
-
-export const EventsViewPage = () => {
-    const [landingPageData, setLandingPageData] = useState({});
-    
-    useEffect(() => {
-        setLandingPageData(JsonData);
-    }, []);
-
-    const [view, setView] = useState("All Events");
-
-    const handleView = (view) => {
-        setView(view);
-    }
-    //pass dropdown filter to parent and call backend, pass in data as per dropdown filtered data. 
-
-=======
 import axios from 'axios'; // Import Axios for making HTTP requests
 
 export const EventsViewPage = () => {
@@ -53,17 +35,12 @@ export const EventsViewPage = () => {
         }
     }
 
->>>>>>> newTestingMaven
     return (
         <div>
             <div style={{minHeight:"100vh"}}>
                 <Navigation />
                 <PageTitle pageTitle={"Events"}  pageView={view} filterShow={"true"}/>
-<<<<<<< HEAD
-                <Event data={landingPageData.TopPicks} handleView={handleView} />
-=======
                 <Event data={selectedEvents} handleView={handleView}/>
->>>>>>> newTestingMaven
             </div>
             <Footer></Footer>
         </div>

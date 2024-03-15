@@ -15,19 +15,11 @@ export const FaqPage = () => {
     return (
         <div >
             <Navigation />
-<<<<<<< HEAD
-            
-            <div style={{ minHeight: "100vh", overflow: "auto" }}>
-                <PageTitle pageTitle={"FAQ"} />
-                <Faq data={landingPageData.Faq}/>
-                
-=======
 
             <div style={{ minHeight: "100vh", overflow: "auto" }}>
                 <PageTitle pageTitle={"FAQ"} />
                 <Faq data={landingPageData.Faq}/>
 
->>>>>>> newTestingMaven
                 <div >
                     <h3 className="text-center pt-5">FOR MORE ENQUIRIES</h3>
                     <button className="btn btn-custom btn-lg align-center" style={{ display: "block", margin: "20px auto 20px auto" }} onClick={() => window.location.href = "/contactPage"}>Click Here</button>
