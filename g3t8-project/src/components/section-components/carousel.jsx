@@ -10,8 +10,8 @@ function ControlledCarousel(props) {
     return (
         
         <div id="carouselIndicators" className="carousel slide" data-bs-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+            <ol className="carousel-indicators">
+                <li data-target="#carouselIndicators" data-slide-to="0" className="active"></li>
                 <li data-target="#carouselIndicators" data-slide-to="1"></li>
                 <li data-target="#carouselIndicators" data-slide-to="2"></li>
             </ol>
@@ -28,7 +28,7 @@ function ControlledCarousel(props) {
                 : "loading"
                 }
             </div>
-            <div class="carousel-caption d-none d-md-block" style={{marginBottom:"2.5%"}}>            
+            <div className="carousel-caption d-none d-md-block" style={{marginBottom:"2.5%"}}>            
                 <a href="/eventsView" className="btn btn-custom btn-lg page-scroll ">View events</a>
             </div>
             <a className="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">

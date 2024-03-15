@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios"; // Import Axios for making HTTP requests
 
 export const Register = ({handleAction}) => {
 
@@ -63,6 +64,14 @@ export const Register = ({handleAction}) => {
 
     if (Object.keys(error).length === 0) {
       //proceed to send to backend
+      axios
+        .post("http://localhost:4567/register", values) // Modify URL to match your backend endpoint
+        .then((response) => {
+          console.log("Registration successful"); // Handle successful login
+        })
+        .catch((error) => {
+          console.error("Registration failed", error); // Handle login failure
+        });
     }
   }
 

@@ -22,6 +22,20 @@
       "User-friendly interface"
     ]
   },
+  "images": {
+    "1": "img/carousel/carousel2.jpg",
+    "2": "img/carousel/carousel1.jpg",
+    "3": "img/carousel/carousel3.jpg",
+    "4": "img/carousel/carousel4.jpg",
+    "5": ""
+
+  },
+  "views": {
+    "All Events": "get_all_events",
+    "Bookable Events": "get_all_bookable_events",
+    "Upcoming events (available after 6 months)":"get_upcoming_events",
+    "Immediate events (happening in 24 hours)":"get_immediate_events"
+  },
   "TopPicks": [
     {
       "title": "Ed Sheeren +-=÷x tour",
@@ -199,6 +213,7 @@
       "title": "Lorem ipsum",
       "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
     }
+    
   ],
   "Faq":[
     {
@@ -232,4 +247,5 @@
       ]
   }
   ]
+  
 }

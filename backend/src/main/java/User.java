@@ -86,14 +86,24 @@ public class User {
         return user;
     }
     
+<<<<<<< HEAD
     public static User login(String name, String password) {
+=======
+    public static User login(String passedEmail, String password) {
+>>>>>>> newTestingMaven
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
             DBConnection.establishConnection();
+<<<<<<< HEAD
             String sqlQuery = "SELECT * FROM user WHERE name = ? AND password = ?";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             statement.setString(1, name);
+=======
+            String sqlQuery = "SELECT * FROM user WHERE email = ? AND password = ?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setString(1, passedEmail);
+>>>>>>> newTestingMaven
             statement.setString(2, password);
             resultSet = statement.executeQuery();
     
@@ -142,16 +152,28 @@ public class User {
         PreparedStatement insertStatement = null;
 
         try {
+<<<<<<< HEAD
             // Check if the username already exists
             DBConnection.establishConnection();
             String checkQuery = "SELECT * FROM user WHERE name = ?";
             checkStatement = DBConnection.getConnection().prepareStatement(checkQuery);
             checkStatement.setString(1, name);  // sets to first parameter of register(), which is name
+=======
+            // Check if the email already exists
+            DBConnection.establishConnection();
+            String checkQuery = "SELECT * FROM user WHERE email = ?";
+            checkStatement = DBConnection.getConnection().prepareStatement(checkQuery);
+            checkStatement.setString(1, email);  // sets to first parameter of register(), which is name
+>>>>>>> newTestingMaven
             checkResultSet = checkStatement.executeQuery();
 
             if (checkResultSet.next()) {
                 // Username already exists
+<<<<<<< HEAD
                 return "Username already exists. Please choose a different one.";
+=======
+                return "Email already exists. Please choose a different one.";
+>>>>>>> newTestingMaven
             } else {
                 // Check if the email is valid
                 if (!isValidEmail(email)) {

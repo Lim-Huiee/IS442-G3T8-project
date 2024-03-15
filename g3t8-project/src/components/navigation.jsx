@@ -11,7 +11,7 @@ export const Navigation = (props) => {
             data-toggle="collapse"
             data-target="#bs-example-navbar-collapse-1"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
           <Link to="/"> 
             <img src="img/ticketmistress-logo.jpg"></img>
@@ -19,13 +19,13 @@ export const Navigation = (props) => {
           {" "}
         </div>
 
-        <div class="container-fluid">
+        <div className="container-fluid">
           <div
             className="collapse navbar-collapse"
             id="bs-example-navbar-collapse-1"
           >
             <ul className="nav navbar-nav navbar-right">
-              <li class="nav-item">
+              <li className="nav-item">
                 <Link to="/eventsView"> All Events </Link>
                 {/* <a href="#services" className="page-scroll">
                   Services
@@ -37,19 +37,19 @@ export const Navigation = (props) => {
                   About
                 </a>
               </li> */}
-              <li class="nav-item">
+              <li className="nav-item">
                 <Link to="/faqPage"> FAQs </Link>
                 {/* <a href="#portfolio" className="page-scroll">
                   Gallery
                 </a> */}
               </li>
-              <li class="nav-item">
+              <li className="nav-item">
                 <Link to="/contactPage"> Contact </Link>
                 {/* <a href="#contact" className="page-scroll"> */}
                   {/* Contact */}
                 {/* </a> */}
               </li>
-              <li class="nav-item">
+              <li className="nav-item">
                 <Link to="/loginRegisterPage"> Login/Register </Link>
                 {/* <a href="#contact" className="page-scroll"> */}
                   {/* Contact */}
