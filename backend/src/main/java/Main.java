@@ -162,9 +162,9 @@ public static void main(String[] args) {
         // ==============================END  TESTING FOR EVENT CLASS =========================================
 
         System.out.println("-----------------------------------TEST CHECKOUT ORDER------------------------");
-         Map<Integer, Integer> eventsBooked = new HashMap<>();  //event id, num tix purchased
-         eventsBooked.put(1,1);
-         eventsBooked.put(2,2);
+        Map<Integer, Integer> eventsBooked = new HashMap<>();  //event id, num tix purchased
+        eventsBooked.put(1,1);
+        eventsBooked.put(2,2);
 
         //Booking for User id 1
         //Consists of :
@@ -175,13 +175,15 @@ public static void main(String[] args) {
 
         Order.checkOutOrder(eventsBooked, newOrderIDCreated);
         
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        System.out.println(Order.getAllOrdersByUserID(1));
-       
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx       
         ArrayList<Order> orders = Order.getAllOrdersByUserID(1);
         for (Order o:orders){
-            System.out.println("ORDER ID IS  " + o.getOrderID());
-            System.out.println("ORDER TOTAL IS " + o.getTotalPrice());
+            //System.out.println("ORDER ID IS  " + o.getOrderID());
+            //System.out.println("ORDER TOTAL IS " + o.getTotalPrice());
+            
+            if (o.getOrderID()==newOrderIDCreated){          // return latest order only
+                System.out.println(o.getTotalPrice());
+            }
         }
        
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
