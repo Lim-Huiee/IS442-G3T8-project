@@ -98,7 +98,7 @@ public class Order{
     }
 
     
-    public static int createOrder(Map<Integer, Integer> eventsBooked, int userID){       
+    public static int createOrder(int userID){       
         PreparedStatement insertStatement = null;
         ResultSet generatedKeys = null;
         try {
