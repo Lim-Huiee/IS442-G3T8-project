@@ -91,7 +91,7 @@ public static void main(String[] args) {
         System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
         User eventManager = null;
         try {
-            eventManager=User.login("event man","password4");     // event manager login, returns user object
+            eventManager=User.login("em@tm.com","password4");     // event manager login, returns user object
 
             if (eventManager != null){
                 if(eventManager instanceof EventManager){
@@ -164,11 +164,27 @@ public static void main(String[] args) {
         System.out.println("-----------------------------------TEST CHECKOUT ORDER------------------------");
          Map<Integer, Integer> eventsBooked = new HashMap<>();  //event id, num tix purchased
          eventsBooked.put(1,1);
-         eventsBooked.put(1,2);
+         eventsBooked.put(2,2);
 
         Integer newOrderIDCreated = Order.createOrder(eventsBooked,1);
         System.out.println(newOrderIDCreated);
+
+        Order.checkOutOrder(eventsBooked, newOrderIDCreated);
         
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        Order test = new Order(5, 5, eventsBooked, 10.0, 5);
+        System.out.println(test.getCancellationFee());
+
+        System.out.println(Order.getAllOrdersByUserID(1));
+        double totalOrderPrice=0.0;
+        ArrayList<Order> orders = Order.getAllOrdersByUserID(1);
+        for (Order o:orders){
+            System.out.println("TOTAL PRICE IS  " + o.getOrderID());
+            totalOrderPrice+=o.getTotalPrice();
+
+        }
+        System.out.println(totalOrderPrice);
+
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 

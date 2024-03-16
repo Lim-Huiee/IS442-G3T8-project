@@ -1,8 +1,12 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Order{
     private int userID;
@@ -18,6 +22,79 @@ public class Order{
         this.eventsBooked = eventsBooked;
         this.totalPrice=totalPrice;
         this.cancellationFee = cancellationFee;
+    }
+
+    public int getOrderID(){
+        return orderID;
+    }
+
+    public static ArrayList<Order> getAllOrdersByUserID(int userID) {
+        ArrayList<Order> orders = new ArrayList<>();
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT o.order_id, o.user_id, t.event_id, t.ticket_id, e.price, t.cancellation_fee " +
+                              "FROM orders o " +
+                              "JOIN ticket t ON o.order_id = t.order_id " +
+                              "JOIN event e ON t.event_id = e.event_id " +
+                              "WHERE o.user_id = ?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setInt(1, userID);
+            resultSet = statement.executeQuery();
+
+            Map<Integer, Map<Integer, Integer>> eventsBookedMap = new HashMap<>(); // Map to store eventsBooked for each order
+            Map<Integer, Double> totalPriceMap = new HashMap<>(); // Map to store totalPrice for each order
+
+            while (resultSet.next()) {
+                int orderID = resultSet.getInt("order_id");
+                int eventID = resultSet.getInt("event_id");
+                int ticketID = resultSet.getInt("ticket_id");
+                double price = resultSet.getDouble("price");
+                //double cancellationFee = resultSet.getDouble("cancellation_fee");
+
+                // Populate eventsBookedMap
+                if (!eventsBookedMap.containsKey(orderID)) {
+                    eventsBookedMap.put(orderID, new HashMap<>());
+                }
+                Map<Integer, Integer> eventTicketsMap = eventsBookedMap.get(orderID);
+                eventTicketsMap.put(eventID, eventTicketsMap.getOrDefault(eventID, 0) + 1);
+
+                // Calculate totalPrice and update totalPriceMap
+                totalPriceMap.put(orderID, totalPriceMap.getOrDefault(orderID, 0.0) + price);
+
+                // Update cancellationFee for the order
+                // Assuming cancellationFee is per ticket
+                // If it's per order, then you might need to adjust the logic
+                totalPriceMap.put(orderID, totalPriceMap.get(orderID) );
+            }
+
+            // Construct Order objects from the retrieved data
+            for (Map.Entry<Integer, Map<Integer, Integer>> entry : eventsBookedMap.entrySet()) {
+                int orderID = entry.getKey();
+                Map<Integer, Integer> eventsBooked = entry.getValue();
+                double totalPrice = totalPriceMap.get(orderID);
+                int cancellationFee = totalPriceMap.get(orderID).intValue(); // Convert cancellationFee to int
+                orders.add(new Order(userID, orderID, eventsBooked, totalPrice, cancellationFee));
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return orders;
     }
 
     
@@ -67,17 +144,27 @@ public class Order{
     }
 
     
-    public static String checkOutOrder(Map<Integer, Integer> eventsBooked, int orderID){  // 1,1  and 1,2   event id and num tix
+    public static String checkOutOrder(Map<Integer, Integer> eventsBooked, int orderID){  // 1,1  and 1,2  for  event id/num tix
         PreparedStatement insertStatement = null;
         try {
             // Check if the email already exists
             DBConnection.establishConnection();
             
-            String insertQuery = "INSERT INTO ticket (ticket_id,event_id,order_id,cancellation_fee) VALUES (?,?)";
+            String insertQuery = "INSERT INTO ticket (event_id,order_id,cancellation_fee) VALUES (?,?,?)";
             insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
-            insertStatement.setInt(1, orderID);
-            insertStatement.setString(2, "delivered");
-            insertStatement.executeUpdate();
+        
+            for (Map.Entry<Integer, Integer> entry : eventsBooked.entrySet()) {
+                int eventId = entry.getKey();
+                int numTickets = entry.getValue();
+    
+                for (int i = 0; i < numTickets; i++) {
+                    insertStatement.setInt(1, eventId);
+                    insertStatement.setInt(2, orderID);
+                    insertStatement.setInt(3, 10); // Assuming cancellation fee is always 10
+    
+                    insertStatement.executeUpdate();
+                }
+            }
             
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
@@ -137,7 +224,7 @@ public class Order{
         this.cancellationFee = newCancellationFee;
     } */
 
-    public int getUserIDOfOrder(){
-        return 0;
+    public double getTotalPrice(){
+        return totalPrice;
     }
 }
