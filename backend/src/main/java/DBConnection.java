@@ -7,7 +7,7 @@ public class DBConnection {
     private static String MYSQL_JDBC_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     private static String MYSQL_DB_URL = "jdbc:mysql://localhost:3306/ticketmistress";
     private static String MYSQL_DB_USER = "root";
-    private static String MYSQL_DB_USER_PASSWORD = "root";
+    private static String MYSQL_DB_USER_PASSWORD = "";
 
     private static Connection connection; // Declare the connection variable at the class level
 
