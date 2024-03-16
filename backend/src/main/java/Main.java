@@ -166,7 +166,11 @@ public static void main(String[] args) {
          eventsBooked.put(1,1);
          eventsBooked.put(2,2);
 
-        Integer newOrderIDCreated = Order.createOrder(1);
+        //Booking for User id 1
+        //Consists of :
+        //Event id 1, 1 ticket
+        //Event id 2, 2 tickets
+        Integer newOrderIDCreated = Order.createOrder(1);       // creates a new order id
         System.out.println(newOrderIDCreated);
 
         Order.checkOutOrder(eventsBooked, newOrderIDCreated);
