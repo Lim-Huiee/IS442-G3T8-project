@@ -1,10 +1,11 @@
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import spark.Filter;
 import spark.Request;
@@ -160,7 +161,18 @@ public static void main(String[] args) {
     
         // ==============================END  TESTING FOR EVENT CLASS =========================================
 
-        // ============================== TESTING OF ROUTING WITH SPARK =======================================
+        System.out.println("-----------------------------------TEST CHECKOUT ORDER------------------------");
+         Map<Integer, Integer> eventsBooked = new HashMap<>();  //event id, num tix purchased
+         eventsBooked.put(1,1);
+         eventsBooked.put(1,2);
+
+        Integer newOrderIDCreated = Order.createOrder(eventsBooked,1);
+        System.out.println(newOrderIDCreated);
+        
+
+        System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
+
+
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
         port(4567);

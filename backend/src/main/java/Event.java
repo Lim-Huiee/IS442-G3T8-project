@@ -338,9 +338,4 @@ public class Event {
         return events;
     }
     
-    public String bookEvent(int userID, int bookEventID,int numTickets, int numGuests){
-        
-
-        return"";
-    }
 }
