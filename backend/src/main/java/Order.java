@@ -64,9 +64,6 @@ public class Order{
                 // Calculate totalPrice and update totalPriceMap
                 totalPriceMap.put(orderID, totalPriceMap.getOrDefault(orderID, 0.0) + price);
 
-                // Update cancellationFee for the order
-                // Assuming cancellationFee is per ticket
-                // If it's per order, then you might need to adjust the logic
                 totalPriceMap.put(orderID, totalPriceMap.get(orderID) );
             }
 
@@ -144,31 +141,43 @@ public class Order{
     }
 
     
-    public static String checkOutOrder(Map<Integer, Integer> eventsBooked, int orderID){  // 1,1  and 1,2  for  event id/num tix
+    public static String checkOutOrder(Map<Integer, Integer[]> eventsBooked, int orderID) {
         PreparedStatement insertStatement = null;
         try {
             // Check if the email already exists
             DBConnection.establishConnection();
+    
+            String insertQueryTicket = "INSERT INTO ticket (event_id, order_id, cancellation_fee) VALUES (?, ?, ?)";
+            String insertQueryGuest = "INSERT INTO user_accompanying_guest (user_id, event_id, num_accompanying_guest) VALUES (?, ?, ?)";
             
-            String insertQuery = "INSERT INTO ticket (event_id,order_id,cancellation_fee) VALUES (?,?,?)";
-            insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
-        
-            for (Map.Entry<Integer, Integer> entry : eventsBooked.entrySet()) {
+            insertStatement = DBConnection.getConnection().prepareStatement(insertQueryTicket);
+    
+            for (Map.Entry<Integer, Integer[]> entry : eventsBooked.entrySet()) {
                 int eventId = entry.getKey();
-                int numTickets = entry.getValue();
+                Integer[] eventData = entry.getValue();
+                int numTickets = eventData[0]; // Assuming the first element represents the number of tickets
+                int numGuests = eventData[1]; // Assuming the second element represents the number of accompanying guests
     
                 for (int i = 0; i < numTickets; i++) {
                     insertStatement.setInt(1, eventId);
                     insertStatement.setInt(2, orderID);
-                    insertStatement.setInt(3, 10); // Assuming cancellation fee is always 10
+                    insertStatement.setInt(3, 10); // Assuming cancellation fee is always 10           will need to change
     
                     insertStatement.executeUpdate();
                 }
+    
+                // Insert new record into user_accompanying_guest table
+                PreparedStatement insertGuestStatement = DBConnection.getConnection().prepareStatement(insertQueryGuest);
+                insertGuestStatement.setInt(1, orderID);
+                insertGuestStatement.setInt(2, eventId);
+                insertGuestStatement.setInt(3, numGuests);
+                insertGuestStatement.executeUpdate();
+                insertGuestStatement.close();
             }
-            
+    
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
-            
+    
         } finally {
             try {
                 if (insertStatement != null) {
@@ -181,10 +190,7 @@ public class Order{
             }
         }
         return "success";
-         
     }
-
-
 
     public static String updateCancellationFee(int updatedCancellationFee){   //shud be set cancellationfee???
         PreparedStatement insertStatement = null;

@@ -39,6 +39,15 @@ CREATE TABLE `TICKET` (
     CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`)
 );
 
+CREATE TABLE `USER_ACCOMPANYING_GUEST` (
+    `user_id` INT NOT NULL,
+    `event_id` INT NOT NULL,
+    `num_accompanying_guest` INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`user_id`, `event_id`),
+    CONSTRAINT user_event_guest_fk1 FOREIGN KEY (user_id) REFERENCES USER(`user_id`),
+    CONSTRAINT user_event_guest_fk2 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`)
+);
+
 -- Dummy data for the USER table
 INSERT INTO `USER` (`email`, `name`, `password`, `role`, `amount_avail`) VALUES
 ('user1@abc.com', 'User 1', 'password1', 'customer', 1000),
@@ -69,3 +78,9 @@ INSERT INTO `TICKET` (`event_id`, `order_id`,  `cancellation_fee`) VALUES
 (3, 3, 10),
 (1, 4, 4),
 (2, 5, 10);
+
+INSERT INTO `USER_ACCOMPANYING_GUEST` (
+(1, 1, 4),
+(2, 2, 3),
+(3, 3, 2)
+)
