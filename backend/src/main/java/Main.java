@@ -179,6 +179,9 @@ public static void main(String[] args) {
         for (Order o : orders) {
             if (o.getOrderID() == newOrderIDCreated) { // return latest order only
                 System.out.println(o.getTotalPrice());
+                for (Ticket t : o.getOrderTickets()){
+                    System.out.println(t.getTicketID());
+                }
             }
         }
        

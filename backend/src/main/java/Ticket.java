@@ -1,4 +1,4 @@
-public class Ticket{
+public class Ticket {
     private Integer ticketID;
     private Integer cancellationFee;
     private Integer eventID;
@@ -6,13 +6,27 @@ public class Ticket{
 
     public Ticket(Integer eventID, Integer orderID, Integer ticketID) {
         this.eventID = eventID;
-        this.ticketID = ticketID;
         this.orderID = orderID;
+        this.ticketID = ticketID;
     }
 
     public Integer getTicketID() {
-        return this.ticketID;
+        return ticketID;
     }
 
+    public Integer getCancellationFee() {
+        return cancellationFee;
+    }
 
+    public Integer getEventID() {
+        return eventID;
+    }
+
+    public Integer getOrderID() {
+        return orderID;
+    }
+
+    public void setCancellationFee(Integer cancellationFee) {
+        this.cancellationFee = cancellationFee;
+    }
 }

@@ -79,8 +79,7 @@ INSERT INTO `TICKET` (`event_id`, `order_id`,  `cancellation_fee`) VALUES
 (1, 4, 4),
 (2, 5, 10);
 
-INSERT INTO `USER_ACCOMPANYING_GUEST` (
+INSERT INTO `USER_ACCOMPANYING_GUEST` (`user_id`,`event_id`,`num_accompanying_guest`) VALUES
 (1, 1, 4),
 (2, 2, 3),
-(3, 3, 2)
-)
+(3, 3, 2);

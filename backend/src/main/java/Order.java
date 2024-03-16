@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -14,25 +15,31 @@ public class Order{
     private int cancellationFee;   //for one tix
     private double totalPrice;
     private Map<Integer, Integer> eventsBooked; 
+    private List<Ticket> orderTickets;
 
     // Map is "1:2" , 1 stands for event id, 2 stands for number of tix
-    public Order(int userID, int orderID, Map<Integer, Integer> eventsBooked, double totalPrice, int cancellationFee ) {
+    public Order(int userID, int orderID, Map<Integer, Integer> eventsBooked, double totalPrice, int cancellationFee, List<Ticket> orderTickets ) {
         this.userID = userID;
         this.orderID = orderID;
         this.eventsBooked = eventsBooked;
         this.totalPrice=totalPrice;
         this.cancellationFee = cancellationFee;
+        this.orderTickets=orderTickets;
     }
 
     public int getOrderID(){
         return orderID;
     }
 
+    public List<Ticket> getOrderTickets(){
+        return orderTickets;
+    }
+
     public static ArrayList<Order> getAllOrdersByUserID(int userID) {
         ArrayList<Order> orders = new ArrayList<>();
         ResultSet resultSet = null;
         PreparedStatement statement = null;
-
+    
         try {
             DBConnection.establishConnection();
             String sqlQuery = "SELECT o.order_id, o.user_id, t.event_id, t.ticket_id, e.price, t.cancellation_fee " +
@@ -43,37 +50,45 @@ public class Order{
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             statement.setInt(1, userID);
             resultSet = statement.executeQuery();
-
+    
             Map<Integer, Map<Integer, Integer>> eventsBookedMap = new HashMap<>(); // Map to store eventsBooked for each order
             Map<Integer, Double> totalPriceMap = new HashMap<>(); // Map to store totalPrice for each order
-
+            Map<Integer, List<Ticket>> ticketLists = new HashMap<>(); // Map to store tickets for each order
+    
             while (resultSet.next()) {
                 int orderID = resultSet.getInt("order_id");
                 int eventID = resultSet.getInt("event_id");
                 int ticketID = resultSet.getInt("ticket_id");
                 double price = resultSet.getDouble("price");
-                //double cancellationFee = resultSet.getDouble("cancellation_fee");
-
+                
+                Ticket currentTicket = new Ticket(eventID, orderID, ticketID);
+                
+                // Populate ticketLists
+                if (!ticketLists.containsKey(orderID)) {
+                    ticketLists.put(orderID, new ArrayList<>());
+                }
+                ticketLists.get(orderID).add(currentTicket);
+    
                 // Populate eventsBookedMap
                 if (!eventsBookedMap.containsKey(orderID)) {
                     eventsBookedMap.put(orderID, new HashMap<>());
                 }
+    
                 Map<Integer, Integer> eventTicketsMap = eventsBookedMap.get(orderID);
                 eventTicketsMap.put(eventID, eventTicketsMap.getOrDefault(eventID, 0) + 1);
-
+    
                 // Calculate totalPrice and update totalPriceMap
                 totalPriceMap.put(orderID, totalPriceMap.getOrDefault(orderID, 0.0) + price);
-
-                totalPriceMap.put(orderID, totalPriceMap.get(orderID) );
             }
-
+    
             // Construct Order objects from the retrieved data
             for (Map.Entry<Integer, Map<Integer, Integer>> entry : eventsBookedMap.entrySet()) {
                 int orderID = entry.getKey();
                 Map<Integer, Integer> eventsBooked = entry.getValue();
                 double totalPrice = totalPriceMap.get(orderID);
-                int cancellationFee = totalPriceMap.get(orderID).intValue(); // Convert cancellationFee to int
-                orders.add(new Order(userID, orderID, eventsBooked, totalPrice, cancellationFee));
+                int cancellationFee = totalPriceMap.get(orderID).intValue();
+                List<Ticket> orderTickets = ticketLists.get(orderID);
+                orders.add(new Order(userID, orderID, eventsBooked, totalPrice, cancellationFee, orderTickets));
             }
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
@@ -90,9 +105,10 @@ public class Order{
                 e.printStackTrace();
             }
         }
-
+    
         return orders;
     }
+    
 
     
     public static int createOrder(int userID){       
