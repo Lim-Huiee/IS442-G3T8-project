@@ -208,6 +208,37 @@ public class Order{
         return "success";
     }
 
+    public static void deductPaymentForCheckout(int userID, double totalAmount) {          // do secured payment instead
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT amount_avail FROM user WHERE user_id = ?";
+            PreparedStatement statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setInt(1, userID);
+            ResultSet resultSet = statement.executeQuery();
+            
+            if (resultSet.next()) {
+                int amountAvail = resultSet.getInt("amount_avail");
+                if (amountAvail >= totalAmount) {
+                    String updateQuery = "UPDATE user SET amount_avail = amount_avail - ? WHERE user_id = ?";
+                    PreparedStatement updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+                    updateStatement.setDouble(1, totalAmount);
+                    updateStatement.setInt(2, userID);
+                    updateStatement.executeUpdate();
+                    updateStatement.close();
+                } else {
+                    System.out.println("Insufficient funds!");
+                }
+            }
+            
+            resultSet.close();
+            statement.close();
+            DBConnection.closeConnection();
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        }
+    }
+    
+
     public static String updateCancellationFee(int updatedCancellationFee){   //shud be set cancellationfee???
         PreparedStatement insertStatement = null;
         try {
@@ -236,6 +267,7 @@ public class Order{
         }
         return "success";
     }
+
 
 
     public int getCancellationFee(){
