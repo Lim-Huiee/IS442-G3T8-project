@@ -15,7 +15,7 @@ import { getTheme } from '@table-library/react-table-library/baseline';
 
 import { StaffNavigation } from "../staffNavigation";
 import { PageTitle } from "../section-components/pageTitle";
-import { EventModalCreate } from "../section-components/eventModalCreate";
+import { EventModal } from "../section-components/eventModal";
 import "./../../App.css";
 
 const key = 'Composed Table';
@@ -150,7 +150,7 @@ export const EventManagementPageEM = () => {
                                     <Cell>{item.eventDateTime}</Cell>
                                     <Cell>{item.eventTicketPrice}</Cell>
                                     <Cell>{item.numTicketAvail}</Cell>
-                                    <Cell><Button variant="primary">Update Event</Button></Cell>
+                                    <Cell><Button variant="primary" onClick={() => handleOpen("Update")}>Update Event</Button></Cell>
                                 </Row>
                                 )): "Loading..."}
                             </Body>
@@ -159,7 +159,7 @@ export const EventManagementPageEM = () => {
                     </Table>
                 </div>
             </div>
-            <EventModalCreate show={toShowModal} action={action} handleClose={handleClose}/>
+            <EventModal show={toShowModal} action={action} handleClose={handleClose}/>
         </div>
     )
 };
