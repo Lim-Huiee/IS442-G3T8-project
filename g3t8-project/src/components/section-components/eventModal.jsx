@@ -117,6 +117,12 @@ export const EventModal = ({show, action, handleClose}) => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
                                 <DateTimePicker
+                                slotProps={{
+                                    textField: {
+                                      size: "large",
+                                      error: false,
+                                    },
+                                }}
                                 label="Enter event date and time"
                                 value={values.eventDateTime}
                                 onChange={(date) => {
