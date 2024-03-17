@@ -15,7 +15,7 @@ import { getTheme } from '@table-library/react-table-library/baseline';
 
 import { StaffNavigation } from "../staffNavigation";
 import { PageTitle } from "../section-components/pageTitle";
-import { EventModal } from "../section-components/eventModal";
+import { EventModalCreate } from "../section-components/eventModalCreate";
 import "./../../App.css";
 
 const key = 'Composed Table';
@@ -54,7 +54,7 @@ export const EventManagementPageEM = () => {
     
     //table set up
     const [data, setData] = useState({nodes: dataList});
-    
+    const resize = { resizerHighlight: "#dde2eb", resizerWidth: 25 };
     const theme = useTheme(getTheme());
     
     //table sorting
@@ -100,7 +100,7 @@ export const EventManagementPageEM = () => {
 
             <PageTitle pageTitle={"Event Management"} pageView="" filterShow={"false"} />
             
-            <div class="container mt-5">
+            <div className="container mt-5">
                 <div className="row">
                     <div className="col">
                         <div className="d-flex justify-content-left h-100">
@@ -115,20 +115,20 @@ export const EventManagementPageEM = () => {
                         <Button variant="primary" onClick={() => handleOpen("Create")}>Add Event</Button>
                     </div>
                 </div>
-
+                
                 <div className="mt-5">
                     <Table data={data} theme={theme}  sort={sort}>
                         {(tableList) => (
                             <>
                             <Header>
                                 <HeaderRow>
-                                    <HeaderCellSort sortKey="EVENTID">Event ID</HeaderCellSort>
-                                    <HeaderCellSort sortKey="EVENTTYPE">Event Type</HeaderCellSort>
-                                    <HeaderCellSort sortKey="EVENTNAME">Event Name</HeaderCellSort>
-                                    <HeaderCellSort sortKey="EVENTVENUE">Event Venue</HeaderCellSort>
-                                    <HeaderCellSort sortKey="EVENTDATETIME">Event Date & Time</HeaderCellSort>
-                                    <HeaderCellSort sortKey="EVENTTICKETPRICE">Ticket Price</HeaderCellSort>
-                                    <HeaderCellSort sortKey="NUMTICKETAVAIL">Available tickets</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTID" resize>Event ID</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTTYPE" resize>Event Type</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTNAME" resize>Event Name</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTVENUE" resize>Event Venue</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTDATETIME" resize>Event Date & Time</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTTICKETPRICE" resize>Ticket Price</HeaderCellSort>
+                                    <HeaderCellSort sortKey="NUMTICKETAVAIL" resize>Available tickets</HeaderCellSort>
                                     <HeaderCell>Action</HeaderCell>
                                 </HeaderRow>
                             </Header>
@@ -159,7 +159,7 @@ export const EventManagementPageEM = () => {
                     </Table>
                 </div>
             </div>
-            <EventModal show={toShowModal} action={action} handleClose={handleClose}/>
+            <EventModalCreate show={toShowModal} action={action} handleClose={handleClose}/>
         </div>
     )
 };

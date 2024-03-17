@@ -10,7 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { getTodayDate } from "@mui/x-date-pickers/internals";
 
-export const EventModal = ({show, action, handleClose}) => {
+export const EventModalCreate = ({show, action, handleClose}) => {
 
     const [values, setValues] = useState({
         eventType: "",
