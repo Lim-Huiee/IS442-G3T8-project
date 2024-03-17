@@ -13,6 +13,7 @@ export const EventsViewPage = () => {
     const [selectedEvents, setSelectedEvents] = useState({});
 
     const handleView = (view) => {
+        console.log("test");
         setView(view);
         //need to call relevant API
         fetchEvents(JsonData.views[view]);

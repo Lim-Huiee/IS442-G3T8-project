@@ -95,7 +95,7 @@ export const Login = ({ handleAction, userRole }) => {
                     Login
                   </button>
                 </form>
-                {userRole=="customer"?
+                {userRole==="customer"?
                    <p>
                     Don't have an account yet?{" "}
                       <span
