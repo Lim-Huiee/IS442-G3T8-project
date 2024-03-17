@@ -170,18 +170,20 @@ public static void main(String[] args) {
         // Consists of :
         // Event id 1, 1 ticket, 2 accompanying guest
         // Event id 2, 2 tickets, 3 accompanying guest
-        Integer newOrderIDCreated = Order.createOrder(1); // creates a new order id, retrieve user ID from session instead of hardcode 1
-        System.out.println(newOrderIDCreated);
+        //Integer newOrderIDCreated = Order.createOrder(1); // creates a new order id, retrieve user ID from session instead of hardcode 1
+        //System.out.println(newOrderIDCreated);
 
-        Order.checkOutOrder(eventsBooked, newOrderIDCreated);
+        //Order.checkOutOrder(eventsBooked, newOrderIDCreated);
 
         ArrayList<Order> orders = Order.getAllOrdersByUserID(1);
         for (Order o : orders) {
-            if (o.getOrderID() == newOrderIDCreated) { // return latest order only
+            System.out.println("Cancellation fee is "  + o.getCancellationFee());
+            if (o.getOrderID() == 6) { // return latest order only ,  should be newOrderIDCreated
                 double totalPriceOfOrder = o.getTotalPrice();
                 Order.deductPaymentForCheckout(1,totalPriceOfOrder);
                 for (Ticket t : o.getOrderTickets()){
                     System.out.println(t.getTicketID());
+                    //System.out.println(t.getCancellationFee());
                 }
                 
             }

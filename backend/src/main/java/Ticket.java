@@ -4,10 +4,11 @@ public class Ticket {
     private Integer eventID;
     private Integer orderID;
 
-    public Ticket(Integer eventID, Integer orderID, Integer ticketID) {
+    public Ticket(Integer eventID, Integer orderID, Integer ticketID, Integer cancellationFee) {
         this.eventID = eventID;
         this.orderID = orderID;
         this.ticketID = ticketID;
+        this.cancellationFee = cancellationFee;
     }
 
     public Integer getTicketID() {

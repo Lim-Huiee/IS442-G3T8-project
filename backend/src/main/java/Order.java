@@ -60,8 +60,8 @@ public class Order{
                 int eventID = resultSet.getInt("event_id");
                 int ticketID = resultSet.getInt("ticket_id");
                 double price = resultSet.getDouble("price");
-                
-                Ticket currentTicket = new Ticket(eventID, orderID, ticketID);
+                int ticketCancellationFee = resultSet.getInt("cancellation_fee");
+                Ticket currentTicket = new Ticket(eventID, orderID, ticketID, ticketCancellationFee);
                 
                 // Populate ticketLists
                 if (!ticketLists.containsKey(orderID)) {
@@ -86,8 +86,15 @@ public class Order{
                 int orderID = entry.getKey();
                 Map<Integer, Integer> eventsBooked = entry.getValue();
                 double totalPrice = totalPriceMap.get(orderID);
-                int cancellationFee = totalPriceMap.get(orderID).intValue();
+                int cancellationFee = 0;
+                
                 List<Ticket> orderTickets = ticketLists.get(orderID);
+                // Sum up cancellation fees for tickets in the current order
+                for (Ticket ticket : orderTickets) {
+                    cancellationFee += ticket.getCancellationFee();
+                }
+               
+                
                 orders.add(new Order(userID, orderID, eventsBooked, totalPrice, cancellationFee, orderTickets));
             }
         } catch (SQLException | ClassNotFoundException se) {
