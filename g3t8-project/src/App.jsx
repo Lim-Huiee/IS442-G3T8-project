@@ -16,7 +16,7 @@ import { OneEventPage } from "./components/views/oneEventPage";
 
 import { StaffLoginPage } from "./components/views/staffLoginPage";
 import { SalesStatisticsPageEM } from "./components/views/salesStatisticsPageEM";
-
+import { EventManagementPageEM } from "./components/views/eventManagementPageEM";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -40,6 +40,7 @@ const App = () => {
             {/* event manager views*/}
             <Route path="/staff" element={ <StaffLoginPage/> } />
             <Route path="/salesStatisticsPageEM" element={ <SalesStatisticsPageEM />} />
+            <Route path="/eventManagementPageEM" element={ <EventManagementPageEM/> }/>
 
           </Routes>
       </Router>

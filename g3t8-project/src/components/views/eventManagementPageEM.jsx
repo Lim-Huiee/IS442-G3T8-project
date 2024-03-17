@@ -15,11 +15,12 @@ import { getTheme } from '@table-library/react-table-library/baseline';
 
 import { StaffNavigation } from "../staffNavigation";
 import { PageTitle } from "../section-components/pageTitle";
+import { EventModal } from "../section-components/eventModal";
 import "./../../App.css";
 
 const key = 'Composed Table';
 
-export const SalesStatisticsPageEM = () => {
+export const EventManagementPageEM = () => {
     
     //check userRole
     
@@ -33,17 +34,21 @@ export const SalesStatisticsPageEM = () => {
     const dataList = [
         {
             eventID: '1',
-            eventName: 'Test',
-            eventDateTime: '12:00',
-            eventTicketSold: '10',
-            eventRevenue: '$10000'
+            eventType: 'Concert',
+            eventName: 'Kyuhyun',
+            eventVenue: 'Singapore Expo Hall 7',
+            eventDateTime: '2024-03-30 12:00',
+            eventTicketPrice: '$100.00',
+            numTicketAvail: '1000',
         },
         {
             eventID: '2',
-            eventName: 'Test2',
-            eventDateTime: '10:00',
-            eventTicketSold: '10',
-            eventRevenue: '$10000'
+            eventType: 'Concert',
+            eventName: 'Ed Sherran',
+            eventVenue: 'National Stadium',
+            eventDateTime: '2024-02-16 12:00',
+            eventTicketPrice: '$200.00',
+            numTicketAvail: '2000',
         }
     ]
     
@@ -66,9 +71,10 @@ export const SalesStatisticsPageEM = () => {
             sortFns: {
                 EVENTID: (array) => array.sort((a, b) => a.eventID.localeCompare(b.eventID)),
                 EVENTNAME: (array) => array.sort((a, b) => a.eventName.localeCompare(b.eventName)),
+                EVENTVENUE: (array) => array.sort((a, b) => a.eventVenue.localeCompare(b.eventVenue)),
                 EVENTDATETIME: (array) => array.sort((a, b) => a.eventDateTime-b.eventDateTime),
-                TICKETSOLD: (array) => array.sort((a, b) => a.eventTicketSold - b.eventTicketSold),
-                EVENTREVENUE: (array) => array.sort((a, b) => (a.eventRevenue - b.eventRevenue)),
+                EVENTTICKETPRICE: (array) => array.sort((a, b) => a.eventTicketPrice - b.eventTicketPrice),
+                NUMTICKETAVAIL: (array) => array.sort((a, b) => (a.numTicketAvail - b.numTicketAvail)),
             },
         }
         );
@@ -77,17 +83,22 @@ export const SalesStatisticsPageEM = () => {
             console.log(action, state);
         }
     
-        //handle cancel event
-        const cancelEvent = (eventID) => {
-            console.log(eventID);
-        };
-        
+        //handle create/update modal
+        const [toShowModal, setToShowModal] = useState(false);
+        const [action, setAction] = useState("");
+        const handleClose = () => {
+            setToShowModal(false);
+        }
+        const handleOpen = (selectedAction) => {
+            setToShowModal(true);
+            setAction(selectedAction);
+        }
         
         return (
             <div>
             <StaffNavigation/>
 
-            <PageTitle pageTitle={"Sales Statistics"} pageView="" filterShow={"false"} />
+            <PageTitle pageTitle={"Event Management"} pageView="" filterShow={"false"} />
             
             <div class="container mt-5">
                 <div className="row">
@@ -99,6 +110,10 @@ export const SalesStatisticsPageEM = () => {
                             </div>
                         </div>
                     </div>
+
+                    <div className="col p-3 d-flex justify-content-end">
+                        <Button variant="primary" onClick={() => handleOpen("Create")}>Add Event</Button>
+                    </div>
                 </div>
 
                 <div className="mt-5">
@@ -108,10 +123,12 @@ export const SalesStatisticsPageEM = () => {
                             <Header>
                                 <HeaderRow>
                                     <HeaderCellSort sortKey="EVENTID">Event ID</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTTYPE">Event Type</HeaderCellSort>
                                     <HeaderCellSort sortKey="EVENTNAME">Event Name</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTVENUE">Event Venue</HeaderCellSort>
                                     <HeaderCellSort sortKey="EVENTDATETIME">Event Date & Time</HeaderCellSort>
-                                    <HeaderCellSort sortKey="TICKETSOLD">No. of tickets sold</HeaderCellSort>
-                                    <HeaderCellSort sortKey="EVENTREVENUE">Event revenue</HeaderCellSort>
+                                    <HeaderCellSort sortKey="EVENTTICKETPRICE">Ticket Price</HeaderCellSort>
+                                    <HeaderCellSort sortKey="NUMTICKETAVAIL">Available tickets</HeaderCellSort>
                                     <HeaderCell>Action</HeaderCell>
                                 </HeaderRow>
                             </Header>
@@ -127,11 +144,13 @@ export const SalesStatisticsPageEM = () => {
                                 }).map((item) => (
                                 <Row key={item.eventID} item={item}>
                                     <Cell>{item.eventID}</Cell>
+                                    <Cell>{item.eventType}</Cell>
                                     <Cell>{item.eventName}</Cell>
+                                    <Cell>{item.eventVenue}</Cell>
                                     <Cell>{item.eventDateTime}</Cell>
-                                    <Cell>{item.eventTicketSold}</Cell>
-                                    <Cell>{item.eventRevenue}</Cell>
-                                    <Cell><Button variant="danger" onClick={()=>cancelEvent(item.eventID)}>Cancel Event</Button></Cell>
+                                    <Cell>{item.eventTicketPrice}</Cell>
+                                    <Cell>{item.numTicketAvail}</Cell>
+                                    <Cell><Button variant="primary">Update Event</Button></Cell>
                                 </Row>
                                 )): "Loading..."}
                             </Body>
@@ -140,6 +159,7 @@ export const SalesStatisticsPageEM = () => {
                     </Table>
                 </div>
             </div>
+            <EventModal show={toShowModal} action={action} handleClose={handleClose}/>
         </div>
     )
 };

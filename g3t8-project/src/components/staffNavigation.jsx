@@ -28,10 +28,10 @@ export const StaffNavigation = (props) => {
             >
                 <ul className="nav navbar-nav navbar-right">
                     <li className="nav-item">
-                        <Link to="/eventManagerSalesStatistics"> Sales Statistics </Link>
+                        <Link to="/salesStatisticsPageEM"> Sales Statistics </Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/"> Event Management </Link>
+                        <Link to="/eventManagementPageEM"> Event Management </Link>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded=" true">
