@@ -246,7 +246,7 @@ public class Order{
     }
     
 
-    public static String updateCancellationFee(int updatedCancellationFee){   //shud be set cancellationfee???
+    /* public static String updateCancellationFee(int updatedCancellationFee){   //shud be set cancellationfee???
         PreparedStatement insertStatement = null;
         try {
             DBConnection.establishConnection();
@@ -273,7 +273,7 @@ public class Order{
             }
         }
         return "success";
-    }
+    } */
 
 
 
@@ -281,9 +281,9 @@ public class Order{
         return cancellationFee;
     }
 
-    /* private void setCancellationFee(int newCancellationFee){
+    public void setCancellationFee(int newCancellationFee){         //maybe put in eventManager???? idk 
         this.cancellationFee = newCancellationFee;
-    } */
+    } 
 
     public double getTotalPrice(){
         return totalPrice;

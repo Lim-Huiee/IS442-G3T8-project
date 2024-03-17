@@ -1,3 +1,6 @@
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Ticket {
     private Integer ticketID;
     private Integer cancellationFee;
@@ -27,7 +30,37 @@ public class Ticket {
         return orderID;
     }
 
-    public void setCancellationFee(Integer cancellationFee) {
-        this.cancellationFee = cancellationFee;
+    public void setCancellationFee(Integer newCancellationFee) {
+        this.cancellationFee = newCancellationFee;
     }
+
+    public static String updateCancellationFee(int updatedCancellationFee){   //maybe shud be in eventManager
+        PreparedStatement insertStatement = null;
+        try {
+            DBConnection.establishConnection();
+            
+            String insertQuery = "Update ticket SET cancellation_fee= ?";
+            insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
+            insertStatement.setInt(1, updatedCancellationFee);
+            
+            insertStatement.executeUpdate();
+            
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "Error occurred while updating cancellation fee: " + se.getMessage();
+            
+        } finally {
+            try {
+                if (insertStatement != null) {
+                    insertStatement.close();
+                }
+                DBConnection.closeConnection();
+                return "";
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return "success";
+    }
+
 }

@@ -175,6 +175,7 @@ public static void main(String[] args) {
 
         //Order.checkOutOrder(eventsBooked, newOrderIDCreated);
 
+        //Ticket.updateCancellationFee(20);
         ArrayList<Order> orders = Order.getAllOrdersByUserID(1);
         for (Order o : orders) {
             System.out.println("Cancellation fee is "  + o.getCancellationFee());
@@ -185,6 +186,7 @@ public static void main(String[] args) {
                     System.out.println(t.getTicketID());
                     //System.out.println(t.getCancellationFee());
                 }
+                System.out.println("Original cancellation fee is " + o.getCancellationFee());
                 
             }
         }
