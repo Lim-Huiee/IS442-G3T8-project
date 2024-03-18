@@ -235,7 +235,7 @@ public class Order{
             // Check if the email already exists
             DBConnection.establishConnection();
     
-            String insertQueryTicket = "INSERT INTO ticket (event_id, order_id, cancellation_fee) VALUES (?, ?, ?)";
+            String insertQueryTicket = "INSERT INTO ticket (event_id, order_id, cancellation_fee,status) VALUES (?, ?, ?, ?)";
             String insertQueryGuest = "INSERT INTO user_accompanying_guest (user_id, event_id, num_accompanying_guest) VALUES (?, ?, ?)";
             
             insertStatement = DBConnection.getConnection().prepareStatement(insertQueryTicket);
@@ -250,6 +250,7 @@ public class Order{
                     insertStatement.setInt(1, eventId);
                     insertStatement.setInt(2, orderID);
                     insertStatement.setInt(3, 10); // Assuming cancellation fee is always 10           will need to change
+                    insertStatement.setString(4,"delivered");
     
                     insertStatement.executeUpdate();
                 }

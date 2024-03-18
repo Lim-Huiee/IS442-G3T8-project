@@ -177,8 +177,6 @@ public static void main(String[] args) {
 
         //Ticket.updateCancellationFee(20);
         ArrayList<Order> orders = Order.getAllOrdersByUserID(1);
-        Order a = Order.getOrderByID(1);
-
 
         for (Order o : orders) {
             System.out.println("Cancellation fee is "  + o.getCancellationFee());
@@ -193,6 +191,22 @@ public static void main(String[] args) {
                 
             }
         }
+
+        
+        List<Integer> deleteTickets = new ArrayList<>();
+        deleteTickets.add(6);
+        deleteTickets.add(7);
+
+        Ticket.cancelTickets(deleteTickets);
+
+        Order a = Order.getOrderByID(6);
+
+        List<Ticket> ticketsInOrder = a.getOrderTickets();
+        for (Ticket m :ticketsInOrder){
+            System.out.println("Tickets in order" + m);
+            System.out.println(m.getTicketStatus());
+        } 
+        //change getallordersbyuser method
        
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 

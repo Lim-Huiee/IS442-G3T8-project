@@ -35,6 +35,7 @@ CREATE TABLE `TICKET` (
     `event_id` INT NOT NULL,
     `order_id` INT NOT NULL,
     `cancellation_fee` DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    `status` varchar (255),
     CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`),
     CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`)
 );
@@ -72,12 +73,12 @@ INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tick
 ('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.',90);
 
 -- Dummy data for the TICKET table
-INSERT INTO `TICKET` (`event_id`, `order_id`,  `cancellation_fee`) VALUES
-(1, 1, 4),
-(2, 2, 10),
-(3, 3, 10),
-(1, 4, 4),
-(2, 5, 10);
+INSERT INTO `TICKET` (`event_id`, `order_id`,  `cancellation_fee`,`status`) VALUES
+(1, 1, 4,'delivered'),
+(2, 2, 10,'delivered'),
+(3, 3, 10,'delivered'),
+(1, 4, 4,'refunded'),
+(2, 5, 10,'delivered');
 
 INSERT INTO `USER_ACCOMPANYING_GUEST` (`user_id`,`event_id`,`num_accompanying_guest`) VALUES
 (1, 1, 4),
