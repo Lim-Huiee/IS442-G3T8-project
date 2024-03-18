@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 
 public class Order{
     private int userID;
@@ -35,6 +34,71 @@ public class Order{
         return orderTickets;
     }
 
+    public static Order getOrderByID(int orderID){
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        Order order = null;
+        
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT o.user_id, t.event_id, t.ticket_id, e.price, t.cancellation_fee, t.status " +
+                              "FROM orders o " +
+                              "JOIN ticket t ON o.order_id = t.order_id " +
+                              "JOIN event e ON t.event_id = e.event_id " +
+                              "WHERE o.order_id = ?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setInt(1, orderID);
+            resultSet = statement.executeQuery();
+    
+            Map<Integer, Integer> eventsBooked = new HashMap<>();
+            double totalPrice = 0.0;
+            int cancellationFee = 0;
+            List<Ticket> orderTickets = new ArrayList<>();
+            int userID = 0;
+            while (resultSet.next()) {
+                userID = resultSet.getInt("user_id");
+                int eventID = resultSet.getInt("event_id");
+                int ticketID = resultSet.getInt("ticket_id");
+                double price = resultSet.getDouble("price");
+                String ticketStatus = resultSet.getString("status");
+                int ticketCancellationFee = resultSet.getInt("cancellation_fee");
+    
+                // Populate ticket list
+                Ticket currentTicket = new Ticket(eventID, orderID, ticketID, ticketCancellationFee, ticketStatus);
+                orderTickets.add(currentTicket);
+    
+                // Update eventsBooked map
+                eventsBooked.put(eventID, eventsBooked.getOrDefault(eventID, 0) + 1);
+    
+                // Update totalPrice
+                totalPrice += price;
+    
+                // Update cancellation fee
+                cancellationFee += ticketCancellationFee;
+            }
+    
+            // Create Order object
+            order = new Order(userID, orderID, eventsBooked, totalPrice, cancellationFee, orderTickets);
+    
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    
+        return order;
+    }
+
     public static ArrayList<Order> getAllOrdersByUserID(int userID) {
         ArrayList<Order> orders = new ArrayList<>();
         ResultSet resultSet = null;
@@ -42,7 +106,7 @@ public class Order{
     
         try {
             DBConnection.establishConnection();
-            String sqlQuery = "SELECT o.order_id, o.user_id, t.event_id, t.ticket_id, e.price, t.cancellation_fee " +
+            String sqlQuery = "SELECT o.order_id, o.user_id, t.event_id, t.ticket_id, e.price, t.cancellation_fee, t.status " +
                               "FROM orders o " +
                               "JOIN ticket t ON o.order_id = t.order_id " +
                               "JOIN event e ON t.event_id = e.event_id " +
@@ -60,8 +124,9 @@ public class Order{
                 int eventID = resultSet.getInt("event_id");
                 int ticketID = resultSet.getInt("ticket_id");
                 double price = resultSet.getDouble("price");
+                String ticketStatus = resultSet.getString("status");
                 int ticketCancellationFee = resultSet.getInt("cancellation_fee");
-                Ticket currentTicket = new Ticket(eventID, orderID, ticketID, ticketCancellationFee);
+                Ticket currentTicket = new Ticket(eventID, orderID, ticketID, ticketCancellationFee,ticketStatus);
                 
                 // Populate ticketLists
                 if (!ticketLists.containsKey(orderID)) {

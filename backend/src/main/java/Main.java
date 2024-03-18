@@ -177,6 +177,9 @@ public static void main(String[] args) {
 
         //Ticket.updateCancellationFee(20);
         ArrayList<Order> orders = Order.getAllOrdersByUserID(1);
+        Order a = Order.getOrderByID(1);
+
+
         for (Order o : orders) {
             System.out.println("Cancellation fee is "  + o.getCancellationFee());
             if (o.getOrderID() == 6) { // return latest order only ,  should be newOrderIDCreated

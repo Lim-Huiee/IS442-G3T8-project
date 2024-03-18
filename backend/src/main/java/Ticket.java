@@ -6,12 +6,14 @@ public class Ticket {
     private Integer cancellationFee;
     private Integer eventID;
     private Integer orderID;
+    private String ticketStatus;
 
-    public Ticket(Integer eventID, Integer orderID, Integer ticketID, Integer cancellationFee) {
+    public Ticket(Integer eventID, Integer orderID, Integer ticketID, Integer cancellationFee, String ticketStatus) {
         this.eventID = eventID;
         this.orderID = orderID;
         this.ticketID = ticketID;
         this.cancellationFee = cancellationFee;
+        this.ticketStatus = ticketStatus;
     }
 
     public Integer getTicketID() {
@@ -30,9 +32,36 @@ public class Ticket {
         return orderID;
     }
 
+    public String getTicketStatus(){
+        return ticketStatus;
+    }
+
     public void setCancellationFee(Integer newCancellationFee) {
         this.cancellationFee = newCancellationFee;
     }
+
+    public void cancelTicket(int ticketID) {
+        PreparedStatement updateStatement = null;
+        try {
+            DBConnection.establishConnection();
+            String updateQuery = "UPDATE ticket SET status = 'refunded' WHERE ticketID = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+            updateStatement.setInt(1, ticketID);
+            updateStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public static String updateCancellationFee(int updatedCancellationFee){   //maybe shud be in eventManager
         PreparedStatement insertStatement = null;
