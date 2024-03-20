@@ -220,6 +220,7 @@ public static void main(String[] args) {
                 if(toto instanceof TicketOfficer){
                     TicketOfficer toto1 = (TicketOfficer) toto;
 
+                    // test validity
                     int res = toto1.verifyTicket(1, 1);
                     if (res == 0) {
                         System.out.println("Ticket is valid!");
@@ -234,6 +235,15 @@ public static void main(String[] args) {
                     }
                     else {
                         System.out.println("Ticket is NOT valid.");
+                    }
+
+                    // test on site ticket sales
+                    int res3 = toto1.processOnSiteTicketSale(2,2);
+                    if (res == 0) {
+                        System.out.println("Tickets purchased successfully!");
+                    }
+                    else {
+                        System.out.println("Ticket purchase FAIL...");
                     }
                 }
             }

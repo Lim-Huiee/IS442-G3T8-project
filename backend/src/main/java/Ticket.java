@@ -99,4 +99,7 @@ public class Ticket {
         return "success";
     }
 
+    public String toString() {
+        return String.format("Ticket ID: %d, Event ID: %d, Order ID: %d, Cancellation Fee: %d, Status: %s", ticketID, eventID, orderID, cancellationFee, ticketStatus);
+    }
 }
