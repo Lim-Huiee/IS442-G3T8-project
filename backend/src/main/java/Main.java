@@ -427,6 +427,10 @@ public static void main(String[] args) {
         System.out.println("----------------------END OF PARK ROUTING TEST------------------------------");
         // ============================== END TESTING OF ROUTING WITH SPARK =======================================
 
-        
+        // TEST EMAIL SENDING 
+        System.out.println("----------------------START OF SENDING EMAIL TEST------------------------------");
+        String recipientEmail = "mydogispeeing@gmail.com";
+        Mail.sendEmail();
+        System.out.println("----------------------END OF SENDING EMAIL TEST------------------------------");
     }
 }
