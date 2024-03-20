@@ -429,7 +429,6 @@ public static void main(String[] args) {
 
         // TEST EMAIL SENDING 
         System.out.println("----------------------START OF SENDING EMAIL TEST------------------------------");
-        String recipientEmail = "mydogispeeing@gmail.com";
         Mail.sendEmail();
         System.out.println("----------------------END OF SENDING EMAIL TEST------------------------------");
     }
