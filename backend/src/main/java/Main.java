@@ -210,6 +210,41 @@ public static void main(String[] args) {
        
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 
+        System.out.println("=============================START OF TESTING FOR TICKET OFFICER CLASS===========");
+
+        User toto = null;
+        try {
+            toto = User.login("to@tm.com","password5");
+
+            if (toto != null){
+                if(toto instanceof TicketOfficer){
+                    TicketOfficer toto1 = (TicketOfficer) toto;
+
+                    int res = toto1.verifyTicket(1, 1);
+                    if (res == 0) {
+                        System.out.println("Ticket is valid!");
+                    }
+                    else {
+                        System.out.println("Ticket is NOT valid.");
+                    }
+
+                    int res2 = toto1.verifyTicket(2, 1);
+                    if (res2 == 0) {
+                        System.out.println("Ticket is valid!");
+                    }
+                    else {
+                        System.out.println("Ticket is NOT valid.");
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+
+        }
+
+
+        System.out.println("=============================END OF TESTING FOR TICKET OFFICER CLASS===========");
+
 
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
@@ -278,7 +313,7 @@ public static void main(String[] args) {
                 req.session().attribute("user", em);
             }
             else {
-                TicketOfficer to= (TicketOfficer)user;
+                TicketOfficer to = (TicketOfficer)user;
                 req.session().attribute("user", to);
             }
 
