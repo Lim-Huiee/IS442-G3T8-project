@@ -1,4 +1,5 @@
-Ticket.class
-Event.class
+StripeTest.class
 Cors.class
 DBConnection.class
+Ticket.class
+Event.class

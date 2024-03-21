@@ -3,70 +3,85 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.sql.Timestamp; 
+import java.sql.Timestamp;
 
 public class Event {
     private int eventID;
     private String eventType;
     private String eventName;
     private String venue;
-    private LocalDateTime eventDateTime; 
+    private LocalDateTime eventDateTime;
     private int numTotalTickets;
     private int numTicketsAvailable;
     private String eventDetails;
-    private int ticketPrice;   
-    
-    // with event ID 
-    public Event(int eventID,String eventType, String eventName, String venue, LocalDateTime eventDateTime,int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice){
+    private double ticketPrice;
+    private double cancellationFee;
+
+    // with event ID
+    public Event(int eventID, String eventType, String eventName, String venue, LocalDateTime eventDateTime,
+            int numTotalTickets, int numTicketsAvailable, String eventDetails, double ticketPrice,
+            double cancellationFee) {
         this.eventID = eventID;
-        this.eventType=eventType;
-        this.eventName=eventName;
-        this.venue=venue;
-        this.eventDateTime=eventDateTime;
-        this.numTotalTickets=numTotalTickets;
-        this.numTicketsAvailable=numTicketsAvailable;
-        this.eventDetails =eventDetails;
-        this.ticketPrice=ticketPrice;
+        this.eventType = eventType;
+        this.eventName = eventName;
+        this.venue = venue;
+        this.eventDateTime = eventDateTime;
+        this.numTotalTickets = numTotalTickets;
+        this.numTicketsAvailable = numTicketsAvailable;
+        this.eventDetails = eventDetails;
+        this.ticketPrice = ticketPrice;
+        this.cancellationFee = cancellationFee;
     }
-    
-    public int getEventID(){
+
+    public int getEventID() {
         return eventID;
     }
-    public String getEventType(){
+
+    public String getEventType() {
         return eventType;
     }
-    public String getEventName(){
+
+    public String getEventName() {
         return eventName;
     }
-    public String getVenue(){
+
+    public String getVenue() {
         return venue;
     }
-    public LocalDateTime getEventDateTime(){
+
+    public LocalDateTime getEventDateTime() {
         return eventDateTime;
     }
-    public int getTotalTickets(){
+
+    public int getTotalTickets() {
         return numTotalTickets;
     }
-    public int getTicketsAvailable(){
+
+    public int getTicketsAvailable() {
         return numTicketsAvailable;
     }
-    public String getEventDetails(){
+
+    public String getEventDetails() {
         return eventDetails;
     }
-    public int getTicketPrice(){
+
+    public double getTicketPrice() {
         return ticketPrice;
     }
 
-
-    public int numTicketsSold(){
-        return numTotalTickets-numTicketsAvailable;
+    public double getCancellationFee() {
+        return cancellationFee;
     }
 
-    public int revenueEarned(){
-        return this.numTicketsSold()*ticketPrice;
+    public int numTicketsSold() {
+        return numTotalTickets - numTicketsAvailable;
     }
- 
-    // not sure if need setter methods? 
+
+    public double revenueEarned() {
+        return this.numTicketsSold() * ticketPrice;
+    }
+
+    // not sure if need setter methods?
 
     public static Event getEventByID(int searchEventID) {
         Event event = null;
@@ -78,24 +93,26 @@ public class Event {
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             statement.setInt(1, searchEventID);
             resultSet = statement.executeQuery();
-    
+
             if (resultSet.next()) {
                 int retrievedEventID = resultSet.getInt("event_id");
                 String retrieveEventType = resultSet.getString("event_type");
                 String retrieveEventName = resultSet.getString("event_name");
                 String retrieveVenue = resultSet.getString("venue");
 
-                
                 Timestamp timestamp = resultSet.getTimestamp("datetime");
                 LocalDateTime retrieveEventDateTime = timestamp.toLocalDateTime();
 
                 int retrieveNumTotalTickets = resultSet.getInt("total_tickets");
-                int retrieveNumTicketsAvailable = resultSet.getInt("num_tickets_avail");               
+                int retrieveNumTicketsAvailable = resultSet.getInt("num_tickets_avail");
                 String retrieveEventDetails = resultSet.getString("event_details");
-                int retrieveTicketPrice = resultSet.getInt("price");
-                
-                event = new Event(retrievedEventID, retrieveEventType, retrieveEventName, retrieveVenue,retrieveEventDateTime,retrieveNumTotalTickets,retrieveNumTicketsAvailable,retrieveEventDetails,retrieveTicketPrice);
-            }  
+                double retrieveTicketPrice = resultSet.getDouble("price");
+                double retrieveCancellationFee = resultSet.getDouble("cancellation_fee");
+
+                event = new Event(retrievedEventID, retrieveEventType, retrieveEventName, retrieveVenue,
+                        retrieveEventDateTime, retrieveNumTotalTickets, retrieveNumTicketsAvailable,
+                        retrieveEventDetails, retrieveTicketPrice, retrieveCancellationFee);
+            }
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
         } finally {
@@ -113,7 +130,7 @@ public class Event {
         }
         return event;
     }
-    
+
     public static boolean getEventStatusByID(int searchEventID) {
         Event event = null;
         ResultSet resultSet = null;
@@ -123,14 +140,14 @@ public class Event {
             String sqlQuery = "SELECT * FROM event WHERE num_tickets_avail > 0 AND datetime > NOW() AND datetime < DATE_ADD(NOW(), INTERVAL 6 MONTH) AND TIMESTAMPDIFF(HOUR, NOW(), datetime) > 24";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             resultSet = statement.executeQuery();
-    
-            while (resultSet.next()) { 
-                
+
+            while (resultSet.next()) {
+
                 int retrievedEventID = resultSet.getInt("event_id");
                 if (searchEventID == retrievedEventID) {
-                    return true; //means event is bookable
-                }                
-            }  
+                    return true; // means event is bookable
+                }
+            }
 
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
@@ -172,11 +189,12 @@ public class Event {
                 int retrieveNumTotalTickets = resultSet.getInt("total_tickets");
                 int retrieveNumTicketsAvailable = resultSet.getInt("num_tickets_avail");
                 String retrieveEventDetails = resultSet.getString("event_details");
-                int retrieveTicketPrice = resultSet.getInt("price");
+                double retrieveTicketPrice = resultSet.getDouble("price");
+                double retrieveCancellationFee = resultSet.getDouble("cancellation_fee");
 
                 Event event = new Event(retrievedEventID, retrieveEventType, retrieveEventName, retrieveVenue,
                         retrieveEventDateTime, retrieveNumTotalTickets, retrieveNumTicketsAvailable,
-                        retrieveEventDetails, retrieveTicketPrice);
+                        retrieveEventDetails, retrieveTicketPrice, retrieveCancellationFee);
                 events.add(event);
             }
         } catch (SQLException | ClassNotFoundException se) {
@@ -206,24 +224,25 @@ public class Event {
             String sqlQuery = "SELECT * FROM event WHERE num_tickets_avail > 0 AND datetime > NOW() AND datetime > DATE_ADD(NOW(), INTERVAL 6 MONTH)";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             resultSet = statement.executeQuery();
-    
+
             while (resultSet.next()) {
                 int retrievedEventID = resultSet.getInt("event_id");
                 String retrieveEventType = resultSet.getString("event_type");
                 String retrieveEventName = resultSet.getString("event_name");
                 String retrieveVenue = resultSet.getString("venue");
-    
+
                 Timestamp timestamp = resultSet.getTimestamp("datetime");
                 LocalDateTime retrieveEventDateTime = timestamp.toLocalDateTime();
-    
+
                 int retrieveNumTotalTickets = resultSet.getInt("total_tickets");
                 int retrieveNumTicketsAvailable = resultSet.getInt("num_tickets_avail");
                 String retrieveEventDetails = resultSet.getString("event_details");
-                int retrieveTicketPrice = resultSet.getInt("price");
-    
+                double retrieveTicketPrice = resultSet.getDouble("price");
+                double retrieveCancellationFee = resultSet.getDouble("cancellation_fee");
+
                 Event event = new Event(retrievedEventID, retrieveEventType, retrieveEventName, retrieveVenue,
                         retrieveEventDateTime, retrieveNumTotalTickets, retrieveNumTicketsAvailable,
-                        retrieveEventDetails, retrieveTicketPrice);
+                        retrieveEventDetails, retrieveTicketPrice, retrieveCancellationFee);
                 events.add(event);
             }
         } catch (SQLException | ClassNotFoundException se) {
@@ -253,24 +272,25 @@ public class Event {
             String sqlQuery = "SELECT * FROM event WHERE datetime > NOW() AND datetime < DATE_ADD(NOW(), INTERVAL 24 HOUR)";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             resultSet = statement.executeQuery();
-    
+
             while (resultSet.next()) {
                 int retrievedEventID = resultSet.getInt("event_id");
                 String retrieveEventType = resultSet.getString("event_type");
                 String retrieveEventName = resultSet.getString("event_name");
                 String retrieveVenue = resultSet.getString("venue");
-    
+
                 Timestamp timestamp = resultSet.getTimestamp("datetime");
                 LocalDateTime retrieveEventDateTime = timestamp.toLocalDateTime();
-    
+
                 int retrieveNumTotalTickets = resultSet.getInt("total_tickets");
                 int retrieveNumTicketsAvailable = resultSet.getInt("num_tickets_avail");
                 String retrieveEventDetails = resultSet.getString("event_details");
-                int retrieveTicketPrice = resultSet.getInt("price");
-    
+                double retrieveTicketPrice = resultSet.getDouble("price");
+                double retrieveCancellationFee = resultSet.getDouble("cancellation_fee");
+
                 Event event = new Event(retrievedEventID, retrieveEventType, retrieveEventName, retrieveVenue,
                         retrieveEventDateTime, retrieveNumTotalTickets, retrieveNumTicketsAvailable,
-                        retrieveEventDetails, retrieveTicketPrice);
+                        retrieveEventDetails, retrieveTicketPrice, retrieveCancellationFee);
                 events.add(event);
             }
         } catch (SQLException | ClassNotFoundException se) {
@@ -300,24 +320,25 @@ public class Event {
             String sqlQuery = "SELECT * FROM event";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
             resultSet = statement.executeQuery();
-    
+
             while (resultSet.next()) {
                 int retrievedEventID = resultSet.getInt("event_id");
                 String retrieveEventType = resultSet.getString("event_type");
                 String retrieveEventName = resultSet.getString("event_name");
                 String retrieveVenue = resultSet.getString("venue");
-    
+
                 Timestamp timestamp = resultSet.getTimestamp("datetime");
                 LocalDateTime retrieveEventDateTime = timestamp.toLocalDateTime();
-    
+
                 int retrieveNumTotalTickets = resultSet.getInt("total_tickets");
                 int retrieveNumTicketsAvailable = resultSet.getInt("num_tickets_avail");
                 String retrieveEventDetails = resultSet.getString("event_details");
-                int retrieveTicketPrice = resultSet.getInt("price");
-    
+                double retrieveTicketPrice = resultSet.getDouble("price");
+                double retrieveCancellationFee = resultSet.getDouble("cancellation_fee");
+
                 Event event = new Event(retrievedEventID, retrieveEventType, retrieveEventName, retrieveVenue,
                         retrieveEventDateTime, retrieveNumTotalTickets, retrieveNumTicketsAvailable,
-                        retrieveEventDetails, retrieveTicketPrice);
+                        retrieveEventDetails, retrieveTicketPrice, retrieveCancellationFee);
                 events.add(event);
             }
         } catch (SQLException | ClassNotFoundException se) {
@@ -337,5 +358,5 @@ public class Event {
         }
         return events;
     }
-    
+
 }
