@@ -19,17 +19,20 @@ public class Mail {
     
         ms.setToken("mlsn.c7e50d74154a793566ba9f6286c4dd69f76eb8e8cb08e09685678380c98fd7e2");
     
-        email.setTemplateId("3z0vklo71reg7qrx");
+        email.setTemplateId("z3m5jgrnwk0ldpyo");
 
-        email.addPersonalization(recipient, "price", "");
         email.addPersonalization(recipient, "orderId", "");
-        email.addPersonalization(recipient, "quantity", "");
+        
+        Purchase Purchase = new Purchase();
+        Purchase.0.price = "";
+        Purchase.0.quantity = "";
+        Purchase.0.eventName = "";
+        Purchase.0.eventDetails = "";
+        email.addPersonalization(recipient, "Purchase", Purchase);
+    
         email.addPersonalization(recipient, "username", "");
-        email.addPersonalization(recipient, "eventName", "");
-        email.addPersonalization(recipient, "eventVenue", "");
         email.addPersonalization(recipient, "total_paid", "");
         email.addPersonalization(recipient, "account_name", "");
-        email.addPersonalization(recipient, "eventDatetime", "");
         email.addPersonalization(recipient, "orderDatetime", "");
 
         try {
