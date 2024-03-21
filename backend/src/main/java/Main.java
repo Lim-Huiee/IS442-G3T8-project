@@ -184,28 +184,37 @@ public class Main {
         // Consists of :
         // Event id 1, 1 ticket, 2 accompanying guest
         // Event id 2, 2 tickets, 3 accompanying guest
-        Integer newOrderIDCreated = Order.createOrder(1); // creates a new order id, retrieve user ID from session
+        // Integer newOrderIDCreated = Order.createOrder(1); // creates a new order id, retrieve user ID from session
                                                           // instead of hardcode 1
-        System.out.println(newOrderIDCreated);
+        // System.out.println(newOrderIDCreated);
 
-        Order.checkOutOrder(eventsBooked, newOrderIDCreated);
+        // Order.checkOutOrder(eventsBooked, newOrderIDCreated);
 
         // Ticket.updateCancellationFee(20);
         ArrayList<Order> orders = Order.getAllOrdersByUserID(1);
 
-        for (Order o : orders) {
-            System.out.println("Cancellation fee is " + o.getCancellationFee());
-            if (o.getOrderID() == 6) { // return latest order only , should be newOrderIDCreated
-                double totalPriceOfOrder = o.getTotalPrice();
-                Order.deductPaymentForCheckout(1, totalPriceOfOrder);
-                for (Ticket t : o.getOrderTickets()) {
-                    System.out.println(t.getTicketID());
-                    // System.out.println(t.getCancellationFee());
-                }
-                System.out.println("Original cancellation fee is " + o.getCancellationFee());
+        // for (Order o : orders) {
+        //     System.out.println("Cancellation fee is " + o.getCancellationFee());
+        //     if (o.getOrderID() == 6) { // return latest order only , should be newOrderIDCreated
+        //         double totalPriceOfOrder = o.getTotalPrice();
+        //         Order.deductPaymentForCheckout(1, totalPriceOfOrder);
+        //         for (Ticket t : o.getOrderTickets()) {
+        //             System.out.println(t.getTicketID());
+        //             // System.out.println(t.getCancellationFee());
+        //         }
+        //         System.out.println("Original cancellation fee is " + o.getCancellationFee());
 
-            }
-        }
+        //     }
+        // }
+        // TEST CREATE ORDER AND EMAIL SENDING 
+        System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
+        Map<Integer, Integer> purchase = new HashMap<>();
+        purchase.put(1, 4);
+        purchase.put(2, 3);
+        purchase.put(3, 5);
+        purchase.put(4, 1);
+        Order.createOrder(1, purchase);
+        System.out.println("----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
 
         List<Integer> deleteTickets = new ArrayList<>();
         deleteTickets.add(6);
@@ -213,7 +222,7 @@ public class Main {
 
         Ticket.cancelTickets(deleteTickets);
 
-        Order a = Order.getOrderByID(6);
+        Order a = Order.getOrderByID(5);
 
         List<Ticket> ticketsInOrder = a.getOrderTickets();
         for (Ticket m : ticketsInOrder) {
@@ -440,10 +449,5 @@ public class Main {
 
         System.out.println("----------------------END OF PARK ROUTING TEST------------------------------");
         // ============================== END TESTING OF ROUTING WITH SPARK =======================================
-
-        // TEST EMAIL SENDING 
-        System.out.println("----------------------START OF SENDING EMAIL TEST------------------------------");
-        Mail.sendEmail();
-        System.out.println("----------------------END OF SENDING EMAIL TEST------------------------------");
     }
 }

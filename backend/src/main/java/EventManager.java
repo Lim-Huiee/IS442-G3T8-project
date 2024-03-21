@@ -199,7 +199,7 @@ public class EventManager extends User{
             for (Event event : events) {
                 String eventName = event.getEventName();
                 int ticketsSold = event.numTicketsSold();
-                int revenue = event.revenueEarned();
+                double revenue = event.revenueEarned();
 
                 statistics.append(eventName).append("\t").append(ticketsSold).append("\t").append(revenue).append("\n");
             }

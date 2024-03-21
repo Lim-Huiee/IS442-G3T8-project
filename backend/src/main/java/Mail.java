@@ -1,11 +1,17 @@
 import com.mailersend.sdk.emails.Email;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.time.LocalDateTime;
+
 import com.mailersend.sdk.MailerSend;
 import com.mailersend.sdk.MailerSendResponse;
 import com.mailersend.sdk.Recipient;
 import com.mailersend.sdk.exceptions.MailerSendException;
 
 public class Mail {
-	public static void sendEmail(){
+
+	public static void sendEmail(int orderId, String username, double total_paid, String orderDatetime, ArrayList<HashMap<String, String>> purchase){
         Email email = new Email();
 
         email.setFrom("Ticket Mistress", "info@trial-pq3enl6yj05g2vwr.mlsender.net");
@@ -21,19 +27,22 @@ public class Mail {
     
         email.setTemplateId("z3m5jgrnwk0ldpyo");
 
-        email.addPersonalization(recipient, "orderId", "");
+        email.addPersonalization(recipient, "orderId", orderId);
         
-        Purchase Purchase = new Purchase();
-        Purchase.0.price = "";
-        Purchase.0.quantity = "";
-        Purchase.0.eventName = "";
-        Purchase.0.eventDetails = "";
-        email.addPersonalization(recipient, "Purchase", Purchase);
+        // Purchase purchase = new Purchase();
+        // purchase.0.price = "";
+        // purchase.0.quantity = "";
+        // purchase.0.eventName = "";
+        // purchase.0.eventDetails = "";
+        // for (int i=0; i<purchase.size(); i++) {
+        //     email.addPersonalization(recipient, "Purchase", purchase[i]);
+        // }
+        email.addPersonalization(recipient, "Purchase", purchase);
     
-        email.addPersonalization(recipient, "username", "");
-        email.addPersonalization(recipient, "total_paid", "");
-        email.addPersonalization(recipient, "account_name", "");
-        email.addPersonalization(recipient, "orderDatetime", "");
+        email.addPersonalization(recipient, "username", username);
+        email.addPersonalization(recipient, "total_paid", total_paid);
+        email.addPersonalization(recipient, "account_name", username);
+        email.addPersonalization(recipient, "orderDatetime", orderDatetime);
 
         try {
             MailerSendResponse response = ms.emails().send(email);
