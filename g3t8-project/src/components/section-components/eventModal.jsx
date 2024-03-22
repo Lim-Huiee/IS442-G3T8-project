@@ -64,6 +64,7 @@ export const EventModal = ({show, action, handleClose, data}) => {
           // Send data to backend
           if (action == "Create") {
             createEvent();
+            window.location.reload()
           } else {
 
           }
