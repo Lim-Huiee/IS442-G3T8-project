@@ -71,12 +71,47 @@ public class EventManager extends User{
             DBConnection.closeConnection(); // Close the database connection
         }
     }
-    public String updateEvent(int eventID, String eventType,String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice) {
+
+    public static String updateEvent(int eventID, String eventType,String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice) {
         PreparedStatement statement = null;
 
         try {
             DBConnection.establishConnection(); // Establish database connection
 
+            // Check if any changes is made to the record
+            String checkQuery1 = "SELECT COUNT(*) FROM event WHERE event_id = ? AND event_type = ? AND event_name = ? AND venue = ? AND datetime = ? AND total_tickets = ? AND num_tickets_avail = ? AND event_details = ? AND price = ?";
+            statement = DBConnection.getConnection().prepareStatement(checkQuery1);
+            statement.setInt(1, eventID);
+            statement.setString(2, eventType);
+            statement.setString(3, eventName);
+            statement.setString(4, venue);
+            statement.setObject(5, dateTime);
+            statement.setInt(6, numTotalTickets);
+            statement.setInt(7, numTicketsAvailable);
+            statement.setString(8, eventDetails);
+            statement.setInt(9, ticketPrice);
+
+            ResultSet resultSet1 = statement.executeQuery();
+            resultSet1.next();
+            int count1 = resultSet1.getInt(1);
+            if (count1 > 0) {
+                return "No changes were made to event";
+            }
+
+            // Check if the record already exists based on eventName and dateTime
+            String checkQuery2 = "SELECT COUNT(*) FROM event WHERE event_name = ? AND datetime = ? AND event_id != ?";
+            statement = DBConnection.getConnection().prepareStatement(checkQuery2);
+            statement.setString(1, eventName);
+            statement.setObject(2, dateTime);
+            statement.setObject(3, eventID);
+
+            ResultSet resultSet2 = statement.executeQuery();
+            resultSet2.next();
+            int count2 = resultSet2.getInt(1);
+            if (count2 > 0) {
+                return "Event already exists.";
+            }
+        
             String sqlQuery = "UPDATE event SET event_type=?,event_name=?, venue=?, datetime=?, total_tickets=?, num_tickets_avail=?, event_details=?, price=? WHERE event_id=?";
             statement = DBConnection.getConnection().prepareStatement(sqlQuery);
 

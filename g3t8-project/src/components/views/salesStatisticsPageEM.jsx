@@ -15,6 +15,7 @@ import { getTheme } from '@table-library/react-table-library/baseline';
 
 import { StaffNavigation } from "../staffNavigation";
 import { PageTitle } from "../section-components/pageTitle";
+import axios from 'axios'; // Import Axios for making HTTP requests
 import "./../../App.css";
 
 const key = 'Composed Table';
@@ -28,8 +29,7 @@ export const SalesStatisticsPageEM = () => {
     const handleSearch = (event) => {
         setSearch(event.target.value);
     };
-    
-    //dummy data - to be called from backend
+
     const dataList = [
         {
             eventID: '1',
@@ -49,7 +49,25 @@ export const SalesStatisticsPageEM = () => {
     
     //table set up
     const [data, setData] = useState({nodes: dataList});
-    
+
+    //table data
+    useEffect(() => {
+        // fetchEvents();
+    }, []); // Empty dependency array to run only once when the component mounts
+
+    async function fetchEvents() {
+        try {
+            const response = await axios.get('http://localhost:4567/view_sales_statistics');
+            console.log('Response from server:', response.data); // Log the response data
+            setData({nodes: response.data}); // Set the events state
+            // console.log(events);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
+    console.log(data.nodes);
+
+
     const theme = useTheme(getTheme());
     
     //table sorting
@@ -64,7 +82,7 @@ export const SalesStatisticsPageEM = () => {
         },
         {
             sortFns: {
-                EVENTID: (array) => array.sort((a, b) => a.eventID.localeCompare(b.eventID)),
+                EVENTID: (array) => array.sort((a, b) => a.eventID - b.eventID),
                 EVENTNAME: (array) => array.sort((a, b) => a.eventName.localeCompare(b.eventName)),
                 EVENTDATETIME: (array) => array.sort((a, b) => a.eventDateTime-b.eventDateTime),
                 TICKETSOLD: (array) => array.sort((a, b) => a.eventTicketSold - b.eventTicketSold),
@@ -102,7 +120,8 @@ export const SalesStatisticsPageEM = () => {
                 </div>
 
                 <div className="mt-5">
-                    <Table data={data} theme={theme}  sort={sort}>
+                    {data.nodes.length>0 ?
+                    (<Table data={data} theme={theme}  sort={sort}>
                         {(tableList) => (
                             <>
                             <Header>
@@ -137,7 +156,8 @@ export const SalesStatisticsPageEM = () => {
                             </Body>
                             </>
                         )}
-                    </Table>
+                    </Table>) : "No events found"
+                    }
                 </div>
             </div>
         </div>

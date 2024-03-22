@@ -16,6 +16,7 @@ export const EventModal = ({show, action, handleClose, data}) => {
     const [values, setValues] = useState(data);
     const [dateTime, setDateTime] = useState({});
     const [errors, setErrors] = useState({});
+    const [serverResponse, setServerResponse] = useState("");
 
     const handleInput = (event) => {
         setValues((prev) => ({
@@ -64,10 +65,10 @@ export const EventModal = ({show, action, handleClose, data}) => {
           // Send data to backend
           if (action == "Create") {
             createEvent();
-            window.location.reload()
+            window.location.reload();
           } else {
-
-          }
+            updateEvent();
+        }
         }
     };
 
@@ -76,6 +77,21 @@ export const EventModal = ({show, action, handleClose, data}) => {
             const response = await axios.post('http://localhost:4567/create_event', values);
             console.log(values);
             console.log('Response from server:', response.data); // Log the response data
+            setServerResponse(response.data);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
+
+    async function updateEvent() {
+        try {
+            const response = await axios.put('http://localhost:4567/update_event', values);
+            console.log(values);
+            console.log('Response from server:', response.data); // Log the response data
+            setServerResponse(response.data);
+            if (response.data=="Event updated successfully!") {
+                window.location.reload();
+            }
         } catch (error) {
             console.error('Error fetching events:', error);
         }
@@ -83,16 +99,15 @@ export const EventModal = ({show, action, handleClose, data}) => {
 
     return (
         <div>
-            {/* <Modal show={show} onHide={handleClose} animation={false}> */}
             <Modal show={show} animation={false} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{action} Event</Modal.Title>
+                    <Modal.Title><h4>{action} Event</h4>{serverResponse!=""?<p className={(serverResponse!="Event updated successfully!" && serverResponse!="Event created successfully." )? "text-danger" : "text-success"}>{serverResponse}</p>:<p></p>}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={handleSubmit}>
                         <div class="form-group">
                             <label htmlFor="eventType">Event Type</label>
-                            <select class="form-control" id="eventType" name="eventType" onChange={handleInput}>
+                            <select class="form-control" id="eventType" name="eventType" value={values.eventType} onChange={handleInput}>
                                 <option value="" selected disabled>Please select event type</option>
                                 <option value="Concert">Concert</option>
                                 <option value="Musical">Musical</option>
@@ -139,7 +154,7 @@ export const EventModal = ({show, action, handleClose, data}) => {
                                     },
                                 }}
                                 label="Enter event date and time"
-                                value={values.eventDateTime}
+                                value={dayjs(values.eventDateTime)}
                                 onChange={(date) => {
                                     //prepare date for backend
                                     const year = date.$d.getFullYear();
@@ -228,9 +243,16 @@ export const EventModal = ({show, action, handleClose, data}) => {
                         </div>
                         
                         <div className="d-flex justify-content-end">
-                            <button type="submit" className="btn btn-primary">
-                                Create Event
-                            </button>
+                            {action=="Create"? (
+                                <button type="submit" className="btn btn-primary">
+                                    Create Event
+                                </button>
+                            ) : (
+                                <button type="submit" className="btn btn-primary">
+                                    Update Event
+                                </button>
+                            )}
+
                         </div>
                     </form>
                 </Modal.Body>

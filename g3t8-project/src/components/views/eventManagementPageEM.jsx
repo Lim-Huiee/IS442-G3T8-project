@@ -44,7 +44,6 @@ export const EventManagementPageEM = () => {
             const response = await axios.get('http://localhost:4567/get_all_events');
             console.log('Response from server:', response.data); // Log the response data
             setData({nodes: response.data}); // Set the events state
-            // console.log(events);
         } catch (error) {
             console.error('Error fetching events:', error);
         }
@@ -82,26 +81,77 @@ export const EventManagementPageEM = () => {
         //handle create/update modal
         const [toShowModal, setToShowModal] = useState(false);
         const [action, setAction] = useState("");
-        const [eventData, setEventData] = useState({
-            eventType: "",
-            eventName: "",
-            venue: "",
-            eventDateTime: "",
-            numTotalTickets: "",
-            numTicketsAvailable: "",
-            eventDetails: "",
-            ticketPrice: ""
-        });
+        const [isLoading, setIsLoading] = useState(true);
+
+        const [eventData, setEventData] = useState({});
         const handleClose = () => {
+            window.location.reload();
             setToShowModal(false);
         }
-        const handleOpen = (selectedAction) => {
-            setToShowModal(true);
+        const handleOpen = (selectedAction, eventID) => {
             setAction(selectedAction);
             if (selectedAction!="Create") {
-                //update -- call from backend
-                console.log("test");
+                fetchEventToUpdate(eventID);
+                setToShowModal(true);
+                setIsLoading(true);
+            } else {
+                createEventDataField();
+                console.log(eventData);
+                setToShowModal(true);
             }
+        }
+
+        function createEventDataField() {
+            setEventData({
+                eventType: "",
+                eventName: "",
+                venue: "",
+                eventDateTime: "",
+                numTotalTickets: "",
+                numTicketsAvailable: "",
+                eventDetails: "",
+                ticketPrice: ""
+            })
+            setIsLoading(false);
+        }
+
+        async function fetchEventToUpdate(id) {
+            try {
+                const response = await axios.get('http://localhost:4567/get_event_by_id/' + id);
+                console.log('Response from server:', response.data); // Log the response data
+                                
+                setEventData({
+                    eventID: response.data.eventID,
+                    eventType: response.data.eventType,
+                    eventName: response.data.eventName,
+                    venue: response.data.venue,
+                    eventDateTime: response.data.eventDateTime,
+                    numTotalTickets: response.data.numTotalTickets,
+                    numTicketsAvailable: response.data.numTicketsAvailable,
+                    eventDetails: response.data.eventDetails,
+                    ticketPrice: response.data.ticketPrice
+                });
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        }
+
+        function processDateTime(datetime) {
+            const inputDate = new Date(datetime);
+
+            // Get the individual components of the date
+            const year = inputDate.getFullYear();
+            const month = String(inputDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+            const day = String(inputDate.getDate()).padStart(2, '0');
+            const hours = String(inputDate.getHours() % 12 || 12).padStart(2, '0'); // Convert to 12-hour format
+            const minutes = String(inputDate.getMinutes()).padStart(2, '0');
+            const ampm = inputDate.getHours() >= 12 ? 'PM' : 'AM';
+
+            // Construct the formatted date string
+            const formattedDateString = `${year}/${month}/${day} ${hours}.${minutes}${ampm}`;
+
+            return formattedDateString; // Output: "2024/03/30 11.40AM"
         }
         
         return (
@@ -122,7 +172,7 @@ export const EventManagementPageEM = () => {
                     </div>
 
                     <div className="col p-3 d-flex justify-content-end">
-                        <Button variant="primary" onClick={() => handleOpen("Create")}>Add Event</Button>
+                        <Button variant="primary" onClick={() => handleOpen("Create", null)}>Add Event</Button>
                     </div>
                 </div>
                 
@@ -157,10 +207,10 @@ export const EventManagementPageEM = () => {
                                     <Cell>{item.eventType}</Cell>
                                     <Cell>{item.eventName}</Cell>
                                     <Cell>{item.venue}</Cell>
-                                    <Cell>{item.eventDateTime}</Cell>
+                                    <Cell>{processDateTime(item.eventDateTime)}</Cell>
                                     <Cell>{item.ticketPrice}</Cell>
                                     <Cell>{item.numTicketsAvailable}</Cell>
-                                    <Cell><Button variant="primary" onClick={() => handleOpen("Update")}>Update Event</Button></Cell>
+                                    <Cell><Button variant="primary" onClick={() => handleOpen("Update", item.eventID)}>Update Event</Button></Cell>
                                 </Row>
                                 )): "Loading..."}
                             </Body>
@@ -169,7 +219,13 @@ export const EventManagementPageEM = () => {
                     </Table>
                 </div>
             </div>
-            <EventModal show={toShowModal} action={action} handleClose={handleClose} data={eventData}/>
+            <div>
+            {isLoading ? (
+                <p></p>
+            ) : (
+                <EventModal show={toShowModal} action={action} handleClose={handleClose} data={eventData}/>
+            )}
+            </div>
         </div>
     )
 };

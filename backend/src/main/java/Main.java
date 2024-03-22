@@ -4,6 +4,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import spark.Filter;
@@ -337,6 +338,13 @@ public static void main(String[] args) {
             }
         });
 
+        get("/get_event_by_id/:id", (req, res) -> {
+            String id = req.params(":id");
+            Event event = Event.getEventByID(Integer.parseInt(id));
+            //Gson gson = new Gson();
+            return gson.toJson(event);
+        });
+
         get("/get_all_bookable_events", (req, res) -> {
             List<Event> bookableEvents = Event.getAllBookableEvents();
             //Gson gson = new Gson();
@@ -382,6 +390,24 @@ public static void main(String[] args) {
             int ticketPrice = eventData.getTicketPrice();
 
             String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+            return eventCreated;
+        });
+
+        put("/update_event", (req, res) -> {
+            String jsonData = req.body();
+
+            Event eventData = gson.fromJson(jsonData, Event.class);
+            int eventID = eventData.getEventID();
+            String eventType = eventData.getEventType();
+            String eventName = eventData.getEventName();
+            String venue = eventData.getVenue();
+            LocalDateTime dateTime = eventData.getEventDateTime();
+            int numTotalTickets = eventData.getTotalTickets();
+            int numTicketsAvailable = eventData.getTicketsAvailable();
+            String eventDetails = eventData.getEventDetails();
+            int ticketPrice = eventData.getTicketPrice();
+
+            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
             return eventCreated;
         });
 
