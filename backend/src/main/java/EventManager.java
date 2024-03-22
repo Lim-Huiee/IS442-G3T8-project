@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventManager extends User{
     private static String addTicketOfficerRole = "ticketing officer";
@@ -246,18 +247,18 @@ public class EventManager extends User{
     //         return "Failed to fetch sale statistics.";
     //     }
     // }
-    public static HashMap<Integer, ArrayList<String>> viewSaleStatistics() {
-        HashMap<Integer, ArrayList<String>> salesStats = new HashMap<>();
+    public static List<Map<String, String>> viewSaleStatistics() {
+        List<Map<String, String>> salesStats = new ArrayList<>();
         try {
             ArrayList<Event> events = Event.getAllEvents();
             for (Event event : events) {
-                ArrayList<String> oneEventStat = new ArrayList<>(); //eventID, eventName, number of tickets sold, reveune earned
-                oneEventStat.add(String.valueOf(event.getEventID()));
-                oneEventStat.add(event.getEventName());
-                oneEventStat.add(String.valueOf(event.numTicketsSold()));
-                oneEventStat.add(String.valueOf(event.revenueEarned()));
+                Map<String, String> oneEvent = new HashMap<>();
+                oneEvent.put("eventID", String.valueOf(event.getEventID()));
+                oneEvent.put("eventName", event.getEventName());
+                oneEvent.put("numTicketsSold", String.valueOf(event.numTicketsSold()));
+                oneEvent.put("revenueEarned", String.valueOf(event.revenueEarned()));
 
-                salesStats.put(event.getEventID(), oneEventStat);
+                salesStats.add(oneEvent);
             }
 
         } catch (Exception e) {

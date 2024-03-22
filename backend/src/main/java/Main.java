@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import spark.Filter;
 import spark.Request;
@@ -419,9 +420,9 @@ public static void main(String[] args) {
         });
 
         get("/view_sales_statistics", (req, res) -> {
-            HashMap<Integer, ArrayList<String>> statistics = EventManager.viewSaleStatistics();
+            List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
             //Gson gson = new Gson();
-            return statistics;
+            return gson.toJson(statistics);
         });
 
 

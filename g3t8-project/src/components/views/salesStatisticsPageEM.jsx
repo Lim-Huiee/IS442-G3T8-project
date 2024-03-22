@@ -29,30 +29,13 @@ export const SalesStatisticsPageEM = () => {
     const handleSearch = (event) => {
         setSearch(event.target.value);
     };
-
-    const dataList = [
-        {
-            eventID: '1',
-            eventName: 'Test',
-            eventDateTime: '12:00',
-            eventTicketSold: '10',
-            eventRevenue: '$10000'
-        },
-        {
-            eventID: '2',
-            eventName: 'Test2',
-            eventDateTime: '10:00',
-            eventTicketSold: '10',
-            eventRevenue: '$10000'
-        }
-    ]
     
     //table set up
-    const [data, setData] = useState({nodes: dataList});
+    const [data, setData] = useState({nodes: [{}]});
 
     //table data
     useEffect(() => {
-        // fetchEvents();
+        fetchEvents();
     }, []); // Empty dependency array to run only once when the component mounts
 
     async function fetchEvents() {
@@ -128,7 +111,6 @@ export const SalesStatisticsPageEM = () => {
                                 <HeaderRow>
                                     <HeaderCellSort sortKey="EVENTID">Event ID</HeaderCellSort>
                                     <HeaderCellSort sortKey="EVENTNAME">Event Name</HeaderCellSort>
-                                    <HeaderCellSort sortKey="EVENTDATETIME">Event Date & Time</HeaderCellSort>
                                     <HeaderCellSort sortKey="TICKETSOLD">No. of tickets sold</HeaderCellSort>
                                     <HeaderCellSort sortKey="EVENTREVENUE">Event revenue</HeaderCellSort>
                                     <HeaderCell>Action</HeaderCell>
@@ -147,9 +129,8 @@ export const SalesStatisticsPageEM = () => {
                                 <Row key={item.eventID} item={item}>
                                     <Cell>{item.eventID}</Cell>
                                     <Cell>{item.eventName}</Cell>
-                                    <Cell>{item.eventDateTime}</Cell>
-                                    <Cell>{item.eventTicketSold}</Cell>
-                                    <Cell>{item.eventRevenue}</Cell>
+                                    <Cell>{item.numTicketsSold}</Cell>
+                                    <Cell>${item.revenueEarned}</Cell>
                                     <Cell><Button variant="danger" onClick={()=>cancelEvent(item.eventID)}>Cancel Event</Button></Cell>
                                 </Row>
                                 )): "Loading..."}
