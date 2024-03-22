@@ -2,7 +2,6 @@ import com.mailersend.sdk.emails.Email;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.time.LocalDateTime;
 
 import com.mailersend.sdk.MailerSend;
 import com.mailersend.sdk.MailerSendResponse;

@@ -290,57 +290,6 @@ public class Order {
         }
     }
 
-    public static String checkOutOrder(Map<Integer, Integer> eventsBooked, int orderID) {
-        PreparedStatement insertStatement = null;
-        try {
-            // Check if the email already exists
-            DBConnection.establishConnection();
-
-            String insertQueryTicket = "INSERT INTO ticket (event_id, order_id, cancellation_fee,status) VALUES (?, ?, ?, ?)";
-            String insertQueryGuest = "INSERT INTO user_accompanying_guest (user_id, event_id, num_accompanying_guest) VALUES (?, ?, ?)";
-
-            insertStatement = DBConnection.getConnection().prepareStatement(insertQueryTicket);
-
-            for (Map.Entry<Integer, Integer> entry : eventsBooked.entrySet()) {
-                int eventId = entry.getKey();
-                Integer numTickets = entry.getValue();
-
-                for (int i = 0; i < numTickets; i++) {
-                    insertStatement.setInt(1, eventId);
-                    insertStatement.setInt(2, orderID);
-                    insertStatement.setInt(3, 10); // Assuming cancellation fee is always 10 will need to change
-                    insertStatement.setString(4, "delivered");
-
-                    insertStatement.executeUpdate();
-                }
-
-                // Insert new record into user_accompanying_guest table
-                // PreparedStatement insertGuestStatement = DBConnection.getConnection()
-                //         .prepareStatement(insertQueryGuest);
-                // insertGuestStatement.setInt(1, orderID);
-                // insertGuestStatement.setInt(2, eventId);
-                // insertGuestStatement.setInt(3, numGuests);
-                // insertGuestStatement.executeUpdate();
-                // insertGuestStatement.close();
-            }
-
-        } catch (SQLException | ClassNotFoundException se) {
-            se.printStackTrace();
-
-        } finally {
-            try {
-                if (insertStatement != null) {
-                    insertStatement.close();
-
-                }
-                DBConnection.closeConnection();
-                return "";
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return "success";
-    }
 
     public static void deductPaymentForCheckout(int userID, double totalAmount) { // do secured payment instead
         try {
@@ -370,42 +319,6 @@ public class Order {
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
         }
-    }
-
-    /*
-     * public static String updateCancellationFee(int updatedCancellationFee){
-     * //shud be set cancellationfee???
-     * PreparedStatement insertStatement = null;
-     * try {
-     * DBConnection.establishConnection();
-     * 
-     * String insertQuery = "Update ticket SET cancellation_fee= ?";
-     * insertStatement = DBConnection.getConnection().prepareStatement(insertQuery);
-     * insertStatement.setInt(1, updatedCancellationFee);
-     * 
-     * insertStatement.executeUpdate();
-     * 
-     * } catch (SQLException | ClassNotFoundException se) {
-     * se.printStackTrace();
-     * return "Error occurred while updating cancellation fee: " + se.getMessage();
-     * 
-     * } finally {
-     * try {
-     * if (insertStatement != null) {
-     * insertStatement.close();
-     * }
-     * DBConnection.closeConnection();
-     * return "";
-     * } catch (SQLException e) {
-     * e.printStackTrace();
-     * }
-     * }
-     * return "success";
-     * }
-     */
-
-    public void setCancellationFee(int newCancellationFee) { // maybe put in eventManager???? idk
-        this.cancellationFee = newCancellationFee;
     }
 
     public double getTotalPrice() {

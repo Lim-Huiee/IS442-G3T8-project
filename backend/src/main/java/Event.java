@@ -359,4 +359,38 @@ public class Event {
         return events;
     }
 
+    public static String setCancellationFee(int event_id, double updatedCancellationFee) {
+        PreparedStatement updateStatement = null;
+        try {
+            DBConnection.establishConnection();
+            
+            String updateQuery = "UPDATE event SET cancellation_fee = ? WHERE event_id = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+            updateStatement.setDouble(1, updatedCancellationFee);
+            updateStatement.setInt(2, event_id);
+            
+            int rowsAffected = updateStatement.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                return "Success";
+            } else {
+                return "No event found with the provided event_id";
+            }
+            
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "Error occurred while updating cancellation fee: " + se.getMessage();
+            
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
