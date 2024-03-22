@@ -412,7 +412,7 @@ public static void main(String[] args) {
             return eventCreated;
         });
 
-        get("/delete_event/:id", (req, res) -> {
+        delete("/delete_event/:id", (req, res) -> {
             String id = req.params(":id");
             String eventDeleted = EventManager.deleteEvent(Integer.parseInt(id));
             //Gson gson = new Gson();

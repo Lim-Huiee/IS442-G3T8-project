@@ -79,10 +79,23 @@ export const SalesStatisticsPageEM = () => {
         }
     
         //handle cancel event
+        const [serverResponse, setServerResponse] = useState("");
+
         const cancelEvent = (eventID) => {
-            console.log(eventID);
+            cancelSelectedEvent(eventID);
+            setServerResponse(""); // Clear serverResponse state
+            window.location.reload(); // Reload the window
         };
-        
+        async function cancelSelectedEvent(eventID) {
+            try {
+                const response = await axios.delete('http://localhost:4567/delete_event/' + eventID);
+                console.log('Response from server:', response.data); // Log the response data
+                setServerResponse(response.data);
+
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        }
         
         return (
             <div>
@@ -99,6 +112,9 @@ export const SalesStatisticsPageEM = () => {
                             <a href="#" className="search_icon">🔍</a>
                             </div>
                         </div>
+                    </div>
+                    <div className="col">
+                        <h5 className={serverResponse!=="Event deleted successfully." ? "text-danger" : "text-success"}>{serverResponse}</h5>
                     </div>
                 </div>
 
