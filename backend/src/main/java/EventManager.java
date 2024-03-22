@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EventManager extends User{
@@ -13,7 +14,7 @@ public class EventManager extends User{
         super(userID, name, password, email);
     }
 
-    public String createEvent(String eventType, String eventName, String venue, LocalDateTime  dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails,int ticketPrice) {
+    public static String createEvent(String eventType, String eventName, String venue, LocalDateTime  dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails,int ticketPrice) {
         PreparedStatement statement = null;    
         ResultSet resultSet = null;
             
@@ -104,7 +105,7 @@ public class EventManager extends User{
         }
     }
     
-    public String deleteEvent(int eventID) {  //=================== Will need to call refund() before deleting===============
+    public static String deleteEvent(int eventID) {  //=================== Will need to call refund() before deleting===============
         PreparedStatement statement = null;
     
         try {
@@ -190,25 +191,44 @@ public class EventManager extends User{
         }
     }
 
-    public String viewSaleStatistics() {
+    // public static String viewSaleStatistics() {
+    //     try {
+    //         ArrayList<Event> events = Event.getAllEvents();
+    //         StringBuilder statistics = new StringBuilder();
+    //         statistics.append("Event Name\tTickets Sold\tRevenue\n");
+
+    //         for (Event event : events) {
+    //             String eventName = event.getEventName();
+    //             int ticketsSold = event.numTicketsSold();
+    //             int revenue = event.revenueEarned();
+
+    //             statistics.append(eventName).append("\t").append(ticketsSold).append("\t").append(revenue).append("\n");
+    //         }
+
+    //         return statistics.toString();
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return "Failed to fetch sale statistics.";
+    //     }
+    // }
+    public static HashMap<Integer, ArrayList<String>> viewSaleStatistics() {
+        HashMap<Integer, ArrayList<String>> salesStats = new HashMap<>();
         try {
             ArrayList<Event> events = Event.getAllEvents();
-            StringBuilder statistics = new StringBuilder();
-            statistics.append("Event Name\tTickets Sold\tRevenue\n");
-
             for (Event event : events) {
-                String eventName = event.getEventName();
-                int ticketsSold = event.numTicketsSold();
-                int revenue = event.revenueEarned();
+                ArrayList<String> oneEventStat = new ArrayList<>(); //eventID, eventName, number of tickets sold, reveune earned
+                oneEventStat.add(String.valueOf(event.getEventID()));
+                oneEventStat.add(event.getEventName());
+                oneEventStat.add(String.valueOf(event.numTicketsSold()));
+                oneEventStat.add(String.valueOf(event.revenueEarned()));
 
-                statistics.append(eventName).append("\t").append(ticketsSold).append("\t").append(revenue).append("\n");
+                salesStats.put(event.getEventID(), oneEventStat);
             }
 
-            return statistics.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            return "Failed to fetch sale statistics.";
         }
+        return salesStats;
     }
     
 }

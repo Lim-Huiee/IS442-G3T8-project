@@ -368,6 +368,37 @@ public static void main(String[] args) {
             return eventStatus;
         });
 
+        post("/create_event", (req, res) -> {
+            String jsonData = req.body();
+
+            Event eventData = gson.fromJson(jsonData, Event.class);
+            String eventType = eventData.getEventType();
+            String eventName = eventData.getEventName();
+            String venue = eventData.getVenue();
+            LocalDateTime dateTime = eventData.getEventDateTime();
+            int numTotalTickets = eventData.getTotalTickets();
+            int numTicketsAvailable = eventData.getTicketsAvailable();
+            String eventDetails = eventData.getEventDetails();
+            int ticketPrice = eventData.getTicketPrice();
+
+            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+            return eventCreated;
+        });
+
+        get("/delete_event/:id", (req, res) -> {
+            String id = req.params(":id");
+            String eventDeleted = EventManager.deleteEvent(Integer.parseInt(id));
+            //Gson gson = new Gson();
+            return eventDeleted;
+        });
+
+        get("/view_sales_statistics", (req, res) -> {
+            HashMap<Integer, ArrayList<String>> statistics = EventManager.viewSaleStatistics();
+            //Gson gson = new Gson();
+            return statistics;
+        });
+
+
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DBConnection.closeConnection(); // Close database connection

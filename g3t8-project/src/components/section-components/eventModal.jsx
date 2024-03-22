@@ -9,18 +9,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { getTodayDate } from "@mui/x-date-pickers/internals";
+import axios from 'axios'; // Import Axios for making HTTP requests
 
-export const EventModal = ({show, action, handleClose}) => {
+export const EventModal = ({show, action, handleClose, data}) => {
 
-    const [values, setValues] = useState({
-        eventType: "",
-        eventName: "",
-        eventVenue: "",
-        eventDateTime: "",
-        eventTicketPrice: "",
-        numTicketAvail: ""
-    });
-    
+    const [values, setValues] = useState(data);
+    const [dateTime, setDateTime] = useState({});
     const [errors, setErrors] = useState({});
 
     const handleInput = (event) => {
@@ -42,29 +36,49 @@ export const EventModal = ({show, action, handleClose}) => {
         if (values.eventName==="") {
             error.eventNameError = "Event name should not be empty";
         }
-        if (values.eventVenue==="") {
-            error.eventVenueError = "Event venue should not be empty";
+        if (values.venue==="") {
+            error.venueError = "Event venue should not be empty";
         }
         if (values.eventDateTime==="") {
             error.eventDateTimeError = "Please pick a date and time";
-        } else if (values.eventDateTime <= new Date().getTime()) {
+        } else if (dateTime <= new Date().getTime()) {
             error.eventDateTimeError = "Please pick a future date and time";
         }
-        if (values.eventTicketPrice==="" || values.eventTicketPrice==="0" || values.eventTicketPrice==="-0") {
-            error.eventTicketPriceError = "Please input valid ticket price";
+        if (values.ticketPrice==="" || values.ticketPrice==="0" || values.ticketPrice==="-0") {
+            error.ticketPriceError = "Please input valid ticket price";
         }
-        if (values.numTicketAvail==="" || values.numTicketAvail==="0" || values.eventTicketPrice==="-0") {
-            error.numTicketAvailError = "Please input valid number of tickets available";
+        if (values.numTicketsAvailable==="" || values.numTicketsAvailable==="0" || values.numTicketsAvailable==="-0") {
+            error.numTicketsAvailableError = "Please input valid number of tickets available";
+        }
+        if (values.numTotalTickets==="" || values.numTotalTickets==="0" || values.numTotalTickets==="-0") {
+            error.numTotalTicketsError = "Please input valid number of tickets available";
+        }
+        if (values.eventDetails==="") {
+            error.eventDetailsError = "Event venue should not be empty";
         }
 
         setErrors(error);
-    
+
         // If no error, proceed to send to backend
         if (Object.keys(error).length === 0) {
           // Send data to backend
-          console.log("OK");
+          if (action == "Create") {
+            createEvent();
+          } else {
+
+          }
         }
     };
+
+    async function createEvent() {
+        try {
+            const response = await axios.post('http://localhost:4567/create_event', values);
+            console.log(values);
+            console.log('Response from server:', response.data); // Log the response data
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
 
     return (
         <div>
@@ -101,17 +115,17 @@ export const EventModal = ({show, action, handleClose}) => {
                             )}
                         </div>
                         <div className="form-group">
-                            <label htmlFor="eventVenue">Event Venue</label>
+                            <label htmlFor="venue">Event Venue</label>
                             <input
-                                id="eventVenue"
+                                id="venue"
                                 className="form-control"
-                                name="eventVenue"
-                                value={values.eventVenue}
+                                name="venue"
+                                value={values.venue}
                                 placeholder={"Enter event venue"}
                                 onChange={handleInput}
                             ></input>
-                            {errors.eventVenueError && (
-                            <span className="text-danger">{errors.eventVenueError}</span>
+                            {errors.venueError && (
+                            <span className="text-danger">{errors.venueError}</span>
                             )}
                         </div>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -126,10 +140,20 @@ export const EventModal = ({show, action, handleClose}) => {
                                 label="Enter event date and time"
                                 value={values.eventDateTime}
                                 onChange={(date) => {
+                                    //prepare date for backend
+                                    const year = date.$d.getFullYear();
+                                    const month = String(date.$d.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.$d.getDate()).padStart(2, '0');
+                                    const hours = String(date.$d.getHours()).padStart(2, '0');
+                                    const minutes = String(date.$d.getMinutes()).padStart(2, '0');
+                                    const seconds = String(date.$d.getSeconds()).padStart(2, '0');
+                                    const dateTimeString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+                                    
                                     setValues((prev) => ({
                                         ...prev,
-                                        eventDateTime: date.$d // Remove square brackets around event.target.value
+                                        eventDateTime: dateTimeString // Remove square brackets around event.target.value
                                     }));
+                                    setDateTime(date.$d);
                                 }}
                                 />                 
                             </DemoContainer>
@@ -138,35 +162,67 @@ export const EventModal = ({show, action, handleClose}) => {
                             )}
                         </LocalizationProvider>
                         <div className="form-group mt-3">
-                            <label htmlFor="eventTicketPrice">Event Ticket Price</label>
-                            <input
-                                id="eventTicketPrice"
+                            <label htmlFor="eventDetails">Event Details</label>
+                            <textarea                              
+                                id="eventDetails"
                                 className="form-control"
-                                type="number"
-                                min="0"
-                                name="eventTicketPrice"
-                                value={values.eventTicketPrice}
-                                placeholder={"Enter event ticket price"}
-                                onChange={handleInput}
-                            ></input>
-                            {errors.eventTicketPriceError && (
-                            <span className="text-danger">{errors.eventTicketPriceError}</span>
+                                name="eventDetails"
+                                value={values.eventDetails}
+                                placeholder={"Enter event details"}
+                                onChange={handleInput} 
+                                rows="4" 
+                                cols="50">
+                            </textarea>
+                            {errors.eventDetailsError && (
+                            <span className="text-danger">{errors.eventDetailsError}</span>
                             )}
                         </div>
                         <div className="form-group">
-                            <label htmlFor="numTicketAvail">No. of tickets available</label>
+                            <label htmlFor="numTotalTickets">Total No. of tickets</label>
                             <input
-                                id="numTicketAvail"
+                                id="numTotalTickets"
                                 className="form-control"
                                 type="number"
                                 min="0"
-                                name="numTicketAvail"
-                                value={values.numTicketAvail}
+                                name="numTotalTickets"
+                                value={values.numTotalTickets}
+                                placeholder={"Enter total number of tickets"}
+                                onChange={handleInput}
+                            ></input>
+                            {errors.numTotalTicketsError && (
+                            <span className="text-danger">{errors.numTotalTicketsError}</span>
+                            )}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="numTicketsAvailable">No. of tickets available</label>
+                            <input
+                                id="numTicketsAvailable"
+                                className="form-control"
+                                type="number"
+                                min="0"
+                                name="numTicketsAvailable"
+                                value={values.numTicketsAvailable}
                                 placeholder={"Enter number of tickets available"}
                                 onChange={handleInput}
                             ></input>
-                            {errors.numTicketAvailError && (
-                            <span className="text-danger">{errors.numTicketAvailError}</span>
+                            {errors.numTicketsAvailableError && (
+                            <span className="text-danger">{errors.numTicketsAvailableError}</span>
+                            )}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="ticketPrice">Event Ticket Price</label>
+                            <input
+                                id="ticketPrice"
+                                className="form-control"
+                                type="number"
+                                min="0"
+                                name="ticketPrice"
+                                value={values.ticketPrice}
+                                placeholder={"Enter event ticket price"}
+                                onChange={handleInput}
+                            ></input>
+                            {errors.ticketPriceError && (
+                            <span className="text-danger">{errors.ticketPriceError}</span>
                             )}
                         </div>
                         
