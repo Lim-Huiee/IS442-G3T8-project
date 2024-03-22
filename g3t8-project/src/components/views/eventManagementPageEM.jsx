@@ -90,13 +90,12 @@ export const EventManagementPageEM = () => {
         }
         const handleOpen = (selectedAction, eventID) => {
             setAction(selectedAction);
-            if (selectedAction!="Create") {
+            if (selectedAction!="Create") { //view and update both need to retrieve from DB
                 fetchEventToUpdate(eventID);
                 setToShowModal(true);
                 setIsLoading(true);
             } else {
                 createEventDataField();
-                console.log(eventData);
                 setToShowModal(true);
             }
         }
@@ -189,7 +188,8 @@ export const EventManagementPageEM = () => {
                                     <HeaderCellSort sortKey="EVENTDATETIME" resize>Event Date & Time</HeaderCellSort>
                                     <HeaderCellSort sortKey="EVENTTICKETPRICE" resize>Ticket Price</HeaderCellSort>
                                     <HeaderCellSort sortKey="NUMTICKETAVAIL" resize>Available tickets</HeaderCellSort>
-                                    <HeaderCell>Action</HeaderCell>
+                                    <HeaderCell resize>View</HeaderCell>
+                                    <HeaderCell resize>Update</HeaderCell>
                                 </HeaderRow>
                             </Header>
 
@@ -210,7 +210,12 @@ export const EventManagementPageEM = () => {
                                     <Cell>{processDateTime(item.eventDateTime)}</Cell>
                                     <Cell>{item.ticketPrice}</Cell>
                                     <Cell>{item.numTicketsAvailable}</Cell>
-                                    <Cell><Button variant="primary" onClick={() => handleOpen("Update", item.eventID)}>Update Event</Button></Cell>
+                                    <Cell>
+                                        <Button variant="primary" onClick={() => handleOpen("View", item.eventID)}>View</Button>
+                                    </Cell>
+                                    <Cell>
+                                        <Button variant="warning" onClick={() => handleOpen("Update", item.eventID)}>Update</Button>
+                                    </Cell>
                                 </Row>
                                 )): "Loading..."}
                             </Body>
@@ -223,7 +228,7 @@ export const EventManagementPageEM = () => {
             {isLoading ? (
                 <p></p>
             ) : (
-                <EventModal show={toShowModal} action={action} handleClose={handleClose} data={eventData}/>
+                <EventModal show={toShowModal} action={action} handleClose={handleClose} data={eventData} processDateTime={processDateTime}/>
             )}
             </div>
         </div>

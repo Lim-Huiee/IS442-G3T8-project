@@ -11,7 +11,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { getTodayDate } from "@mui/x-date-pickers/internals";
 import axios from 'axios'; // Import Axios for making HTTP requests
 
-export const EventModal = ({show, action, handleClose, data}) => {
+export const EventModal = ({show, action, handleClose, data, processDateTime}) => {
 
     const [values, setValues] = useState(data);
     const [dateTime, setDateTime] = useState({});
@@ -103,6 +103,7 @@ export const EventModal = ({show, action, handleClose, data}) => {
                 <Modal.Header closeButton>
                     <Modal.Title><h4>{action} Event</h4>{serverResponse!=""?<p className={(serverResponse!="Event updated successfully!" && serverResponse!="Event created successfully." )? "text-danger" : "text-success"}>{serverResponse}</p>:<p></p>}</Modal.Title>
                 </Modal.Header>
+                {action!="View" ? (
                 <Modal.Body>
                     <form onSubmit={handleSubmit}>
                         <div class="form-group">
@@ -149,8 +150,8 @@ export const EventModal = ({show, action, handleClose, data}) => {
                                 <DateTimePicker
                                 slotProps={{
                                     textField: {
-                                      size: "large",
-                                      error: false,
+                                        size: "large",
+                                        error: false,
                                     },
                                 }}
                                 label="Enter event date and time"
@@ -256,6 +257,19 @@ export const EventModal = ({show, action, handleClose, data}) => {
                         </div>
                     </form>
                 </Modal.Body>
+                ) : (
+                <Modal.Body>
+                    <p><b>Event ID:</b> <span>{values.eventID}</span></p>
+                    <p><b>Event Type:</b> <span>{values.eventType}</span></p>
+                    <p><b>Event Name:</b> <span>{values.eventName}</span></p>
+                    <p><b>Event Venue:</b> <span>{values.venue}</span></p>
+                    <p><b>Event Date & Time:</b> <span>{processDateTime(values.eventDateTime)}</span></p>
+                    <p><b>Total number of tickets:</b> <span>{values.numTotalTickets}</span></p>
+                    <p><b>Event Details:</b> <span>{values.numTicketsAvailable}</span></p>
+                    <p><b>Ticket Price:</b> <span>{values.ticketPrice}</span></p>
+                </Modal.Body>
+                )
+                }
             </Modal>
         </div>
     );
