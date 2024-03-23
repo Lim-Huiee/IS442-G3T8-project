@@ -172,7 +172,7 @@ public class EventManager extends User{
         }
     }
 
-    public String addTicketingOfficer(String name, String password, String email) {
+    public static String addTicketingOfficer(String name, String password, String email) {
         PreparedStatement checkStatement = null;
         ResultSet checkResultSet = null;
         PreparedStatement insertStatement = null;

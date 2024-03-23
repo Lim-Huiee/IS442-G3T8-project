@@ -412,6 +412,18 @@ public static void main(String[] args) {
             return eventCreated;
         });
 
+        post("/add_ticketing_officer", (req, res) -> {
+            String jsonData = req.body();
+
+            TicketOfficer ticketOfficerData = gson.fromJson(jsonData, TicketOfficer.class);
+            String name = ticketOfficerData.getName();
+            String password = ticketOfficerData.getPassword();
+            String email = ticketOfficerData.getEmail();
+
+            String ticketOfficerCreated = EventManager.addTicketingOfficer(name, password, email);
+            return ticketOfficerCreated;
+        });
+
         delete("/delete_event/:id", (req, res) -> {
             String id = req.params(":id");
             String eventDeleted = EventManager.deleteEvent(Integer.parseInt(id));
