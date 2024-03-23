@@ -5,7 +5,7 @@ import { Register} from "../register";
 import JsonData from "../../data/data.json";
 import "./../../App.css";
 
-export const LoginRegisterPage = (props) => {
+export const StaffLoginPage = (props) => {
 
   const [action, setAction] = useState("login");
 
@@ -15,7 +15,7 @@ export const LoginRegisterPage = (props) => {
 
   const renderComponent = () => {
     if (action === "login") {
-      return <Login handleAction={handleAction} userRole="customer"/>
+      return <Login handleAction={handleAction} userRole="staff"/>
     } else {
       return <Register handleAction={handleAction}/>
     }
@@ -23,8 +23,7 @@ export const LoginRegisterPage = (props) => {
 
   return (
     <div style={{backgroundImage: "url(img/LoginRegisterBg.jpg)", height:"100%", backgroundRepeat: "no-repeat", backgroundSize:"cover", backgroundPosition: "center"}}>
-      <Navigation/>
-      <div style={{marginTop: "30px"}}>
+      <div>
         {renderComponent()}
       </div>
     </div>

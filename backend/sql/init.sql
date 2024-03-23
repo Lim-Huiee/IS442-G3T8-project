@@ -36,8 +36,8 @@ CREATE TABLE `TICKET` (
     `event_id` INT NOT NULL,
     `order_id` INT NOT NULL,
     `status` varchar (255),
-    CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`),
-    CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`)
+    CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`) ON DELETE CASCADE,
+    CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`) ON DELETE CASCADE
 );
 
 -- Dummy data for the USER table

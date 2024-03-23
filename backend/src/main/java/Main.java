@@ -401,6 +401,27 @@ public class Main {
             }
         });
 
+        get("/get_user_by_id/:id", (req, res) -> {
+            String id = req.params(":id");
+            User userByID = User.getUserByID(Integer.parseInt(id));
+            //Gson gson = new Gson();
+            return gson.toJson(userByID);
+        });
+        
+        get("/get_users_by_role/:roleName", (req, res) -> {
+            String roleName = req.params(":roleName");
+            List<User> usersByRole = User.getUsersByRole(roleName);
+            //Gson gson = new Gson();
+            return gson.toJson(usersByRole);
+        });
+
+        get("/get_event_by_id/:id", (req, res) -> {
+            String id = req.params(":id");
+            Event event = Event.getEventByID(Integer.parseInt(id));
+            //Gson gson = new Gson();
+            return gson.toJson(event);
+        });
+
         get("/get_all_bookable_events", (req, res) -> {
             List<Event> bookableEvents = Event.getAllBookableEvents();
             // Gson gson = new Gson();
@@ -431,6 +452,80 @@ public class Main {
             // Gson gson = new Gson();
             return eventStatus;
         });
+
+        post("/create_event", (req, res) -> {
+            String jsonData = req.body();
+
+            Event eventData = gson.fromJson(jsonData, Event.class);
+            String eventType = eventData.getEventType();
+            String eventName = eventData.getEventName();
+            String venue = eventData.getVenue();
+            LocalDateTime dateTime = eventData.getEventDateTime();
+            int numTotalTickets = eventData.getTotalTickets();
+            int numTicketsAvailable = eventData.getTicketsAvailable();
+            String eventDetails = eventData.getEventDetails();
+            int ticketPrice = eventData.getTicketPrice();
+
+            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+            return eventCreated;
+        });
+
+        put("/update_event", (req, res) -> {
+            String jsonData = req.body();
+
+            Event eventData = gson.fromJson(jsonData, Event.class);
+            int eventID = eventData.getEventID();
+            String eventType = eventData.getEventType();
+            String eventName = eventData.getEventName();
+            String venue = eventData.getVenue();
+            LocalDateTime dateTime = eventData.getEventDateTime();
+            int numTotalTickets = eventData.getTotalTickets();
+            int numTicketsAvailable = eventData.getTicketsAvailable();
+            String eventDetails = eventData.getEventDetails();
+            int ticketPrice = eventData.getTicketPrice();
+
+            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+            return eventCreated;
+        });
+
+        post("/add_ticketing_officer", (req, res) -> {
+            String jsonData = req.body();
+
+            TicketOfficer ticketOfficerData = gson.fromJson(jsonData, TicketOfficer.class);
+            String name = ticketOfficerData.getName();
+            String password = ticketOfficerData.getPassword();
+            String email = ticketOfficerData.getEmail();
+
+            String ticketOfficerCreated = EventManager.addTicketingOfficer(name, password, email);
+            return ticketOfficerCreated;
+        });
+
+        put("/update_ticketing_officer", (req, res) -> {
+            String jsonData = req.body();
+
+            User ticketOfficerData = gson.fromJson(jsonData, User.class);
+            int id = ticketOfficerData.getUserID();
+            String name = ticketOfficerData.getName();
+            String password = ticketOfficerData.getPassword();
+            String email = ticketOfficerData.getEmail();
+
+            String ticketOfficerUpdated = EventManager.updateTicketingOfficer(id, name, password, email);
+            return ticketOfficerUpdated;
+        });
+
+        delete("/delete_event/:id", (req, res) -> {
+            String id = req.params(":id");
+            String eventDeleted = EventManager.deleteEvent(Integer.parseInt(id));
+            //Gson gson = new Gson();
+            return eventDeleted;
+        });
+
+        get("/view_sales_statistics", (req, res) -> {
+            List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
+            //Gson gson = new Gson();
+            return gson.toJson(statistics);
+        });
+
 
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
