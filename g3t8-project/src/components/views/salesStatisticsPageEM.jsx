@@ -116,6 +116,9 @@ export const SalesStatisticsPageEM = () => {
                     <div className="col">
                         <h5 className={serverResponse!=="Event deleted successfully." ? "text-danger" : "text-success"}>{serverResponse}</h5>
                     </div>
+                    <div className="col p-3 d-flex justify-content-end">
+                        <Button variant="primary" >Generate report</Button>
+                    </div>
                 </div>
 
                 <div className="mt-5">

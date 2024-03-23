@@ -227,6 +227,76 @@ public class EventManager extends User{
         }
     }
 
+    public static String updateTicketingOfficer(int userID, String name, String password, String email) {
+        PreparedStatement checkStatement = null;
+        ResultSet checkResultSet = null;
+
+        try {
+            // Check if the username already exists
+            DBConnection.establishConnection();
+            String checkQuery = "SELECT COUNT(*) FROM user WHERE name = ? AND email = ? AND password = ? AND role = ? AND user_id = ?";
+            checkStatement = DBConnection.getConnection().prepareStatement(checkQuery);
+            checkStatement.setString(1, name);  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setString(2, email);  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setString(3, password);  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setString(4, "ticketing officer");  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setInt(5, userID);  // sets to first parameter of addTicketingOfficer(), which is name
+            
+            checkResultSet = checkStatement.executeQuery();
+            checkResultSet.next();
+            int count1 = checkResultSet.getInt(1);
+            if (count1 > 0) {
+                return "No changes were made to ticketing officer's account";
+            } else {
+                // Check if the record already exists based on user's name
+                String checkQuery2 = "SELECT COUNT(*) FROM user WHERE name = ? AND user_id != ? AND role = ?";
+                checkStatement = DBConnection.getConnection().prepareStatement(checkQuery2);
+                checkStatement.setString(1, name);
+                checkStatement.setInt(2, userID);
+                checkStatement.setString(3, "ticketing officer");
+
+                checkResultSet = checkStatement.executeQuery();
+                checkResultSet.next();
+                int count2 = checkResultSet.getInt(1);
+                if (count2 > 0) {
+                    return "Username already exists.";
+                }else {
+                    // Check if the email is valid
+                    if (!isValidEmail(email)) {
+                        return "Invalid email format. Please enter a valid email address.";
+                    }
+                    // Username is available, proceed with registration
+                    // update user into the database
+                    String sqlQuery = "UPDATE user SET name=?, email=?, password=? WHERE user_id=?";
+                    checkStatement = DBConnection.getConnection().prepareStatement(sqlQuery);
+                    checkStatement.setString(1, name);
+                    checkStatement.setString(2, email);
+                    checkStatement.setString(3, password);
+                    checkStatement.setInt(4, userID);
+
+                    checkStatement.executeUpdate();
+
+                    return "Ticketing officer updated successfully!";
+                }
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "An error occurred while attempting to update ticketing officer.";
+        } finally {
+            try {
+                if (checkResultSet != null) {
+                    checkResultSet.close();
+                }
+                if (checkStatement != null) {
+                    checkStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // public static String viewSaleStatistics() {
     //     try {
     //         ArrayList<Event> events = Event.getAllEvents();

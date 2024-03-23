@@ -339,6 +339,20 @@ public static void main(String[] args) {
             }
         });
 
+        get("/get_user_by_id/:id", (req, res) -> {
+            String id = req.params(":id");
+            User userByID = User.getUserByID(Integer.parseInt(id));
+            //Gson gson = new Gson();
+            return gson.toJson(userByID);
+        });
+        
+        get("/get_users_by_role/:roleName", (req, res) -> {
+            String roleName = req.params(":roleName");
+            List<User> usersByRole = User.getUsersByRole(roleName);
+            //Gson gson = new Gson();
+            return gson.toJson(usersByRole);
+        });
+
         get("/get_event_by_id/:id", (req, res) -> {
             String id = req.params(":id");
             Event event = Event.getEventByID(Integer.parseInt(id));
@@ -422,6 +436,19 @@ public static void main(String[] args) {
 
             String ticketOfficerCreated = EventManager.addTicketingOfficer(name, password, email);
             return ticketOfficerCreated;
+        });
+
+        put("/update_ticketing_officer", (req, res) -> {
+            String jsonData = req.body();
+
+            User ticketOfficerData = gson.fromJson(jsonData, User.class);
+            int id = ticketOfficerData.getUserID();
+            String name = ticketOfficerData.getName();
+            String password = ticketOfficerData.getPassword();
+            String email = ticketOfficerData.getEmail();
+
+            String ticketOfficerUpdated = EventManager.updateTicketingOfficer(id, name, password, email);
+            return ticketOfficerUpdated;
         });
 
         delete("/delete_event/:id", (req, res) -> {

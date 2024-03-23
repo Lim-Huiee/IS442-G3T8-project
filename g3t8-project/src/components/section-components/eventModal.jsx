@@ -112,6 +112,7 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
                                 <option value="" selected disabled>Please select event type</option>
                                 <option value="Concert">Concert</option>
                                 <option value="Musical">Musical</option>
+                                <option value="Seminar">Seminar</option>
                             </select>
                             {errors.eventTypeError && (
                             <span className="text-danger">{errors.eventTypeError}</span>

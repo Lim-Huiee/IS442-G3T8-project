@@ -33,13 +33,16 @@ export const StaffNavigation = (props) => {
                     <li className="nav-item">
                         <Link to="/eventManagementPageEM"> Event Management </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link to="/manageTicketingOfficerPageEM"> Manage Ticketing Officers </Link>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded=" true">
                             Your profile
                         </a>
                         <div class="dropdown-menu " aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Manage profile</a>
-                            <div class="dropdown-divider"></div>
+                            {/* <a class="dropdown-item" href="#">Manage profile</a>
+                            <div class="dropdown-divider"></div> */}
                             <a class="dropdown-item" href="#">Sign out</a>
                         </div>
                     </li>
