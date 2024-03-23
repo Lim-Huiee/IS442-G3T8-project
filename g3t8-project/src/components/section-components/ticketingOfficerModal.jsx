@@ -93,6 +93,9 @@ export const TicketingOfficerModal = ({show, action, handleClose, data}) => {
             console.log(values);
             console.log('Response from server:', response.data); // Log the response data
             setServerResponse(response.data);
+            if (response.data=="Ticketing officer added successfully!") {
+                window.location.reload();
+            }
         } catch (error) {
             console.error('Error fetching events:', error);
         }

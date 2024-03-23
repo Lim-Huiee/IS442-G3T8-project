@@ -106,14 +106,15 @@ public class Main {
                     int numTicketsAvailable = 1000;
                     String eventDetails = "A typical  Event";
                     int ticketPrice = 90;
+                    double cancellationFee = 20.00;
                     String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets,
-                            numTicketsAvailable, eventDetails, ticketPrice);
+                            numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
                     System.out.println(result); // creates new event in DB, will print "event exists" if you run it a
                                                 // 2nd time
 
                     // update taylor swift event
                     String updateResult = em.updateEvent(5, eventType, eventName, "my house", eventDateTime,
-                            numTotalTickets, 998, eventDetails, ticketPrice);
+                            numTotalTickets, 998, eventDetails, ticketPrice, cancellationFee);
                     System.out.println(updateResult);
 
                     /*
@@ -464,9 +465,10 @@ public class Main {
             int numTotalTickets = eventData.getTotalTickets();
             int numTicketsAvailable = eventData.getTicketsAvailable();
             String eventDetails = eventData.getEventDetails();
-            int ticketPrice = eventData.getTicketPrice();
+            double ticketPrice = eventData.getTicketPrice();
+            double cancellationFee = eventData.getCancellationFee();
 
-            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
             return eventCreated;
         });
 
@@ -482,9 +484,10 @@ public class Main {
             int numTotalTickets = eventData.getTotalTickets();
             int numTicketsAvailable = eventData.getTicketsAvailable();
             String eventDetails = eventData.getEventDetails();
-            int ticketPrice = eventData.getTicketPrice();
+            double ticketPrice = eventData.getTicketPrice();
+            double cancellationFee = eventData.getCancellationFee();
 
-            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice);
+            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
             return eventCreated;
         });
 

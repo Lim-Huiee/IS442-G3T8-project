@@ -18,6 +18,10 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
     const [errors, setErrors] = useState({});
     const [serverResponse, setServerResponse] = useState("");
 
+    useEffect(() => {
+        setValues(data);
+    }, [data]); // Empty dependency array to run only once when the component mounts
+
     const handleInput = (event) => {
         setValues((prev) => ({
             ...prev,
@@ -57,6 +61,9 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
         if (values.eventDetails==="") {
             error.eventDetailsError = "Event venue should not be empty";
         }
+        if (values.cancellationFee==="" || values.cancellationFee==="0" || values.cancellationFee==="-0") {
+            error.cancellationFeeError = "Please input valid cancellation fee";
+        }
 
         setErrors(error);
 
@@ -65,7 +72,6 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
           // Send data to backend
           if (action == "Create") {
             createEvent();
-            window.location.reload();
           } else {
             updateEvent();
         }
@@ -78,6 +84,9 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
             console.log(values);
             console.log('Response from server:', response.data); // Log the response data
             setServerResponse(response.data);
+            if (response.data=="Event created successfully.") {
+                window.location.reload();
+            }
         } catch (error) {
             console.error('Error fetching events:', error);
         }
@@ -234,6 +243,7 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
                                 className="form-control"
                                 type="number"
                                 min="0"
+                                step=".01"
                                 name="ticketPrice"
                                 value={values.ticketPrice}
                                 placeholder={"Enter event ticket price"}
@@ -241,6 +251,23 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
                             ></input>
                             {errors.ticketPriceError && (
                             <span className="text-danger">{errors.ticketPriceError}</span>
+                            )}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="cancellationFee">Ticket Cancellation Fee</label>
+                            <input
+                                id="cancellationFee"
+                                className="form-control"
+                                type="number"
+                                min="0"
+                                step=".01"
+                                name="cancellationFee"
+                                value={values.cancellationFee}
+                                placeholder={"Enter cancellation fee"}
+                                onChange={handleInput}
+                            ></input>
+                            {errors.cancellationFeeError && (
+                            <span className="text-danger">{errors.cancellationFeeError}</span>
                             )}
                         </div>
                         
@@ -265,9 +292,11 @@ export const EventModal = ({show, action, handleClose, data, processDateTime}) =
                     <p><b>Event Name:</b> <span>{values.eventName}</span></p>
                     <p><b>Event Venue:</b> <span>{values.venue}</span></p>
                     <p><b>Event Date & Time:</b> <span>{processDateTime(values.eventDateTime)}</span></p>
+                    <p><b>Event Details:</b> <span>{values.eventDetails}</span></p>
                     <p><b>Total number of tickets:</b> <span>{values.numTotalTickets}</span></p>
-                    <p><b>Event Details:</b> <span>{values.numTicketsAvailable}</span></p>
-                    <p><b>Ticket Price:</b> <span>{values.ticketPrice}</span></p>
+                    <p><b>Number of tickets available:</b> <span>{values.numTicketsAvailable}</span></p>
+                    <p><b>Ticket Price:</b> <span>${values.ticketPrice}</span></p>
+                    <p><b>Cancellation Fee:</b> <span>${values.cancellationFee}</span></p>
                 </Modal.Body>
                 )
                 }

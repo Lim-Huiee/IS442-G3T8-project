@@ -85,7 +85,7 @@ export const EventManagementPageEM = () => {
 
         const [eventData, setEventData] = useState({});
         const handleClose = () => {
-            window.location.reload();
+            createEventDataField();
             setToShowModal(false);
         }
         const handleOpen = (selectedAction, eventID) => {
@@ -109,7 +109,8 @@ export const EventManagementPageEM = () => {
                 numTotalTickets: "",
                 numTicketsAvailable: "",
                 eventDetails: "",
-                ticketPrice: ""
+                ticketPrice: "",
+                cancellationFee: ""
             })
             setIsLoading(false);
         }
@@ -128,7 +129,8 @@ export const EventManagementPageEM = () => {
                     numTotalTickets: response.data.numTotalTickets,
                     numTicketsAvailable: response.data.numTicketsAvailable,
                     eventDetails: response.data.eventDetails,
-                    ticketPrice: response.data.ticketPrice
+                    ticketPrice: response.data.ticketPrice.toFixed(2),
+                    cancellationFee: response.data.cancellationFee.toFixed(2)
                 });
                 setIsLoading(false);
             } catch (error) {

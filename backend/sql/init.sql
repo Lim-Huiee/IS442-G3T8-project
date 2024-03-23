@@ -57,16 +57,16 @@ INSERT INTO `ORDERS` (`user_id`, `status`) VALUES
 (3, 'delivered');
 
 -- Dummy data for the EVENT table
-INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`) VALUES
+INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`, `cancellation_fee`) VALUES
 ('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.', 50, 10),
 ('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.',100, 20),
-('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70),
+('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70, 30),
 ('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.',90, 40);
 
 -- Dummy data for the TICKET table
-INSERT INTO `TICKET` (`event_id`, `order_id`,  `cancellation_fee`,`status`) VALUES
-(1, 1, 4,'delivered'),
-(2, 2, 10,'delivered'),
-(3, 3, 10,'delivered'),
-(1, 4, 4,'refunded'),
-(2, 5, 10,'delivered');
+INSERT INTO `TICKET` (`event_id`, `order_id`,`status`) VALUES
+(1, 1, 'delivered'),
+(2, 2, 'delivered'),
+(3, 3, 'delivered'),
+(1, 4, 'refunded'),
+(2, 5, 'delivered');
