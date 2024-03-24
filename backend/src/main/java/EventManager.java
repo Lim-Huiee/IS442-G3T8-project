@@ -333,6 +333,9 @@ public class EventManager extends User{
                 oneEvent.put("eventName", event.getEventName());
                 oneEvent.put("numTicketsSold", String.valueOf(event.numTicketsSold()));
                 oneEvent.put("revenueEarned", String.valueOf(event.revenueEarned()));
+                String eventName = event.getEventName();
+                int ticketsSold = event.numTicketsSold();
+                double revenue = event.revenueEarned();
 
                 salesStats.add(oneEvent);
             }

@@ -14,6 +14,7 @@ CREATE TABLE `USER` (
 CREATE TABLE `ORDERS` (
     `order_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
+    `order_datetime` DATETIME NOT NULL,
     `status` ENUM('pending', 'processing', 'delivered', 'cancelled pending refund', 'refunded') NOT NULL DEFAULT 'pending',
     CONSTRAINT order_fk1 FOREIGN KEY (user_id) REFERENCES USER(`user_id`)
 );
@@ -49,12 +50,12 @@ INSERT INTO `USER` (`email`, `name`, `password`, `role`, `amount_avail`) VALUES
 ('to@tm.com', 'ticket man', 'password5', 'ticketing officer', 0);
 
 -- Dummy data for the ORDER table
-INSERT INTO `ORDERS` (`user_id`, `status`) VALUES
-(1, 'delivered'),
-(2, 'pending'),
-(3, 'pending'),
-(2, 'refunded'),
-(3, 'delivered');
+INSERT INTO `ORDERS` (`user_id`, `status`, `order_datetime`) VALUES
+(1, 'delivered', '2024-03-30 19:00:00'),
+(2, 'pending', '2024-02-16 20:00:00'),
+(3, 'pending', '2024-02-16 20:00:00'),
+(2, 'refunded', '2024-02-16 20:00:00'),
+(3, 'delivered', '2024-02-16 20:00:00');
 
 -- Dummy data for the EVENT table
 INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`, `cancellation_fee`) VALUES
