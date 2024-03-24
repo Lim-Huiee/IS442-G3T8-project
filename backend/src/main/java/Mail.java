@@ -28,14 +28,6 @@ public class Mail {
 
         email.addPersonalization(recipient, "orderId", orderId);
         
-        // Purchase purchase = new Purchase();
-        // purchase.0.price = "";
-        // purchase.0.quantity = "";
-        // purchase.0.eventName = "";
-        // purchase.0.eventDetails = "";
-        // for (int i=0; i<purchase.size(); i++) {
-        //     email.addPersonalization(recipient, "Purchase", purchase[i]);
-        // }
         email.addPersonalization(recipient, "Purchase", purchase);
     
         email.addPersonalization(recipient, "username", username);
