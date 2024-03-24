@@ -4,7 +4,7 @@ USE TICKETMISTRESS;
 
 CREATE TABLE `USER` (
     `user_id` INT AUTO_INCREMENT PRIMARY KEY,
-    `email` VARCHAR(200) NOT NULL UNIQUE,
+    `email` VARCHAR(100) NOT NULL UNIQUE,
     `name` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `role` ENUM('customer', 'event manager', 'ticketing officer') NOT NULL DEFAULT 'customer',
@@ -14,6 +14,7 @@ CREATE TABLE `USER` (
 CREATE TABLE `ORDERS` (
     `order_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
+    `order_datetime` DATETIME NOT NULL,
     `status` ENUM('pending', 'processing', 'delivered', 'cancelled pending refund', 'refunded') NOT NULL DEFAULT 'pending',
     CONSTRAINT order_fk1 FOREIGN KEY (user_id) REFERENCES USER(`user_id`)
 );
@@ -27,14 +28,15 @@ CREATE TABLE `EVENT` (
     `total_tickets` INT NOT NULL, 
     `num_tickets_avail` INT NOT NULL DEFAULT 0,
     `event_details` TEXT,
-    `price` DECIMAL(10, 2) NOT NULL DEFAULT 0
+    `price` DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    `cancellation_fee` DECIMAL(10, 2) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `TICKET` (
     `ticket_id` INT AUTO_INCREMENT PRIMARY KEY,
     `event_id` INT NOT NULL,
     `order_id` INT NOT NULL,
-    `cancellation_fee` DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    `status` varchar (255),
     CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`),
     CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`)
 );
@@ -48,24 +50,24 @@ INSERT INTO `USER` (`email`, `name`, `password`, `role`, `amount_avail`) VALUES
 ('to@tm.com', 'ticket man', 'password5', 'ticketing officer', 0);
 
 -- Dummy data for the ORDER table
-INSERT INTO `ORDERS` (`user_id`, `status`) VALUES
-(1, 'delivered'),
-(2, 'pending'),
-(3, 'pending'),
-(2, 'refunded'),
-(3, 'delivered');
+INSERT INTO `ORDERS` (`user_id`, `status`, `order_datetime`) VALUES
+(1, 'delivered', '2024-03-30 19:00:00'),
+(2, 'pending', '2024-02-16 20:00:00'),
+(3, 'pending', '2024-02-16 20:00:00'),
+(2, 'refunded', '2024-02-16 20:00:00'),
+(3, 'delivered', '2024-02-16 20:00:00');
 
 -- Dummy data for the EVENT table
-INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`) VALUES
-('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.', 50),
-('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.',100),
-('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70),
-('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.',90);
+INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`, `cancellation_fee`) VALUES
+('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.', 50, 10),
+('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.',100, 20),
+('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70, 10),
+('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.',90, 40);
 
 -- Dummy data for the TICKET table
-INSERT INTO `TICKET` (`event_id`, `order_id`,  `cancellation_fee`) VALUES
-(1, 1, 4),
-(2, 2, 10),
-(3, 3, 10),
-(1, 4, 4),
-(2, 5, 10);
+INSERT INTO `TICKET` (`event_id`, `order_id`,`status`) VALUES
+(1, 1, 'delivered'),
+(2, 2, 'delivered'),
+(3, 3, 'delivered'),
+(1, 4, 'refunded'),
+(2, 5, 'delivered');
