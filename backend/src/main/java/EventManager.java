@@ -3,7 +3,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventManager extends User{
     private static String addTicketOfficerRole = "ticketing officer";
@@ -13,7 +15,7 @@ public class EventManager extends User{
         super(userID, name, password, email);
     }
 
-    public String createEvent(String eventType, String eventName, String venue, LocalDateTime  dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails,int ticketPrice) {
+    public static String createEvent(String eventType, String eventName, String venue, LocalDateTime  dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails,double ticketPrice, double cancellation_fee) {
         PreparedStatement statement = null;    
         ResultSet resultSet = null;
             
@@ -21,47 +23,48 @@ public class EventManager extends User{
             DBConnection.establishConnection(); // Establish database connection
             // Prepare SQL statement for inserting new event
 
-            if (numTotalTickets>numTicketsAvailable){
+            if (numTicketsAvailable>numTotalTickets){
                 return "Number of Total Tickets cannot be less than number of tickets available!";
-            }
-            String checkQuery = "SELECT COUNT(*) FROM event WHERE event_name = ? AND datetime = ?";
-            statement = DBConnection.getConnection().prepareStatement(checkQuery);
-            statement.setString(1, eventName);
-            statement.setObject(2, dateTime);
-
-            resultSet = statement.executeQuery();
-            resultSet.next();
-            int count = resultSet.getInt(1);
-
-            if (count > 0) {
-                return "Event already exists.";
-            }
-
-            String sqlQuery = "INSERT INTO event (event_type, event_name, venue, datetime, total_tickets, num_tickets_avail,event_details,price) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                    statement = DBConnection.getConnection().prepareStatement(sqlQuery);
-
-            // Set parameters for the SQL statement
-            statement.setString(1, eventType);
-            statement.setString(2, eventName);
-            statement.setString(3, venue);
-            statement.setObject(4, dateTime); // Use setObject to set LocalDateTime
-            statement.setInt(5, numTotalTickets);
-            statement.setInt(6, numTicketsAvailable);
-            statement.setString(7, eventDetails);
-            statement.setInt(8, ticketPrice);
-
-
-            // Execute the SQL statement
-            int rowsAffected = statement.executeUpdate();
-
-            // Close the statement
-            statement.close();
-
-            if (rowsAffected > 0) {
-                return "Event created successfully.";
             } else {
-                return "Failed to create event.";
+                String checkQuery = "SELECT COUNT(*) FROM event WHERE event_name = ? AND datetime = ?";
+                statement = DBConnection.getConnection().prepareStatement(checkQuery);
+                statement.setString(1, eventName);
+                statement.setObject(2, dateTime);
+    
+                resultSet = statement.executeQuery();
+                resultSet.next();
+                int count = resultSet.getInt(1);
+    
+                if (count > 0) {
+                    return "Event already exists.";
+                }
+    
+                String sqlQuery = "INSERT INTO event (event_type, event_name, venue, datetime, total_tickets, num_tickets_avail, event_details, price, cancellation_fee) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+    
+                // Set parameters for the SQL statement
+                statement.setString(1, eventType);
+                statement.setString(2, eventName);
+                statement.setString(3, venue);
+                statement.setObject(4, dateTime); // Use setObject to set LocalDateTime
+                statement.setInt(5, numTotalTickets);
+                statement.setInt(6, numTicketsAvailable);
+                statement.setString(7, eventDetails);
+                statement.setDouble(8, ticketPrice);
+                statement.setDouble(9, cancellation_fee);
+    
+                // Execute the SQL statement
+                int rowsAffected = statement.executeUpdate();
+    
+                // Close the statement
+                statement.close();
+    
+                if (rowsAffected > 0) {
+                    return "Event created successfully.";
+                } else {
+                    return "Failed to create event.";
+                }
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -70,32 +73,72 @@ public class EventManager extends User{
             DBConnection.closeConnection(); // Close the database connection
         }
     }
-    public String updateEvent(int eventID, String eventType,String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, int ticketPrice) {
+
+    public static String updateEvent(int eventID, String eventType,String eventName, String venue, LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String eventDetails, double ticketPrice, double cancellation_fee) {
         PreparedStatement statement = null;
 
         try {
             DBConnection.establishConnection(); // Establish database connection
 
-            String sqlQuery = "UPDATE event SET event_type=?,event_name=?, venue=?, datetime=?, total_tickets=?, num_tickets_avail=?, event_details=?, price=? WHERE event_id=?";
-            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
-
-            // Set parameters for the SQL statement, position of ? above corresponds with index below
-            statement.setString(1, eventType);
-            statement.setString(2, eventName);
-            statement.setString(3, venue);
-            statement.setObject(4, dateTime);
-            statement.setInt(5, numTotalTickets);
-            statement.setInt(6, numTicketsAvailable);
-            statement.setString(7, eventDetails);
-            statement.setInt(8, ticketPrice);
-            statement.setInt(9, eventID); 
+            if (numTicketsAvailable>numTotalTickets){
+                return "Number of Total Tickets cannot be less than number of tickets available!";
+            } else {
+                // Check if any changes is made to the record
+                String checkQuery1 = "SELECT COUNT(*) FROM event WHERE event_id = ? AND event_type = ? AND event_name = ? AND venue = ? AND datetime = ? AND total_tickets = ? AND num_tickets_avail = ? AND event_details = ? AND price = ? AND cancellation_fee = ?";
+                statement = DBConnection.getConnection().prepareStatement(checkQuery1);
+                statement.setInt(1, eventID);
+                statement.setString(2, eventType);
+                statement.setString(3, eventName);
+                statement.setString(4, venue);
+                statement.setObject(5, dateTime);
+                statement.setInt(6, numTotalTickets);
+                statement.setInt(7, numTicketsAvailable);
+                statement.setString(8, eventDetails);
+                statement.setDouble(9, ticketPrice);
+                statement.setDouble(10, cancellation_fee);
+    
+                ResultSet resultSet1 = statement.executeQuery();
+                resultSet1.next();
+                int count1 = resultSet1.getInt(1);
+                if (count1 > 0) {
+                    return "No changes were made to event";
+                } else {
+                    // Check if the record already exists based on eventName and dateTime
+                    String checkQuery2 = "SELECT COUNT(*) FROM event WHERE event_name = ? AND datetime = ? AND event_id != ?";
+                    statement = DBConnection.getConnection().prepareStatement(checkQuery2);
+                    statement.setString(1, eventName);
+                    statement.setObject(2, dateTime);
+                    statement.setObject(3, eventID);
         
-            // Asks SQL to execute statement
-            statement.executeUpdate();
-            // Close the statement
-            statement.close();
-            return "Event updated successfully!";
-            
+                    ResultSet resultSet2 = statement.executeQuery();
+                    resultSet2.next();
+                    int count2 = resultSet2.getInt(1);
+                    if (count2 > 0) {
+                        return "Event already exists.";
+                    }
+                
+                    String sqlQuery = "UPDATE event SET event_type=?,event_name=?, venue=?, datetime=?, total_tickets=?, num_tickets_avail=?, event_details=?, price=?, cancellation_fee=? WHERE event_id=?";
+                    statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+        
+                    // Set parameters for the SQL statement, position of ? above corresponds with index below
+                    statement.setString(1, eventType);
+                    statement.setString(2, eventName);
+                    statement.setString(3, venue);
+                    statement.setObject(4, dateTime);
+                    statement.setInt(5, numTotalTickets);
+                    statement.setInt(6, numTicketsAvailable);
+                    statement.setString(7, eventDetails);
+                    statement.setDouble(8, ticketPrice);
+                    statement.setDouble(9, cancellation_fee);
+                    statement.setInt(10, eventID); 
+                
+                    // Asks SQL to execute statement
+                    statement.executeUpdate();
+                    // Close the statement
+                    statement.close();
+                    return "Event updated successfully!";
+                }
+            }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             return "Failed to update event.";
@@ -104,7 +147,7 @@ public class EventManager extends User{
         }
     }
     
-    public String deleteEvent(int eventID) {  //=================== Will need to call refund() before deleting===============
+    public static String deleteEvent(int eventID) {  //=================== Will need to call refund() before deleting===============
         PreparedStatement statement = null;
     
         try {
@@ -135,7 +178,7 @@ public class EventManager extends User{
         }
     }
 
-    public String addTicketingOfficer(String name, String password, String email) {
+    public static String addTicketingOfficer(String name, String password, String email) {
         PreparedStatement checkStatement = null;
         ResultSet checkResultSet = null;
         PreparedStatement insertStatement = null;
@@ -190,25 +233,117 @@ public class EventManager extends User{
         }
     }
 
-    public String viewSaleStatistics() {
+    public static String updateTicketingOfficer(int userID, String name, String password, String email) {
+        PreparedStatement checkStatement = null;
+        ResultSet checkResultSet = null;
+
+        try {
+            // Check if the username already exists
+            DBConnection.establishConnection();
+            String checkQuery = "SELECT COUNT(*) FROM user WHERE name = ? AND email = ? AND password = ? AND role = ? AND user_id = ?";
+            checkStatement = DBConnection.getConnection().prepareStatement(checkQuery);
+            checkStatement.setString(1, name);  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setString(2, email);  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setString(3, password);  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setString(4, "ticketing officer");  // sets to first parameter of addTicketingOfficer(), which is name
+            checkStatement.setInt(5, userID);  // sets to first parameter of addTicketingOfficer(), which is name
+            
+            checkResultSet = checkStatement.executeQuery();
+            checkResultSet.next();
+            int count1 = checkResultSet.getInt(1);
+            if (count1 > 0) {
+                return "No changes were made to ticketing officer's account";
+            } else {
+                // Check if the record already exists based on user's name
+                String checkQuery2 = "SELECT COUNT(*) FROM user WHERE name = ? AND user_id != ? AND role = ?";
+                checkStatement = DBConnection.getConnection().prepareStatement(checkQuery2);
+                checkStatement.setString(1, name);
+                checkStatement.setInt(2, userID);
+                checkStatement.setString(3, "ticketing officer");
+
+                checkResultSet = checkStatement.executeQuery();
+                checkResultSet.next();
+                int count2 = checkResultSet.getInt(1);
+                if (count2 > 0) {
+                    return "Username already exists.";
+                }else {
+                    // Check if the email is valid
+                    if (!isValidEmail(email)) {
+                        return "Invalid email format. Please enter a valid email address.";
+                    }
+                    // Username is available, proceed with registration
+                    // update user into the database
+                    String sqlQuery = "UPDATE user SET name=?, email=?, password=? WHERE user_id=?";
+                    checkStatement = DBConnection.getConnection().prepareStatement(sqlQuery);
+                    checkStatement.setString(1, name);
+                    checkStatement.setString(2, email);
+                    checkStatement.setString(3, password);
+                    checkStatement.setInt(4, userID);
+
+                    checkStatement.executeUpdate();
+
+                    return "Ticketing officer updated successfully!";
+                }
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "An error occurred while attempting to update ticketing officer.";
+        } finally {
+            try {
+                if (checkResultSet != null) {
+                    checkResultSet.close();
+                }
+                if (checkStatement != null) {
+                    checkStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // public static String viewSaleStatistics() {
+    //     try {
+    //         ArrayList<Event> events = Event.getAllEvents();
+    //         StringBuilder statistics = new StringBuilder();
+    //         statistics.append("Event Name\tTickets Sold\tRevenue\n");
+
+    //         for (Event event : events) {
+    //             String eventName = event.getEventName();
+    //             int ticketsSold = event.numTicketsSold();
+    //             int revenue = event.revenueEarned();
+
+    //             statistics.append(eventName).append("\t").append(ticketsSold).append("\t").append(revenue).append("\n");
+    //         }
+
+    //         return statistics.toString();
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return "Failed to fetch sale statistics.";
+    //     }
+    // }
+    public static List<Map<String, String>> viewSaleStatistics() {
+        List<Map<String, String>> salesStats = new ArrayList<>();
         try {
             ArrayList<Event> events = Event.getAllEvents();
-            StringBuilder statistics = new StringBuilder();
-            statistics.append("Event Name\tTickets Sold\tRevenue\n");
-
             for (Event event : events) {
+                Map<String, String> oneEvent = new HashMap<>();
+                oneEvent.put("eventID", String.valueOf(event.getEventID()));
+                oneEvent.put("eventName", event.getEventName());
+                oneEvent.put("numTicketsSold", String.valueOf(event.numTicketsSold()));
+                oneEvent.put("revenueEarned", String.valueOf(event.revenueEarned()));
                 String eventName = event.getEventName();
                 int ticketsSold = event.numTicketsSold();
                 double revenue = event.revenueEarned();
 
-                statistics.append(eventName).append("\t").append(ticketsSold).append("\t").append(revenue).append("\n");
+                salesStats.add(oneEvent);
             }
 
-            return statistics.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            return "Failed to fetch sale statistics.";
         }
+        return salesStats;
     }
     
 }

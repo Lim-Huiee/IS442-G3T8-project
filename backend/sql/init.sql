@@ -37,8 +37,8 @@ CREATE TABLE `TICKET` (
     `event_id` INT NOT NULL,
     `order_id` INT NOT NULL,
     `status` varchar (255),
-    CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`),
-    CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`)
+    CONSTRAINT ticket_fk1 FOREIGN KEY (event_id) REFERENCES EVENT(`event_id`) ON DELETE CASCADE,
+    CONSTRAINT ticket_fk2 FOREIGN KEY (order_id) REFERENCES ORDERS(`order_id`) ON DELETE CASCADE
 );
 
 -- Dummy data for the USER table
@@ -61,7 +61,7 @@ INSERT INTO `ORDERS` (`user_id`, `status`, `order_datetime`) VALUES
 INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`, `cancellation_fee`) VALUES
 ('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.', 50, 10),
 ('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.',100, 20),
-('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70, 10),
+('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70, 30),
 ('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.',90, 40);
 
 -- Dummy data for the TICKET table
