@@ -39,7 +39,17 @@ export const Login = ({ handleAction }) => {
       axios
         .post("http://localhost:4567/login", values) // Modify URL to match your backend endpoint
         .then((response) => {
-          console.log("Login successful"); // Handle successful login
+          console.log("Login successful");
+          // Store the login token or user information in local storage
+          console.log(response.data);
+          const userid = response.data.userId; 
+          const email = response.data.email;
+          const name = response.data.name;
+          localStorage.setItem("userId", userid); 
+          localStorage.setItem("name", name); 
+          localStorage.setItem("email", email); 
+          // Redirect to the home page or any other page
+          window.location.href = "/";
         })
         .catch((error) => {
           console.error("Login failed", error); // Handle login failure

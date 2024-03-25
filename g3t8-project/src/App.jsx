@@ -13,6 +13,7 @@ import { ContactPage } from "./components/views/contactPage";
 import { LoginRegisterPage } from "./components/views/loginRegisterPage";
 import { FaqPage } from "./components/views/faqPage";
 import { OneEventPage } from "./components/views/oneEventPage";
+import { BookingPage } from "./components/views/bookingPage";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -23,16 +24,17 @@ const App = () => {
 
   return (
     <div>
-      <Router>
-          <Routes>
-            <Route exact path="/" element={ <Home />} />
-            <Route path="/eventsView" element={ <EventsViewPage />} />
-            <Route path="/contactPage" element={ <ContactPage />} />
-            <Route path="/loginRegisterPage" element={ <LoginRegisterPage />} />
-            <Route path="/faqPage" element={ <FaqPage />} />
-            <Route path="/oneEventPage" element={ <OneEventPage />} />
-          </Routes>
-      </Router>
+        <Router>
+            <Routes>
+              <Route exact path="/" element={ <Home />} />
+              <Route path="/eventsView" element={ <EventsViewPage />} />
+              <Route path="/contactPage" element={ <ContactPage />} />
+              <Route path="/loginRegisterPage" element={ <LoginRegisterPage />} />
+              <Route path="/faqPage" element={ <FaqPage />} />
+              <Route path="/oneEventPage" element={ <OneEventPage />} />
+              <Route path="/bookingPage" element={ <BookingPage />} />
+            </Routes>
+        </Router>
     </div>
   );
 };
