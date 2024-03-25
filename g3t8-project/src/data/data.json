@@ -246,6 +246,11 @@
           }
       ]
   }
+  ],
+  "Checkout":[
+    {
+      "img": "img/carousel/carousel1.jpg"
+    }
   ]
   
 }
