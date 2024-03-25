@@ -1,6 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +85,43 @@ public class User {
             }
         }
         return user;
+    }
+
+    public static ArrayList<User> getUsersByRole(String roleName) {
+        ArrayList<User> userList = new ArrayList<>();
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT * FROM user WHERE role = ?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setString(1, roleName);
+            resultSet = statement.executeQuery();
+    
+            while (resultSet.next()) {
+                int userID = resultSet.getInt("user_id");
+                String name = resultSet.getString("name");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                User user = new User(userID, name, password, email);
+                userList.add(user);
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return userList;
     }
     
     public static User login(String passedEmail, String password) {

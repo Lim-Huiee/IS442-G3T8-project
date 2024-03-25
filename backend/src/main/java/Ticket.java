@@ -1,24 +1,60 @@
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ticket {
     private Integer ticketID;
-    private Integer numAccompanyingGuests;
+    private Integer eventID;
+    private Integer orderID;
+    private String ticketStatus;
 
-    public Ticket(Integer ticketID, Integer numAccompanyingGuests) {
+    public Ticket(Integer eventID, Integer orderID, Integer ticketID, String ticketStatus) {
+        this.eventID = eventID;
+        this.orderID = orderID;
         this.ticketID = ticketID;
-        this.numAccompanyingGuests = numAccompanyingGuests;
+        this.ticketStatus = ticketStatus;
     }
 
     public Integer getTicketID() {
-        return this.ticketID;
+        return ticketID;
     }
 
-    public Integer getNumAccompanyingGuests() {
-        return this.numAccompanyingGuests;
+    public Integer getEventID() {
+        return eventID;
     }
 
-    public int setNumAccompanyingGuests(Integer guests) {
-        this.numAccompanyingGuests = guests;
-        // if database is successfully updated, return 0
-        // if failed, return -1
-        return 0;
+    public Integer getOrderID() {
+        return orderID;
+    }
+
+    public String getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public static void cancelTickets(List<Integer> ticketIDs) {
+        PreparedStatement updateStatement = null;
+        try {
+            DBConnection.establishConnection();
+            String updateQuery = "UPDATE ticket SET status = 'refunded' WHERE ticket_id = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+
+            // Iterate over the list of ticket IDs
+            for (Integer ticketID : ticketIDs) {
+                updateStatement.setInt(1, ticketID);
+                updateStatement.executeUpdate();
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

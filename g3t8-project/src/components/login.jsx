@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios for making HTTP requests
 
-export const Login = ({ handleAction }) => {
+export const Login = ({ handleAction, userRole }) => {
   const [values, setValues] = useState({
     email: "",
     password: ""
@@ -66,7 +66,7 @@ export const Login = ({ handleAction }) => {
               <div className="card-body">
                 <h5 className="card-title">Login</h5>
                 <p className="card-text">
-                  Welcome back! Log in to purchase your tickets!
+                  Welcome back! {userRole=="customer"? <span>Log in to purchase your tickets!</span> : <span></span> }
                 </p>
                 <form onSubmit={handleSubmit}>
                   <div className="input-group">
@@ -102,15 +102,17 @@ export const Login = ({ handleAction }) => {
                     Login
                   </button>
                 </form>
-                <p>
-                  Don't have an account yet?{" "}
-                  <span
-                    onClick={() => handleAction("register")}
-                    style={{ cursor: "default" }}
-                  >
-                    <u>Register here</u>
-                  </span>
-                </p>
+                {userRole==="customer"?
+                   <p>
+                    Don't have an account yet?{" "}
+                      <span
+                        onClick={() => handleAction("register")}
+                        style={{ cursor: "default" }}>
+                      <u>Register here</u>
+                      </span>
+                  </p> 
+                 : <p></p> }
+                
               </div>
             </div>
           </div>
