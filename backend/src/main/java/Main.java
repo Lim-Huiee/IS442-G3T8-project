@@ -236,9 +236,22 @@ public static void main(String[] args) {
                 res.status(401);
                 return "Invalid username or password";
             }
-                        
-            return "";
-        });
+            
+            
+                    // Create a JSON object to send back as the response
+            JsonObject responseData = new JsonObject();
+            responseData.addProperty("message", "Login successful");
+            responseData.addProperty("userId", user.getUserID()); // Add user ID to the response
+            responseData.addProperty("email", user.getEmail()); // Add email to the response
+            responseData.addProperty("name", user.getName()); // Add name to the response
+            
+
+            // Set response type to JSON
+            res.type("application/json");
+
+            // Return the JSON object directly
+            return responseData;
+            });
 
         post("/register", (req, res) -> {
             System.out.println("Request: " + req.body());
@@ -313,7 +326,7 @@ public static void main(String[] args) {
             // Return the modified HTML content
             return htmlContent;
         });   */         
-
+        
         get("/test", (req, res) -> {
             // Retrieve user information from the session
             User user = req.session().attribute("user");
@@ -337,6 +350,14 @@ public static void main(String[] args) {
             }
         });
 
+        get("/get_user_by_id/:id", (req, res) -> {
+            String id = req.params(":id");
+            User userByID = User.getUserByID(Integer.parseInt(id));
+            System.out.println(userByID);
+            //Gson gson = new Gson();
+            return gson.toJson(userByID);
+        });
+        
         get("/get_all_bookable_events", (req, res) -> {
             List<Event> bookableEvents = Event.getAllBookableEvents();
             //Gson gson = new Gson();
