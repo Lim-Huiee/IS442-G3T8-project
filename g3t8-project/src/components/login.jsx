@@ -36,19 +36,26 @@ export const Login = ({ handleAction, userRole }) => {
     // If no error, proceed to send to backend
     if (Object.keys(error).length === 0) {
       // Send login data to backend
-      fetchLogin(values);
+      axios
+        .post("http://localhost:4567/login", values) // Modify URL to match your backend endpoint
+        .then((response) => {
+          console.log("Login successful");
+          // Store the login token or user information in local storage
+          console.log(response.data);
+          const userid = response.data.userId; 
+          const email = response.data.email;
+          const name = response.data.name;
+          localStorage.setItem("userId", userid); 
+          localStorage.setItem("name", name); 
+          localStorage.setItem("email", email); 
+          // Redirect to the home page or any other page
+          window.location.href = "/";
+        })
+        .catch((error) => {
+          console.error("Login failed", error); // Handle login failure
+        });
     }
   };
-
-  async function fetchLogin(loginDetails) {
-    try {
-        const response = await axios.post("http://localhost:4567/login", loginDetails);
-        console.log('Response from server:', response.data); // Log the response data
-    } catch (error) {
-        console.error("Login failed: ", error);
-    }
-  } 
-  //login function should return userEmail, userName, userRole
 
   return (
     <div>

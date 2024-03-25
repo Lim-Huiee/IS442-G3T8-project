@@ -275,9 +275,22 @@ public class Main {
                 res.status(401);
                 return "Invalid username or password";
             }
+            
+            
+                    // Create a JSON object to send back as the response
+            JsonObject responseData = new JsonObject();
+            responseData.addProperty("message", "Login successful");
+            responseData.addProperty("userId", user.getUserID()); // Add user ID to the response
+            responseData.addProperty("email", user.getEmail()); // Add email to the response
+            responseData.addProperty("name", user.getName()); // Add name to the response
+            
 
-            return "";
-        });
+            // Set response type to JSON
+            res.type("application/json");
+
+            // Return the JSON object directly
+            return responseData;
+            });
 
         post("/register", (req, res) -> {
             System.out.println("Request: " + req.body());
