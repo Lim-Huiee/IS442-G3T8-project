@@ -2,10 +2,12 @@ import React, { useState ,useEffect} from "react";
 import Button from "react-bootstrap/Button";
 import JsonData from "../data/data.json";
 import axios from 'axios';
+import Alert from './section-components/alert';
 
 const Checkout = (props) => {
 
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailAlert, setShowFailAlert] = useState(false);
   const [eventsInCart, setEventsInCart] = useState([]);
   const [userInfo, setUserInfo] = useState({
     userId: localStorage.getItem("userId") || "",
@@ -21,8 +23,6 @@ const Checkout = (props) => {
     }
     
   }, []);
-  
-
   
   const increaseQuantity = (eventId) => {
     const updatedEvents = eventsInCart.map(event => {
@@ -65,31 +65,26 @@ const updateEventsInLocalStorage = (updatedEvents) => {
   };
 
   const handleCheckout = async () => {
-    console.log("Performing checkout with local storage data");
-    console.log(userInfo); // Example: Access user info
-    console.log(eventsInCart); // Example: Access events in cart
-    console.log(calculateTotalPrice()); // Example: Access total price
     try {
-        // Prepare data to send to the backend
         const userId = userInfo.userId;
         const eventsBooked = eventsInCart.reduce((acc, event) => {
           acc[event.eventId] = event.numTickets;
           return acc;
         }, {});
     
-        // Make an HTTP POST request to your backend
         const response = await axios.post('http://localhost:4567/create_order', {
           userId: userId,
           eventsBooked: eventsBooked,
         });
     
-        // Handle successful response
-        console.log(response);
         console.log('Order created successfully');
+        setEventsInCart([]);
+        setShowSuccessAlert(true);
     
       } catch (error) {
         console.error('Error creating order:', error.message);
-        // Handle errors, display error message to the user, etc.
+        setShowFailAlert(true);
+        
       }
   };
 
@@ -126,7 +121,6 @@ const updateEventsInLocalStorage = (updatedEvents) => {
                             </div>
                         </div>
                     ))}
-
                 </div>
             </div>
             <div id='profile'  style={{ width: "30%",height:"100%", backgroundColor: "#f9f9f9", padding: "15px", borderRadius: "5px" }}>
@@ -143,6 +137,8 @@ const updateEventsInLocalStorage = (updatedEvents) => {
                 </div>
             </div>
         </div>
+        {showSuccessAlert && <Alert variant="success" header="Order created successfully!" body="Check your email for confirmation. See you there!"/>}
+        {showFailAlert && <Alert variant="danger" header="Order was not processed" body="Please try again later, or contact us if you have any issues."/>}
     </div>
 );
 };
