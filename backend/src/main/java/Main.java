@@ -544,6 +544,13 @@ public class Main {
             return "Order created successfully";
         });
 
+        get("/get_orders/:userId", (req, res) -> {
+            int userId = Integer.parseInt(req.params("userId"));
+            ArrayList<Order> orders = Order.getAllOrdersByUserID(userId);
+            String jsonResult = gson.toJson(orders);
+            return jsonResult;
+        });
+
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DBConnection.closeConnection(); // Close database connection

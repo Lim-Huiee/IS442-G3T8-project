@@ -80,6 +80,7 @@ const updateEventsInLocalStorage = (updatedEvents) => {
         console.log('Order created successfully');
         setEventsInCart([]);
         setShowSuccessAlert(true);
+        localStorage.removeItem("events");
     
       } catch (error) {
         console.error('Error creating order:', error.message);
