@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigation } from "../navigation";
 import { Footer } from "../footer";
 import { EventListing } from '../eventListing';
+import Button from "react-bootstrap/Button";
 import "./../../App.css";
 import axios from 'axios';
 
@@ -69,6 +70,19 @@ export const MyEventsPage = () => {
     fetchEventDetails();
   }, [myEvents]);
 
+  const [refundQty, setRefundQty] = useState({}); // Initialize refund quantity for each event
+
+  const handleQuantityChange = (eventId, amount, maxQty) => {
+    setRefundQty(prevState => {
+      const updatedQty = (prevState[eventId] || 0) + amount;
+      const newQty = Math.max(1, Math.min(maxQty, updatedQty));
+      return {
+        ...prevState,
+        [eventId]: newQty
+      };
+    });
+  };
+
   return (
     <div>
         <Navigation/>
@@ -84,8 +98,18 @@ export const MyEventsPage = () => {
               <EventListing data={event} />
             </div>
             </td>
-            <td style={{width: '200px', textAlign: 'center'}}>
+            <td style={{width: '200px', textAlign: 'center', fontSize: "15px"}}>
             {event.qty}
+            <br/><br/>
+            Request Refund:
+            <br/>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, -1, event.qty)}>-</Button>
+            <span style={{ margin: "0 10px" }}>{refundQty[event.eventID] || 1}</span>
+            <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, 1, event.qty)}>+</Button>
+              
+            <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginLeft: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }}>Refund</Button>
+            </div>
             </td>
           </tr>
         ))}
