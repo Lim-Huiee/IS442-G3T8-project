@@ -13,7 +13,10 @@ public class Refund {
         String result = event.setNumTicketsAvailable(prev_num_tickets_avail);
 
         if (result.contains("Success")) {
-            // get cancellation fee from ticket db to derive refund
+            // get cancellation fee from event to derive refund
+            double cancellation_fee = event.getCancellationFee();
+            double ticket_price = event.getTicketPrice();
+            double refund_amount = ticket_price - cancellation_fee;
             // update user balance in db
             // update ticket status to refunded in db
             // check all tickets with same order_id, if all status is refunded, update
