@@ -33,6 +33,43 @@ public class Event {
         this.cancellationFee = cancellationFee;
     }
 
+    public String setNumTicketsAvailable(int tickets) {
+        this.numTicketsAvailable = tickets;
+        // create sql query to update in db
+        PreparedStatement updateStatement = null;
+        try {
+            DBConnection.establishConnection();
+
+            String updateQuery = "UPDATE event SET num_tickets_avail = ? WHERE event_id = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+            updateStatement.setDouble(1, tickets);
+            updateStatement.setInt(2, eventID);
+
+            int rowsAffected = updateStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return "Success";
+            } else {
+                return "Error: No event found with the provided event_id";
+            }
+
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "Error occurred while updating cancellation fee: " + se.getMessage();
+
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return "Error occurred: " + e.getMessage();
+            }
+        }
+    }
+
     public int getEventID() {
         return eventID;
     }
@@ -363,24 +400,24 @@ public class Event {
         PreparedStatement updateStatement = null;
         try {
             DBConnection.establishConnection();
-            
+
             String updateQuery = "UPDATE event SET cancellation_fee = ? WHERE event_id = ?";
             updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
             updateStatement.setDouble(1, updatedCancellationFee);
             updateStatement.setInt(2, event_id);
-            
+
             int rowsAffected = updateStatement.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 return "Success";
             } else {
                 return "No event found with the provided event_id";
             }
-            
+
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
             return "Error occurred while updating cancellation fee: " + se.getMessage();
-            
+
         } finally {
             try {
                 if (updateStatement != null) {

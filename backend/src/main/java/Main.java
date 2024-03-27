@@ -176,15 +176,17 @@ public class Main {
         // ==============================END TESTING FOR EVENT CLASS
         // =========================================
 
-        // TEST CREATE ORDER AND EMAIL SENDING 
-        System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
+        // TEST CREATE ORDER AND EMAIL SENDING
+        System.out.println(
+                "----------------------START OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
         Map<Integer, Integer> purchase = new HashMap<>();
         purchase.put(1, 4);
         purchase.put(2, 3);
         purchase.put(3, 5);
         purchase.put(4, 1);
         Order.createOrder(1, purchase);
-        System.out.println("----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
+        System.out.println(
+                "----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
 
         List<Integer> deleteTickets = new ArrayList<>();
         deleteTickets.add(6);
@@ -275,22 +277,20 @@ public class Main {
                 res.status(401);
                 return "Invalid username or password";
             }
-            
-            
-                    // Create a JSON object to send back as the response
+
+            // Create a JSON object to send back as the response
             JsonObject responseData = new JsonObject();
             responseData.addProperty("message", "Login successful");
             responseData.addProperty("userId", user.getUserID()); // Add user ID to the response
             responseData.addProperty("email", user.getEmail()); // Add email to the response
             responseData.addProperty("name", user.getName()); // Add name to the response
-            
 
             // Set response type to JSON
             res.type("application/json");
 
             // Return the JSON object directly
             return responseData;
-            });
+        });
 
         post("/register", (req, res) -> {
             System.out.println("Request: " + req.body());
@@ -396,21 +396,21 @@ public class Main {
         get("/get_user_by_id/:id", (req, res) -> {
             String id = req.params(":id");
             User userByID = User.getUserByID(Integer.parseInt(id));
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(userByID);
         });
-        
+
         get("/get_users_by_role/:roleName", (req, res) -> {
             String roleName = req.params(":roleName");
             List<User> usersByRole = User.getUsersByRole(roleName);
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(usersByRole);
         });
 
         get("/get_event_by_id/:id", (req, res) -> {
             String id = req.params(":id");
             Event event = Event.getEventByID(Integer.parseInt(id));
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(event);
         });
 
@@ -459,7 +459,8 @@ public class Main {
             double ticketPrice = eventData.getTicketPrice();
             double cancellationFee = eventData.getCancellationFee();
 
-            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
+            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets,
+                    numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
             return eventCreated;
         });
 
@@ -478,7 +479,8 @@ public class Main {
             double ticketPrice = eventData.getTicketPrice();
             double cancellationFee = eventData.getCancellationFee();
 
-            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
+            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime,
+                    numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
             return eventCreated;
         });
 
@@ -510,16 +512,15 @@ public class Main {
         delete("/delete_event/:id", (req, res) -> {
             String id = req.params(":id");
             String eventDeleted = EventManager.deleteEvent(Integer.parseInt(id));
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return eventDeleted;
         });
 
         get("/view_sales_statistics", (req, res) -> {
             List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(statistics);
         });
-
 
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -528,6 +529,7 @@ public class Main {
         }));
 
         System.out.println("----------------------END OF PARK ROUTING TEST------------------------------");
-        // ============================== END TESTING OF ROUTING WITH SPARK =======================================
+        // ============================== END TESTING OF ROUTING WITH SPARK
+        // =======================================
     }
 }
