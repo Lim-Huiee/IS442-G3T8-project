@@ -226,6 +226,9 @@ public class Order {
                         insertStatement.setString(3, "delivered");
                         insertStatement.addBatch(); // Add batch for batch insertion
                     }
+
+                    //reduce ticket availability by event id
+                    System.out.println(Event.reduceTickets(eventId, quantity));
                 }
                 // Execute batch insertion of tickets
                 insertStatement.executeBatch();
@@ -262,7 +265,8 @@ public class Order {
                 System.out.println(orderId + " " + username + " " + total_paid + " " + orderDateTime);
                 Mail.sendEmail(orderId, username, total_paid, orderDateTime, purchases);
 
-                // return orderId; // Return the order ID as a string
+                //minus user's money by userid
+                deductPaymentForCheckout(userID, total_paid);
             } else {
                 // Handle if no generated key is found
                 return;
@@ -283,13 +287,13 @@ public class Order {
                     insertStatement.close();
                 }
                 DBConnection.closeConnection();
+
             } catch (SQLException e) {
                 e.printStackTrace();
                 // Handle exception, maybe log it
             }
         }
     }
-
 
     public static void deductPaymentForCheckout(int userID, double totalAmount) { // do secured payment instead
         try {
@@ -308,6 +312,7 @@ public class Order {
                     updateStatement.setInt(2, userID);
                     updateStatement.executeUpdate();
                     updateStatement.close();
+                    System.out.println("Amount:" + Integer.toString(amountAvail) + " Deducted: " + Double.toString(totalAmount));
                 } else {
                     System.out.println("Insufficient funds!");
                 }

@@ -141,6 +141,7 @@ public class User {
                 String userEmail = resultSet.getString("email");
                 String userPassword = resultSet.getString("password");
                 String role = resultSet.getString("role");
+                Double amount_avail = resultSet.getDouble("amount_avail");
     
                 if ("ticketing officer".equals(role)) {
                     // If the role is "ticketing officer", return a TicketOfficer object
@@ -150,7 +151,7 @@ public class User {
                     return new EventManager(userID, userName, userPassword, userEmail);
                 } else {
                     // Otherwise, return a Customer object
-                    return new Customer(userID, userName, userPassword, userEmail);
+                    return new Customer(userID, userName, userPassword, userEmail, amount_avail);
                 }
             } else {
                 // No matching user found

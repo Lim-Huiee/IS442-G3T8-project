@@ -393,4 +393,50 @@ public class Event {
         }
     }
 
+    public static String reduceTickets(int eventID, int numTicketsToReduce) {
+        PreparedStatement updateStatement = null;
+        try {
+            // Check if the event exists and has enough available tickets
+            Event event = getEventByID(eventID);
+            if (event == null) {
+                return "Event with ID " + eventID + " not found.";
+            }
+            if (event.getTicketsAvailable() < numTicketsToReduce) {
+                return "Not enough tickets available for event " + eventID + ".";
+            }
+            System.out.println(event.toString());
+
+            DBConnection.establishConnection();
+    
+            // Update the number of tickets available for the event
+            String updateQuery = "UPDATE event SET num_tickets_avail = num_tickets_avail - ? WHERE event_id = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+            updateStatement.setInt(1, numTicketsToReduce);
+            updateStatement.setInt(2, eventID);
+    
+            int rowsAffected = updateStatement.executeUpdate();
+    
+            if (rowsAffected > 0) {
+                return "Success, num tickets avail reduced";
+            } else {
+                return "Failed to reduce tickets for event " + eventID + ".";
+            }
+    
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "Error occurred while reducing tickets: " + se.getMessage();
+    
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } 
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

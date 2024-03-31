@@ -58,7 +58,7 @@ public class Main {
         /// ==================== Testing of User/TicketOfficer class
         /// =======================================
 
-        System.out.println("=============================Start OF TESTING FOR USER CLASS====================");
+        System.out.println("=============================Start OF TESTING FOR USER & CUSTOMER CLASS====================");
         try {
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
@@ -76,10 +76,13 @@ public class Main {
                                                                                          // username exists
                 System.out.println(User.register("Dehouhehexd", "asd", "haha")); // invalid email
 
-                if (customer instanceof Customer) {
-                    Customer c = (Customer) customer;
-                    System.out.println(c.getAmountAvail()); // class cast, testing getAmountAvail() for customer
-                }
+                System.out.println("Construct Customer from User");
+                Customer cust = new Customer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail(), 1000.00);
+                System.out.println(cust.toString());
+                System.out.println(cust.getAmountAvail()); // class cast, testing getAmountAvail() for customer
+                System.out.println("Test update $$");
+                cust.setAmountAvail(500.32);
+                System.out.println("New amount:" + cust.getAmountAvail());
 
             } else {
                 System.out.println("User not found.");
@@ -89,7 +92,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("=============================END OF TESTING FOR USER CLASS====================");
+        System.out.println("=============================END OF TESTING FOR USER & CUSTOMER CLASS====================");
 
         System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
         User eventManager = null;
@@ -178,7 +181,7 @@ public class Main {
         // =========================================
 
         // TEST CREATE ORDER AND EMAIL SENDING 
-        System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
+        System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST + REDUCE TICKET AVAILABILITY + REDUCE USER MONEY------------------------------");
         Map<Integer, Integer> purchase = new HashMap<>();
         purchase.put(1, 4);
         purchase.put(2, 3);
