@@ -345,6 +345,25 @@ public class EventManager extends User{
         }
         return salesStats;
     }
+
+    public static String generateReport(List<Map<String, String>> salesStats) {
+        StringBuilder csv = new StringBuilder();
+        try {
+            ArrayList<Event> events = Event.getAllEvents();
+            
+            csv.append("Event ID,Event Name,Num Tickets Sold,Revenue Earned\n");
+            for (Map<String, String> eventStats : salesStats) {
+                csv.append(eventStats.get("eventID")).append(",")
+                   .append(eventStats.get("eventName")).append(",")
+                   .append(eventStats.get("numTicketsSold")).append(",")
+                   .append(eventStats.get("revenueEarned")).append("\n");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return csv.toString();
+    }
     
 }
 

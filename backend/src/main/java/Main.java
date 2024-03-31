@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -518,6 +519,22 @@ public class Main {
             List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
             //Gson gson = new Gson();
             return gson.toJson(statistics);
+        });
+
+        get("/generate_report", (req, res) -> {
+            List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
+            //Gson gson = new Gson();
+            // Generate CSV from statistics
+            String csvReport = EventManager.generateReport(statistics);
+
+            // Write the CSV report to a file
+            try (FileWriter writer = new FileWriter("sales_statistics.csv")) {
+                writer.write(csvReport);
+                System.out.println("CSV report generated successfully.");
+            } catch (IOException e) {
+                System.err.println("Error writing CSV report: " + e.getMessage());
+            }
+            return "CSV report generated successfully.";
         });
 
 
