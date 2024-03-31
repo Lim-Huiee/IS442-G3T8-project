@@ -32,6 +32,30 @@ public class Ticket {
         return ticketStatus;
     }
 
+    public void cancelTickets(Integer ticketID) {
+        PreparedStatement updateStatement = null;
+        try {
+            DBConnection.establishConnection();
+            String updateQuery = "UPDATE ticket SET status = 'refunded' WHERE ticket_id = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+
+            // Update statement
+            updateStatement.setInt(1, ticketID);
+            updateStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void cancelTickets(List<Integer> ticketIDs) {
         PreparedStatement updateStatement = null;
         try {

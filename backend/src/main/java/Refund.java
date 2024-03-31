@@ -18,7 +18,18 @@ public class Refund {
             double ticket_price = event.getTicketPrice();
             double refund_amount = ticket_price - cancellation_fee;
             // update user balance in db
+            try {
+                String updateQuery = "UPDATE user SET amount_avail = amount_avail + ? WHERE user_id = ?";
+                PreparedStatement updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+                updateStatement.setDouble(1, refund_amount);
+                updateStatement.setInt(2, userID);
+                updateStatement.executeUpdate();
+                updateStatement.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
             // update ticket status to refunded in db
+            ticket.cancelTickets(ticket.getTicketID());
             // check all tickets with same order_id, if all status is refunded, update
             // order_id status to refunded, else do nothing
             // return success or fail
