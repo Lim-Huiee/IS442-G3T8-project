@@ -332,11 +332,11 @@ public class EventManager extends User{
                 oneEvent.put("eventID", String.valueOf(event.getEventID()));
                 oneEvent.put("eventName", event.getEventName());
                 oneEvent.put("numTicketsSold", String.valueOf(event.numTicketsSold()));
+                oneEvent.put("numTicketsSoldByTicketingOfficer", String.valueOf(event.getNumTicketsSoldByTicketOfficer()));
                 oneEvent.put("revenueEarned", String.valueOf(event.revenueEarned()));
-                String eventName = event.getEventName();
-                int ticketsSold = event.numTicketsSold();
-                double revenue = event.revenueEarned();
-
+                oneEvent.put("dateTime",String.valueOf(event.getEventDateTime()));
+                oneEvent.put("venue",event.getVenue());
+        
                 salesStats.add(oneEvent);
             }
 
@@ -351,12 +351,15 @@ public class EventManager extends User{
         try {
             ArrayList<Event> events = Event.getAllEvents();
             
-            csv.append("Event ID,Event Name,Num Tickets Sold,Revenue Earned\n");
+            csv.append("Event ID,Event Name,Total Tickets Sold,Number of Tickets Sold by Ticketing Officer,Revenue Earned,Date and Time,Venue\n");
             for (Map<String, String> eventStats : salesStats) {
                 csv.append(eventStats.get("eventID")).append(",")
                    .append(eventStats.get("eventName")).append(",")
                    .append(eventStats.get("numTicketsSold")).append(",")
-                   .append(eventStats.get("revenueEarned")).append("\n");
+                   .append(eventStats.get("numTicketsSoldByTicketingOfficer")).append(",")
+                   .append(eventStats.get("revenueEarned")).append(",")
+                   .append(eventStats.get("dateTime")).append(",")
+                   .append(eventStats.get("venue")).append("\n");
             }
 
         } catch (Exception e) {

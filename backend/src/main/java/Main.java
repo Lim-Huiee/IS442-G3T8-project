@@ -203,6 +203,10 @@ public class Main {
         // change getallordersbyuser method
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
+        Map<Integer, Integer> testpurchase = new HashMap<>();
+        testpurchase.put(1, 3);
+        Order.createOrder(5, testpurchase); 
+
 
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567

@@ -82,6 +82,9 @@ public class Event {
     }
 
     // not sure if need setter methods?
+    public double numTicketsSoldByTicketOfficer(){
+        return 0.0;
+    }
 
     public static Event getEventByID(int searchEventID) {
         Event event = null;
@@ -358,6 +361,48 @@ public class Event {
         }
         return events;
     }
+
+    public int getNumTicketsSoldByTicketOfficer() {
+        int currentEventID = this.getEventID(); // Get current event ID
+        int numTicketsSold = 0;
+
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            DBConnection.establishConnection();
+
+            // Query to retrieve the sum of ticket counts for ticketing officers
+            String query = "SELECT COUNT(ticket.ticket_id) AS ticket_count " +
+                           "FROM ticket " +
+                           "INNER JOIN orders ON ticket.order_id = orders.order_id " +
+                           "INNER JOIN user ON orders.user_id = user.user_id " +
+                           "WHERE user.role = 'ticketing officer' AND ticket.event_id = ?";
+            statement = DBConnection.getConnection().prepareStatement(query);
+            statement.setInt(1, currentEventID);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                numTicketsSold = resultSet.getInt("ticket_count");
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return numTicketsSold;
+    }
+
 
     public static String setCancellationFee(int event_id, double updatedCancellationFee) {
         PreparedStatement updateStatement = null;
