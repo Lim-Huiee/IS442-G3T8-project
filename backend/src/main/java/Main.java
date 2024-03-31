@@ -4,6 +4,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -208,6 +209,25 @@ public class Main {
         Order.createOrder(5, testpurchase); 
 
 
+        System.out.println("----------------------------Testing of taking attendance for tix------------------------");
+        ArrayList<Integer> arrList = Ticket.getAllTicketIDsForEvent(1);
+        for (Integer ticketID : arrList) {
+            System.out.println(ticketID);
+        }
+
+        // hardcoding for testing
+        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
+        attendedTix.add(1);
+        attendedTix.add(4);
+        attendedTix.add(6);
+        attendedTix.add(7);
+        User toOfficer= User.login("to@tm.com", "password5");
+        
+        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
+        //TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5", "to@tm.com");
+        castToOfficer.takeAttendance(1,attendedTix);
+
+        System.out.println("----------------------------End Testing of taking attendance for tix------------------------");
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
         port(4567);

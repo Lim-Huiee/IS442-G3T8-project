@@ -81,11 +81,6 @@ public class Event {
         return this.numTicketsSold() * ticketPrice;
     }
 
-    // not sure if need setter methods?
-    public double numTicketsSoldByTicketOfficer(){
-        return 0.0;
-    }
-
     public static Event getEventByID(int searchEventID) {
         Event event = null;
         ResultSet resultSet = null;
