@@ -15,6 +15,7 @@ import { FaqPage } from "./components/views/faqPage";
 import { OneEventPage } from "./components/views/oneEventPage";
 import { BookingPage } from "./components/views/bookingPage";
 import { MyEventsPage } from "./components/views/myEventsPage";
+import { ProfilePage } from "./components/views/profilePage";
 
 import { StaffLoginPage } from "./components/views/staffLoginPage";
 import { SalesStatisticsPageEM } from "./components/views/salesStatisticsPageEM";
@@ -41,6 +42,7 @@ const App = () => {
               <Route path="/oneEventPage" element={ <OneEventPage />} />
               <Route path="/bookingPage" element={ <BookingPage />} />
               <Route path="/myEvents" element={ <MyEventsPage />} />
+              <Route path="/profile" element={ <ProfilePage />} />
   
             {/* event manager views*/}
             <Route path="/staff" element={ <StaffLoginPage/> } />
