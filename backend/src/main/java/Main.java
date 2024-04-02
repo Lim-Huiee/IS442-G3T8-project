@@ -13,6 +13,7 @@ import spark.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
@@ -57,7 +58,7 @@ public class Main {
         /// ==================== Testing of User/TicketOfficer class
         /// =======================================
 
-        System.out.println("=============================Start OF TESTING FOR USER CLASS====================");
+        System.out.println("=============================Start OF TESTING FOR USER & CUSTOMER CLASS====================");
         try {
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
@@ -75,10 +76,16 @@ public class Main {
                                                                                          // username exists
                 System.out.println(User.register("Dehouhehexd", "asd", "haha")); // invalid email
 
-                if (customer instanceof Customer) {
-                    Customer c = (Customer) customer;
-                    System.out.println(c.getAmountAvail()); // class cast, testing getAmountAvail() for customer
-                }
+                System.out.println("test update user details");
+                System.out.println(User.updateUserDetails(6, "Dehouhehexd", "newPw", "haha@gmail.com"));
+
+                System.out.println("Construct Customer from User");
+                Customer cust = new Customer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail(), 1000.00);
+                System.out.println(cust.toString());
+                System.out.println(cust.getAmountAvail()); // class cast, testing getAmountAvail() for customer
+                System.out.println("Test update $$");
+                cust.setAmountAvail(500.32);
+                System.out.println("New amount:" + cust.getAmountAvail());
 
             } else {
                 System.out.println("User not found.");
@@ -88,7 +95,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("=============================END OF TESTING FOR USER CLASS====================");
+        System.out.println("=============================END OF TESTING FOR USER & CUSTOMER CLASS====================");
 
         System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
         User eventManager = null;
@@ -105,15 +112,15 @@ public class Main {
                     int numTotalTickets = 1000;
                     int numTicketsAvailable = 1000;
                     String eventDetails = "A typical  Event";
-                    int ticketPrice = 90;
+                    double ticketPrice = 90;
                     double cancellationFee = 20.00;
-                    String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets,
+                    String result = EventManager.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets,
                             numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
                     System.out.println(result); // creates new event in DB, will print "event exists" if you run it a
                                                 // 2nd time
 
                     // update taylor swift event
-                    String updateResult = em.updateEvent(5, eventType, eventName, "my house", eventDateTime,
+                    String updateResult = EventManager.updateEvent(5, eventType, eventName, "my house", eventDateTime,
                             numTotalTickets, 998, eventDetails, ticketPrice, cancellationFee);
                     System.out.println(updateResult);
 
@@ -126,12 +133,12 @@ public class Main {
 
                     // ======================================= event manager adding ticket
                     // officer============================
-                    String addTicketingOfficerResult = em.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
+                    String addTicketingOfficerResult = EventManager.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
                     System.out.println(addTicketingOfficerResult);
 
                     // view sale statistics test, output is in readable format for testing, will
                     // amend output next time
-                    System.out.println(em.viewSaleStatistics());
+                    System.out.println(EventManager.viewSaleStatistics());
                 }
             }
 
@@ -177,7 +184,7 @@ public class Main {
         // =========================================
 
         // TEST CREATE ORDER AND EMAIL SENDING 
-        System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
+        System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST + REDUCE TICKET AVAILABILITY + REDUCE USER MONEY------------------------------");
         Map<Integer, Integer> purchase = new HashMap<>();
         purchase.put(1, 4);
         purchase.put(2, 3);
@@ -399,6 +406,28 @@ public class Main {
             //Gson gson = new Gson();
             return gson.toJson(userByID);
         });
+
+        put("/update_user_details/:id", (req, res) -> {
+            int userId = Integer.parseInt(req.params(":id"));
+            String newName = req.queryParams("newName");
+            String newPassword = req.queryParams("newPassword");
+            String newEmail = req.queryParams("newEmail");
+            boolean success = User.updateUserDetails(userId, newName, newPassword, newEmail);
+            return new Gson().toJson(success);
+        });
+
+        get("/get_amount_avail_by_user_id/:id", (req, res) -> {
+            int id = Integer.parseInt(req.params(":id"));
+            double amountAvail = Customer.retrieveAmountAvailFromDB(id);
+            return new Gson().toJson(amountAvail);
+        });
+
+        put("/update_amount_avail/:id/:newAmount", (req, res) -> {
+            int userId = Integer.parseInt(req.params(":id"));
+            double newAmountAvail = Double.parseDouble(req.params(":newAmount"));
+            boolean success = Customer.updateAmountAvailInDB(userId, newAmountAvail);
+            return new Gson().toJson(success);
+        });
         
         get("/get_users_by_role/:roleName", (req, res) -> {
             String roleName = req.params(":roleName");
@@ -520,6 +549,35 @@ public class Main {
             return gson.toJson(statistics);
         });
 
+        post("/create_order", (req, res) -> {
+            String jsonData = req.body();
+
+            // Assuming the request body contains the user ID and events booked data in JSON format
+            JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
+            int userId = jsonObject.get("userId").getAsInt();
+            JsonObject eventsBookedJson = jsonObject.get("eventsBooked").getAsJsonObject();
+
+            // Convert events booked JSON to Map<Integer, Integer>
+            Map<Integer, Integer> eventsBooked = new HashMap<>();
+            for (Map.Entry<String, JsonElement> entry : eventsBookedJson.entrySet()) {
+                int eventId = Integer.parseInt(entry.getKey());
+                int quantity = entry.getValue().getAsInt();
+                eventsBooked.put(eventId, quantity);
+            }
+
+            // Call your Java method to create the order
+            Order.createOrder(userId, eventsBooked);
+
+            // You may return a success message or status code if needed
+            return "Order created successfully";
+        });
+
+        get("/get_orders/:userId", (req, res) -> {
+            int userId = Integer.parseInt(req.params("userId"));
+            ArrayList<Order> orders = Order.getAllOrdersByUserID(userId);
+            String jsonResult = gson.toJson(orders);
+            return jsonResult;
+        });
 
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

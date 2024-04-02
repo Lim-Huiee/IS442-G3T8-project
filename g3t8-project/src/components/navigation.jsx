@@ -117,6 +117,12 @@ export const Navigation = (props) => {
                   className={`dropdown-menu ${isHovered ? "show" : ""}`}
                   aria-labelledby="navbarDropdown"
                 >
+                  <a className="dropdown-item" href="/myEvents">
+                    My Upcoming Events
+                  </a>
+                  <a className="dropdown-item" href="/profile">
+                    Profile
+                  </a>
                   <a className="dropdown-item" href="#" onClick={handleLogout}>
                     Logout
                   </a>

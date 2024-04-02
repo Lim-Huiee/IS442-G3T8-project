@@ -1,11 +1,13 @@
 import React, { useState ,useEffect} from "react";
 import Button from "react-bootstrap/Button";
 import JsonData from "../data/data.json";
-
+import axios from 'axios';
+import Alert from './section-components/alert';
 
 const Checkout = (props) => {
 
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showFailAlert, setShowFailAlert] = useState(false);
   const [eventsInCart, setEventsInCart] = useState([]);
   const [userInfo, setUserInfo] = useState({
     userId: localStorage.getItem("userId") || "",
@@ -21,8 +23,6 @@ const Checkout = (props) => {
     }
     
   }, []);
-  
-
   
   const increaseQuantity = (eventId) => {
     const updatedEvents = eventsInCart.map(event => {
@@ -64,6 +64,31 @@ const updateEventsInLocalStorage = (updatedEvents) => {
       return eventsInCart.reduce((total, event) => total + calculateEventTotal(event), 0);
   };
 
+  const handleCheckout = async () => {
+    try {
+        const userId = userInfo.userId;
+        const eventsBooked = eventsInCart.reduce((acc, event) => {
+          acc[event.eventId] = event.numTickets;
+          return acc;
+        }, {});
+    
+        const response = await axios.post('http://localhost:4567/create_order', {
+          userId: userId,
+          eventsBooked: eventsBooked,
+        });
+    
+        console.log('Order created successfully');
+        setEventsInCart([]);
+        setShowSuccessAlert(true);
+        localStorage.removeItem("events");
+    
+      } catch (error) {
+        console.error('Error creating order:', error.message);
+        setShowFailAlert(true);
+        
+      }
+  };
+
   return (
     <div id="portfolio" style={{ padding: "20px", minHeight: "100vh" }}>
         <div style={{ maxWidth: "1300px", margin: "auto", display: "flex" }}>
@@ -97,7 +122,6 @@ const updateEventsInLocalStorage = (updatedEvents) => {
                             </div>
                         </div>
                     ))}
-
                 </div>
             </div>
             <div id='profile'  style={{ width: "30%",height:"100%", backgroundColor: "#f9f9f9", padding: "15px", borderRadius: "5px" }}>
@@ -110,10 +134,12 @@ const updateEventsInLocalStorage = (updatedEvents) => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
                     <div style={{ fontWeight: "bold", color: "rgba(0,0,0,0.8)", fontSize: "18px" }}>Total Price: ${calculateTotalPrice()}</div>
-                    <Button variant="outline-primary"  style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none", fontSize: "20px" }}>Checkout</Button>
+                    <Button variant="outline-primary" onClick={handleCheckout} style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none", fontSize: "20px" }}>Checkout</Button>
                 </div>
             </div>
         </div>
+        {showSuccessAlert && <Alert variant="success" header="Order created successfully!" body="Check your email for confirmation. See you there!"/>}
+        {showFailAlert && <Alert variant="danger" header="Order was not processed" body="Please try again later, or contact us if you have any issues."/>}
     </div>
 );
 };
