@@ -228,6 +228,26 @@ public class User {
         }
     }
 
+    public static boolean updateUserDetails(int userId, String newName, String newPassword, String newEmail) {
+        try {
+            DBConnection.establishConnection();
+            String updateQuery = "UPDATE user SET name = ?, password = ?, email = ? WHERE user_id = ?";
+            PreparedStatement updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+            updateStatement.setString(1, newName);
+            updateStatement.setString(2, newPassword);
+            updateStatement.setString(3, newEmail);
+            updateStatement.setInt(4, userId);
+            int rowsAffected = updateStatement.executeUpdate();
+            updateStatement.close();
+            DBConnection.closeConnection();
+
+            return rowsAffected > 0;
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean isValidEmail(String email) {
         String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(regex);

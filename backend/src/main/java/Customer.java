@@ -8,7 +8,7 @@ public class Customer extends User{
     
     public Customer(int userID, String name, String password, String email){
         super(userID, name, password, email);
-        retrieveAmountAvailFromDB();
+        retrieveAmountAvailFromDB(userID);
     }
 
     public Customer(int userID, String name, String password, String email, double amountAvail){
@@ -16,44 +16,48 @@ public class Customer extends User{
         this.amountAvail = amountAvail;
     }
     public double getAmountAvail(){
-        retrieveAmountAvailFromDB();
         return amountAvail;
     }
 
     public void setAmountAvail(double amountAvail){
         this.amountAvail = amountAvail;
-        this.updateAmountAvailInDB(amountAvail);
+        this.updateAmountAvailInDB(this.getUserID(), amountAvail);
     }
 
-    public void updateAmountAvailInDB(double newAmountAvail) {
+    public static boolean updateAmountAvailInDB(int userId, double newAmountAvail) {
+        boolean success = false;
         try {
             DBConnection.establishConnection();
             String updateQuery = "UPDATE user SET amount_avail = ? WHERE user_id = ?";
             PreparedStatement updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
             updateStatement.setDouble(1, newAmountAvail);
-            updateStatement.setInt(2, this.getUserID());
+            updateStatement.setInt(2, userId);
             int rowsAffected = updateStatement.executeUpdate();
             updateStatement.close();
             DBConnection.closeConnection();
 
-            if (rowsAffected == 0) {
-                System.out.println("No user found with ID " + this.getUserID());
+            if (rowsAffected > 0) {
+                success = true;
+            } else {
+                System.out.println("No user found with ID " + userId);
             }
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
         }
+        return success;
     }
 
-    public void retrieveAmountAvailFromDB() {
+    public static double retrieveAmountAvailFromDB(int userId) {
+        double amountAvail = 0.0;
         try {
             DBConnection.establishConnection();
             String sqlQuery = "SELECT amount_avail FROM user WHERE user_id = ?";
             PreparedStatement statement = DBConnection.getConnection().prepareStatement(sqlQuery);
-            statement.setInt(1, this.getUserID()); // Assuming user_id is the primary key
+            statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             
             if(resultSet.next()) {
-                this.setAmountAvail(resultSet.getDouble("amount_avail"));
+                amountAvail = resultSet.getDouble("amount_avail");
             }
             
             resultSet.close();
@@ -62,6 +66,7 @@ public class Customer extends User{
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
         }
+        return amountAvail;
     }
 
 

@@ -76,6 +76,9 @@ public class Main {
                                                                                          // username exists
                 System.out.println(User.register("Dehouhehexd", "asd", "haha")); // invalid email
 
+                System.out.println("test update user details");
+                System.out.println(User.updateUserDetails(6, "Dehouhehexd", "newPw", "haha@gmail.com"));
+
                 System.out.println("Construct Customer from User");
                 Customer cust = new Customer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail(), 1000.00);
                 System.out.println(cust.toString());
@@ -402,6 +405,28 @@ public class Main {
             User userByID = User.getUserByID(Integer.parseInt(id));
             //Gson gson = new Gson();
             return gson.toJson(userByID);
+        });
+
+        put("/update_user_details/:id", (req, res) -> {
+            int userId = Integer.parseInt(req.params(":id"));
+            String newName = req.queryParams("newName");
+            String newPassword = req.queryParams("newPassword");
+            String newEmail = req.queryParams("newEmail");
+            boolean success = User.updateUserDetails(userId, newName, newPassword, newEmail);
+            return new Gson().toJson(success);
+        });
+
+        get("/get_amount_avail_by_user_id/:id", (req, res) -> {
+            int id = Integer.parseInt(req.params(":id"));
+            double amountAvail = Customer.retrieveAmountAvailFromDB(id);
+            return new Gson().toJson(amountAvail);
+        });
+
+        put("/update_amount_avail/:id/:newAmount", (req, res) -> {
+            int userId = Integer.parseInt(req.params(":id"));
+            double newAmountAvail = Double.parseDouble(req.params(":newAmount"));
+            boolean success = Customer.updateAmountAvailInDB(userId, newAmountAvail);
+            return new Gson().toJson(success);
         });
         
         get("/get_users_by_role/:roleName", (req, res) -> {
