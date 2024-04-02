@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +14,7 @@ import spark.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -210,6 +212,31 @@ public class Main {
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 
+        System.out.println("----------------------------Testing of taking attendance for tix------------------------");
+        ArrayList<Integer> arrList = Ticket.getAllTicketIDsForEvent(1);
+        for (Integer ticketID : arrList) {
+            System.out.println(ticketID);
+        }
+
+        // hardcoding for testing
+        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
+        attendedTix.add(1);
+        attendedTix.add(4);
+        attendedTix.add(6);
+        attendedTix.add(7);
+        User toOfficer= User.login("to@tm.com", "password5");
+        
+        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
+        //TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5", "to@tm.com");
+        castToOfficer.takeAttendance(1,attendedTix);
+
+
+        Map<Integer, Integer> purchasetest = new HashMap<>();
+        purchasetest.put(1, 2);
+        Order.createOrder(5, purchasetest);
+
+        System.out.println("----------------------------End Testing of taking attendance for tix------------------------");
+
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
         port(4567);
@@ -334,48 +361,6 @@ public class Main {
 
             return outcome;
         });
-
-        /*
-         * get("/user_info", (req, res) -> {
-         * // Retrieve user information from the session
-         * User user = req.session().attribute("user");
-         * User loggedInUser=null;
-         * if (user instanceof Customer) {
-         * loggedInUser = (Customer) user;
-         * // Perform operations specific to Customer
-         * } else if (user instanceof EventManager) {
-         * loggedInUser = (EventManager) user;
-         * // Perform operations specific to EventManager
-         * } else if (user instanceof TicketOfficer) {
-         * loggedInUser = (TicketOfficer) user;
-         * // Perform operations specific to TicketOfficer
-         * }
-         * 
-         * // Read the HTML file content
-         * String htmlContent = "";
-         * try {
-         * FileInputStream fileInputStream = new
-         * FileInputStream("src/main/resources/public/user_info.html");
-         * byte[] data = new byte[fileInputStream.available()];
-         * fileInputStream.read(data);
-         * fileInputStream.close();
-         * htmlContent = new String(data, StandardCharsets.UTF_8);
-         * } catch (IOException e) {
-         * e.printStackTrace();
-         * }
-         * 
-         * // Inject user information into the HTML content
-         * htmlContent = htmlContent.replace("{{userId}}",
-         * String.valueOf(loggedInUser.getUserID()));
-         * htmlContent = htmlContent.replace("{{userEmail}}", loggedInUser.getEmail());
-         * 
-         * // Set response type to HTML
-         * res.type("text/html");
-         * 
-         * // Return the modified HTML content
-         * return htmlContent;
-         * });
-         */
 
         get("/test", (req, res) -> {
             // Retrieve user information from the session
@@ -578,6 +563,68 @@ public class Main {
             String jsonResult = gson.toJson(orders);
             return jsonResult;
         });
+
+        get("/generate_report", (req, res) -> {
+		List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
+		//Gson gson = new Gson();
+		// Generate CSV from statistics
+		String csvReport = EventManager.generateReport(statistics);
+		
+		// Write the CSV report to a file
+		try (FileWriter writer = new FileWriter("sales_statistics.csv")) {
+		writer.write(csvReport);
+		System.out.println("CSV report generated successfully.");
+		} catch (IOException e) {
+		System.err.println("Error writing CSV report: " + e.getMessage());
+		}
+		return "CSV report generated successfully.";
+		});
+
+
+        get("/ticketids_for_event/:id", (req, res) -> {
+            String id = req.params(":id");
+            //Gson gson = new Gson();
+            ArrayList<Integer> allTicketIDsForEvent = Ticket.getAllTicketIDsForEvent(1);
+            
+            return gson.toJson(allTicketIDsForEvent);
+        });
+
+
+        post("/take_attendance/:eventId", (req, res) -> {
+            // Extract event ID from URL
+            int eventId = Integer.parseInt(req.params(":eventId"));
+            
+            // Extract data from request body
+            String jsonData = req.body();
+            JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
+            JsonArray attendedTixJson = jsonObject.get("attendedTickets").getAsJsonArray();
+
+            // Convert attendedTickets JSON to ArrayList<Integer>
+            ArrayList<Integer> attendedTickets = new ArrayList<>();
+            for (JsonElement element : attendedTixJson) {
+                attendedTickets.add(element.getAsInt());
+            }
+            User user = req.session().attribute("user");
+            User loggedInUser=null;
+            if (user instanceof Customer) {
+            loggedInUser = (Customer) user;
+             // Perform operations specific to Customer
+            } else if (user instanceof EventManager) {
+             loggedInUser = (EventManager) user;
+             // Perform operations specific to EventManager
+            } else if (user instanceof TicketOfficer) {
+             loggedInUser = (TicketOfficer) user;
+             // Perform operations specific to TicketOfficer
+            }            
+
+            // Call your Java method to take attendance
+            TicketOfficer ticketOfficer = (TicketOfficer) loggedInUser; // Assuming there's a method to retrieve TicketOfficer by ID
+            ticketOfficer.takeAttendance(eventId, attendedTickets);
+
+            // You may return a success message or status code if needed
+            return "Attendance taken successfully";
+        });
+
 
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
