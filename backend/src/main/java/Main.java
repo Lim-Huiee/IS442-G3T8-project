@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -209,6 +210,31 @@ public class Main {
         // change getallordersbyuser method
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
+
+        System.out.println("----------------------------Testing of taking attendance for tix------------------------");
+        ArrayList<Integer> arrList = Ticket.getAllTicketIDsForEvent(1);
+        for (Integer ticketID : arrList) {
+            System.out.println(ticketID);
+        }
+
+        // hardcoding for testing
+        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
+        attendedTix.add(1);
+        attendedTix.add(4);
+        attendedTix.add(6);
+        attendedTix.add(7);
+        User toOfficer= User.login("to@tm.com", "password5");
+        
+        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
+        //TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5", "to@tm.com");
+        castToOfficer.takeAttendance(1,attendedTix);
+
+
+        Map<Integer, Integer> purchasetest = new HashMap<>();
+        purchasetest.put(1, 2);
+        Order.createOrder(5, purchasetest);
+
+        System.out.println("----------------------------End Testing of taking attendance for tix------------------------");
 
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
@@ -578,6 +604,25 @@ public class Main {
             String jsonResult = gson.toJson(orders);
             return jsonResult;
         });
+
+        get("/generate_report", (req, res) -> {
+		List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
+		//Gson gson = new Gson();
+		// Generate CSV from statistics
+		String csvReport = EventManager.generateReport(statistics);
+		
+
+		// Write the CSV report to a file
+		try (FileWriter writer = new FileWriter("sales_statistics.csv")) {
+		writer.write(csvReport);
+		System.out.println("CSV report generated successfully.");
+		} catch (IOException e) {
+		System.err.println("Error writing CSV report: " + e.getMessage());
+		}
+		return "CSV report generated successfully.";
+		});
+
+
 
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

@@ -332,8 +332,11 @@ public class EventManager extends User{
                 oneEvent.put("eventID", String.valueOf(event.getEventID()));
                 oneEvent.put("eventName", event.getEventName());
                 oneEvent.put("numTicketsSold", String.valueOf(event.numTicketsSold()));
+                oneEvent.put("numTicketsSoldByTicketingOfficer", String.valueOf(event.getNumTicketsSoldByTicketOfficer()));
                 oneEvent.put("revenueEarned", String.valueOf(event.revenueEarned()));
-
+                oneEvent.put("dateTime",String.valueOf(event.getEventDateTime()));
+                oneEvent.put("venue",event.getVenue());
+        
                 salesStats.add(oneEvent);
             }
 
@@ -342,6 +345,7 @@ public class EventManager extends User{
         }
         return salesStats;
     }
+
     public static String generateReport(List<Map<String, String>> salesStats) {
         StringBuilder csv = new StringBuilder();
         try {
@@ -363,6 +367,7 @@ public class EventManager extends User{
         }
         return csv.toString();
     }
+
     
 }
 
