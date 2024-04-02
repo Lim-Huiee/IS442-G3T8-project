@@ -1,6 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 
 public class Refund {
     public void processRefund(Ticket ticket, int userID) {
@@ -31,7 +32,27 @@ public class Refund {
             // update ticket status to refunded in db
             ticket.cancelTickets(ticket.getTicketID());
             // check all tickets with same order_id, if all status is refunded, update
+            int order_id = ticket.getOrderID();
+            Order order = Order.getOrderByID(order_id);
+            List<Ticket> tickets_in_order = order.getOrderTickets();
+            boolean refund_flag = true;
+            for (Ticket tick : tickets_in_order) {
+                if (tick.getTicketStatus() != "refunded") {
+                    refund_flag = false;
+                }
+            }
             // order_id status to refunded, else do nothing
+            if (refund_flag) {
+                PreparedStatement updateStatement = null;
+                try {
+                    DBConnection.establishConnection();
+                    String updateQuery = "UPDATE order SET status = 'refunded' WHERE order_id = ?";
+                    updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+                    updateStatement.setInt(1, order_id);
+                    updateStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             // return success or fail
         }
 
