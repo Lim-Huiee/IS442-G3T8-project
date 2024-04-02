@@ -611,7 +611,6 @@ public class Main {
 		// Generate CSV from statistics
 		String csvReport = EventManager.generateReport(statistics);
 		
-
 		// Write the CSV report to a file
 		try (FileWriter writer = new FileWriter("sales_statistics.csv")) {
 		writer.write(csvReport);
@@ -621,6 +620,14 @@ public class Main {
 		}
 		return "CSV report generated successfully.";
 		});
+
+        get("/ticketids_for_event/:id", (req, res) -> {
+            String id = req.params(":id");
+            //Gson gson = new Gson();
+            ArrayList<Integer> allTicketIDsForEvent = Ticket.getAllTicketIDsForEvent(1);
+            
+            return gson.toJson(allTicketIDsForEvent);
+        });
 
 
 
