@@ -7,7 +7,7 @@ public class TicketOfficer extends User {
     public TicketOfficer(int userID, String name, String password, String email){
         super(userID, name, password, email);
     }
-    // also has verify ticket validity, process on-site tickets and issue e ticket methods but idk what they do 
+
     public String takeAttendance(int eventID, ArrayList<Integer> attendedTicketIDS, int userID) {
         PreparedStatement statement = null;
         try {
@@ -64,6 +64,10 @@ public class TicketOfficer extends User {
                     rs.getString("status")
                 );
                 // System.out.println(thisTicket);
+
+                if (thisTicket.getTicketStatus() == "refunded") {
+                    return -1;
+                }
 
                 Order thisOrder = Order.getOrderByID(thisTicket.getOrderID());
                 
@@ -177,4 +181,6 @@ public class TicketOfficer extends User {
 
         return -1;
     }
+
+    // TODO: issue eticket
 }
