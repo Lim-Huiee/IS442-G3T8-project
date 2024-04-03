@@ -34,16 +34,19 @@ export const StaffNavigation = (props) => {
                         <Link to="/eventManagementPageEM"> Event Management </Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/manageTicketingOfficerPageEM"> Manage Ticketing Officers </Link>
+                        <Link to="/attendanceTO"> Ticket Verification </Link>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded=" true">
+                    <li className="nav-item">
+                        <Link to="/manageTicketingOfficerPageEM"> Manage Ticket Officers </Link>
+                    </li>
+                    <li className="nav-item dropdown">
+                        <a className="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded=" true">
                             Your profile
                         </a>
-                        <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+                        <div className="dropdown-menu " aria-labelledby="navbarDropdown">
                             {/* <a class="dropdown-item" href="#">Manage profile</a>
                             <div class="dropdown-divider"></div> */}
-                            <a class="dropdown-item" href="#">Sign out</a>
+                            <a className="dropdown-item" href="#">Sign out</a>
                         </div>
                     </li>
                 </ul>

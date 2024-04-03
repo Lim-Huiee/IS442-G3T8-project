@@ -309,7 +309,8 @@ public class Main {
                 return "Invalid username or password";
             }
             
-            
+            System.out.printf("User has logged in on BE, session ID: %s%n", req.session().id());
+            System.out.println(((User)req.session().attribute("user")).getName());
                     // Create a JSON object to send back as the response
             JsonObject responseData = new JsonObject();
             responseData.addProperty("message", "Login successful");
@@ -362,6 +363,7 @@ public class Main {
         });
 
         get("/test", (req, res) -> {
+            System.out.printf("session id: %s", req.session().id());
             // Retrieve user information from the session
             User user = req.session().attribute("user");
             // Check if the user is logged in
@@ -590,6 +592,7 @@ public class Main {
 
 
         post("/take_attendance/:eventId/:custUserId", (req, res) -> {
+            // System.out.printf("session id: %s", req.session().id());
             // Extract event ID from URL
             int eventId = Integer.parseInt(req.params(":eventId"));
             int custUserId = Integer.parseInt(req.params(":custUserId"));
@@ -604,17 +607,23 @@ public class Main {
             for (JsonElement element : attendedTixJson) {
                 attendedTickets.add(element.getAsInt());
             }
-            User user = req.session().attribute("user");
-            if (user instanceof Customer) {
-                return "Unauthorized user";
-            } else if (user instanceof EventManager) {
-                return "Unauthorized user, please sign in as Ticket Officer";
-            } else if (user instanceof TicketOfficer) {
-                TicketOfficer ticketOfficer = (TicketOfficer) user;
-                ticketOfficer.takeAttendance(eventId, attendedTickets, custUserId);
-            }
 
-            return "Attendance taken successfully";
+            // User user = req.session().attribute("user");
+            // System.out.println(((User)req.session().attribute("user")).getName());
+            User user = User.getUserByID(jsonObject.get("toID").getAsInt());
+
+            if (user.getRole().equals("customer")) {
+                return gson.toJson("Unauthorized user");
+            } else if (user.getRole().equals("event manager")) {
+                return gson.toJson("Unauthorized user, please sign in as Ticket Officer");
+            } else if (user.getRole().equals("ticketing officer")) {
+                TicketOfficer ticketOfficer = new TicketOfficer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail());
+                String toResponse = ticketOfficer.takeAttendance(eventId, attendedTickets, custUserId);
+
+                return gson.toJson(toResponse);
+            }
+            
+            return gson.toJson("Attendance taking failed");
         });
 
 
