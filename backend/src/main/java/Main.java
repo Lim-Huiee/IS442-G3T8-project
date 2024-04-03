@@ -221,14 +221,13 @@ public class Main {
         // hardcoding for testing
         ArrayList<Integer> attendedTix = new ArrayList<Integer>();
         attendedTix.add(1);
-        attendedTix.add(4);
         attendedTix.add(6);
         attendedTix.add(7);
         User toOfficer= User.login("to@tm.com", "password5");
         
         TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
         //TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5", "to@tm.com");
-        castToOfficer.takeAttendance(1,attendedTix);
+        System.out.println(castToOfficer.takeAttendance(1,attendedTix, 1));
 
 
         Map<Integer, Integer> purchasetest = new HashMap<>();
@@ -590,9 +589,10 @@ public class Main {
         });
 
 
-        post("/take_attendance/:eventId", (req, res) -> {
+        post("/take_attendance/:eventId/:custUserId", (req, res) -> {
             // Extract event ID from URL
             int eventId = Integer.parseInt(req.params(":eventId"));
+            int custUserId = Integer.parseInt(req.params(":custUserId"));
             
             // Extract data from request body
             String jsonData = req.body();
@@ -605,23 +605,15 @@ public class Main {
                 attendedTickets.add(element.getAsInt());
             }
             User user = req.session().attribute("user");
-            User loggedInUser=null;
             if (user instanceof Customer) {
-            loggedInUser = (Customer) user;
-             // Perform operations specific to Customer
+                return "Unauthorized user";
             } else if (user instanceof EventManager) {
-             loggedInUser = (EventManager) user;
-             // Perform operations specific to EventManager
+                return "Unauthorized user, please sign in as Ticket Officer";
             } else if (user instanceof TicketOfficer) {
-             loggedInUser = (TicketOfficer) user;
-             // Perform operations specific to TicketOfficer
-            }            
+                TicketOfficer ticketOfficer = (TicketOfficer) user;
+                ticketOfficer.takeAttendance(eventId, attendedTickets, custUserId);
+            }
 
-            // Call your Java method to take attendance
-            TicketOfficer ticketOfficer = (TicketOfficer) loggedInUser; // Assuming there's a method to retrieve TicketOfficer by ID
-            ticketOfficer.takeAttendance(eventId, attendedTickets);
-
-            // You may return a success message or status code if needed
             return "Attendance taken successfully";
         });
 

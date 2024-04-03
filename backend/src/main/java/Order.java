@@ -31,8 +31,34 @@ public class Order {
         this.dateTime = dateTime;
     }
 
+    // create constructor for auto increment order id for create new order
+    public Order(int userID, int orderID, Map<Integer, Integer> eventsBooked) {
+        this.userID = userID;
+        this.eventsBooked = eventsBooked;
+        this.orderTickets = new ArrayList<>();
+
+        this.totalPrice=0;
+        eventsBooked.forEach((eventID, numTix) -> {
+            Event oneEvent = Event.getEventByID(eventID);
+            this.totalPrice += oneEvent.getTicketPrice();
+
+            // for (int i=0;i<numTix;i++) {
+            //     // Populate ticket list
+            //     Ticket currentTicket = new Ticket(eventID, orderID, ticketID, ticketCancellationFee, ticketStatus);
+            //     orderTickets.add(currentTicket);
+                
+            // }
+        });
+
+        
+    }
+
     public int getOrderID() {
         return orderID;
+    }
+
+    public int getUserID() {
+        return userID;
     }
 
     public List<Ticket> getOrderTickets() {
