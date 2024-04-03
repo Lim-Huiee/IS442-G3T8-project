@@ -480,5 +480,43 @@ public class Event {
         return numTicketsSold;
     }
 
+    public int sumTotalAttendees(){
+        int currentEventID = this.getEventID(); // Get current event ID
+        int numAttendees = 0;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            DBConnection.establishConnection();
+
+            // Query to retrieve the sum of ticket counts for attendees
+            String query = "SELECT COUNT(ticket.ticket_id) AS num_attendees " +
+                        "FROM ticket " +
+                        "WHERE ticket.event_id = ? AND ticket.attended = 'yes'";
+            statement = DBConnection.getConnection().prepareStatement(query);
+            statement.setInt(1, currentEventID);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                numAttendees = resultSet.getInt("num_attendees");
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return numAttendees;
+    }
+
 
 }
