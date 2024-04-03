@@ -10,12 +10,21 @@ public class User {
     private String password;
     private int userID;
     private String email;
+    private String role;
 
     public User(int userID, String name, String password, String email){
         this.name = name;
         this.password = password;
         this.userID = userID;
         this.email = email;
+    }
+
+    public User(int userID, String name, String password, String email, String role){
+        this.name = name;
+        this.password = password;
+        this.userID = userID;
+        this.email = email;
+        this.role = role;
     }
 
     // Getters and setters for userID, name, password, and email
@@ -51,6 +60,14 @@ public class User {
         this.email = email;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public static User getUserByID(int userId) {
         User user = null;
         ResultSet resultSet = null;
@@ -67,7 +84,8 @@ public class User {
                 String name = resultSet.getString("name");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                user = new User(userID, name, password, email);
+                String role = resultSet.getString("role");
+                user = new User(userID, name, password, email, role);
             }
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
@@ -103,7 +121,8 @@ public class User {
                 String name = resultSet.getString("name");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                User user = new User(userID, name, password, email);
+                String role = resultSet.getString("role");
+                User user = new User(userID, name, password, email, role);
                 userList.add(user);
             }
         } catch (SQLException | ClassNotFoundException se) {
