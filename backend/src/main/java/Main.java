@@ -632,6 +632,15 @@ public class Main {
             return "Attendance taken successfully";
         });
 
+        System.out.println("----------------------START OF REFUND TEST------------------------------");
+        post("/process_refund/:userID/:ticketID", (req, res) -> {
+            // Extract event ID from URL
+            int userID = Integer.parseInt(req.params(":userID"));
+            int ticketID = Integer.parseInt(req.params(":ticketID"));
+            String result = Refund.process_refund(ticketID, userID);
+            return result;
+        });
+
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DBConnection.closeConnection(); // Close database connection
