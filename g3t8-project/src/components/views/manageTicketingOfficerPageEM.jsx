@@ -13,7 +13,7 @@ import {useSort,HeaderCellSort,SortIconPositions,SortToggleType} from "@table-li
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
 
-import { StaffNavigation } from "../staffNavigation";
+import { EMNavigation } from "../emNavigation";
 import { PageTitle } from "../section-components/pageTitle";
 import { TicketingOfficerModal } from "../section-components/ticketingOfficerModal";
 import axios from 'axios'; // Import Axios for making HTTP requests
@@ -127,7 +127,7 @@ export const ManageTicketingOfficerPageEM = () => {
         
         return (
             <div>
-            <StaffNavigation/>
+            <EMNavigation/>
 
             <PageTitle pageTitle={"Manage Ticketing Officers"} pageView="" filterShow={"false"} />
             

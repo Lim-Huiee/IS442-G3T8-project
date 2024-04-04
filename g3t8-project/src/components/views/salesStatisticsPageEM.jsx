@@ -13,7 +13,7 @@ import {useSort,HeaderCellSort,SortIconPositions,SortToggleType} from "@table-li
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
 
-import { StaffNavigation } from "../staffNavigation";
+import { EMNavigation } from "../emNavigation";
 import { PageTitle } from "../section-components/pageTitle";
 import axios from 'axios'; // Import Axios for making HTTP requests
 import "./../../App.css";
@@ -99,7 +99,7 @@ export const SalesStatisticsPageEM = () => {
         
         return (
             <div>
-            <StaffNavigation/>
+            <EMNavigation/>
 
             <PageTitle pageTitle={"Sales Statistics"} pageView="" filterShow={"false"} />
             

@@ -45,9 +45,11 @@ export const Login = ({ handleAction, userRole }) => {
           const userid = response.data.userId; 
           const email = response.data.email;
           const name = response.data.name;
+          const role = response.data.role;
           localStorage.setItem("userId", userid); 
           localStorage.setItem("name", name); 
           localStorage.setItem("email", email); 
+          localStorage.setItem("role", role); 
           // Redirect to the home page or any other page
           window.location.href = "/";
         })

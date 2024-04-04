@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 
-import { StaffNavigation } from "../staffNavigation";
+import { TONavigation } from "../toNavigation";
 import { PageTitle } from "../section-components/pageTitle";
 import axios from 'axios'; // Import Axios for making HTTP requests
 import "./../../App.css";
 
 export const TOAttendancePage = () => {
-    
-    //check userRole
-    
+    // role checked in navigation
+
     const [numTix, setNumTix] = useState([]);
 
     const numTixChange = event => {
@@ -55,7 +53,7 @@ export const TOAttendancePage = () => {
         
         return (
             <div>
-            <StaffNavigation/>
+            <TONavigation/>
 
             <PageTitle pageTitle={"Ticket Attendance & Verification"} pageView="" filterShow={"false"} />
             

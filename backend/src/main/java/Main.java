@@ -293,15 +293,20 @@ public class Main {
             System.out.println("Password: " + password);
 
             User user = User.login(email, password);
+            JsonObject responseData = new JsonObject();
+
             if (user instanceof Customer) {
                 Customer c = (Customer) user;
                 req.session().attribute("user", c);
+                responseData.addProperty("role", "customer");
             } else if (user instanceof EventManager) {
                 EventManager em = (EventManager) user;
                 req.session().attribute("user", em);
+                responseData.addProperty("role", "event manager");
             } else {
                 TicketOfficer to = (TicketOfficer) user;
                 req.session().attribute("user", to);
+                responseData.addProperty("role", "ticketing officer");
             }
 
             if (user == null) {
@@ -311,14 +316,12 @@ public class Main {
             
             System.out.printf("User has logged in on BE, session ID: %s%n", req.session().id());
             System.out.println(((User)req.session().attribute("user")).getName());
-                    // Create a JSON object to send back as the response
-            JsonObject responseData = new JsonObject();
+            
             responseData.addProperty("message", "Login successful");
             responseData.addProperty("userId", user.getUserID()); // Add user ID to the response
             responseData.addProperty("email", user.getEmail()); // Add email to the response
             responseData.addProperty("name", user.getName()); // Add name to the response
             
-
             // Set response type to JSON
             res.type("application/json");
 

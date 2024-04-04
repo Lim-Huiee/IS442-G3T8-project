@@ -44,9 +44,11 @@ const App = () => {
               <Route path="/bookingPage" element={ <BookingPage />} />
               <Route path="/myEvents" element={ <MyEventsPage />} />
               <Route path="/profile" element={ <ProfilePage />} />
-  
-            {/* event manager views*/}
+
+            {/* staff views */}
             <Route path="/staff" element={ <StaffLoginPage/> } />
+
+            {/* event manager views*/}
             <Route path="/salesStatisticsPageEM" element={ <SalesStatisticsPageEM />} />
             <Route path="/eventManagementPageEM" element={ <EventManagementPageEM/> }/>
             <Route path="/manageTicketingOfficerPageEM" element={ <ManageTicketingOfficerPageEM/> }/>

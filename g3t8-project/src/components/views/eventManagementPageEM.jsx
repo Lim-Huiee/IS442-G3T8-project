@@ -13,7 +13,7 @@ import {useSort,HeaderCellSort,SortIconPositions,SortToggleType} from "@table-li
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
 
-import { StaffNavigation } from "../staffNavigation";
+import { EMNavigation } from "../emNavigation";
 import { PageTitle } from "../section-components/pageTitle";
 import { EventModal } from "../section-components/eventModal";
 import axios from 'axios'; // Import Axios for making HTTP requests
@@ -157,7 +157,7 @@ export const EventManagementPageEM = () => {
         
         return (
             <div>
-            <StaffNavigation/>
+            <EMNavigation/>
 
             <PageTitle pageTitle={"Event Management"} pageView="" filterShow={"false"} />
             
