@@ -141,6 +141,7 @@ public class User {
                 String userEmail = resultSet.getString("email");
                 String userPassword = resultSet.getString("password");
                 String role = resultSet.getString("role");
+                Double amount_avail = resultSet.getDouble("amount_avail");
     
                 if ("ticketing officer".equals(role)) {
                     // If the role is "ticketing officer", return a TicketOfficer object
@@ -150,7 +151,7 @@ public class User {
                     return new EventManager(userID, userName, userPassword, userEmail);
                 } else {
                     // Otherwise, return a Customer object
-                    return new Customer(userID, userName, userPassword, userEmail);
+                    return new Customer(userID, userName, userPassword, userEmail, amount_avail);
                 }
             } else {
                 // No matching user found
@@ -224,6 +225,26 @@ public class User {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static boolean updateUserDetails(int userId, String newName, String newPassword, String newEmail) {
+        try {
+            DBConnection.establishConnection();
+            String updateQuery = "UPDATE user SET name = ?, password = ?, email = ? WHERE user_id = ?";
+            PreparedStatement updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+            updateStatement.setString(1, newName);
+            updateStatement.setString(2, newPassword);
+            updateStatement.setString(3, newEmail);
+            updateStatement.setInt(4, userId);
+            int rowsAffected = updateStatement.executeUpdate();
+            updateStatement.close();
+            DBConnection.closeConnection();
+
+            return rowsAffected > 0;
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return false;
         }
     }
 

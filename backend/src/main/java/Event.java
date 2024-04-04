@@ -430,4 +430,130 @@ public class Event {
         }
     }
 
+    public static String reduceTickets(int eventID, int numTicketsToReduce) {
+        PreparedStatement updateStatement = null;
+        try {
+            // Check if the event exists and has enough available tickets
+            Event event = getEventByID(eventID);
+            if (event == null) {
+                return "Event with ID " + eventID + " not found.";
+            }
+            if (event.getTicketsAvailable() < numTicketsToReduce) {
+                return "Not enough tickets available for event " + eventID + ".";
+            }
+            System.out.println(event.toString());
+
+            DBConnection.establishConnection();
+    
+            // Update the number of tickets available for the event
+            String updateQuery = "UPDATE event SET num_tickets_avail = num_tickets_avail - ? WHERE event_id = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+            updateStatement.setInt(1, numTicketsToReduce);
+            updateStatement.setInt(2, eventID);
+    
+            int rowsAffected = updateStatement.executeUpdate();
+    
+            if (rowsAffected > 0) {
+                return "Success, num tickets avail reduced";
+            } else {
+                return "Failed to reduce tickets for event " + eventID + ".";
+            }
+    
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+            return "Error occurred while reducing tickets: " + se.getMessage();
+    
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } 
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public int getNumTicketsSoldByTicketOfficer() {
+        int currentEventID = this.getEventID(); // Get current event ID
+        int numTicketsSold = 0;
+
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            DBConnection.establishConnection();
+
+            // Query to retrieve the sum of ticket counts for ticketing officers
+            String query = "SELECT COUNT(ticket.ticket_id) AS ticket_count " +
+                           "FROM ticket " +
+                           "INNER JOIN orders ON ticket.order_id = orders.order_id " +
+                           "INNER JOIN user ON orders.user_id = user.user_id " +
+                           "WHERE user.role = 'ticketing officer' AND ticket.event_id = ?";
+            statement = DBConnection.getConnection().prepareStatement(query);
+            statement.setInt(1, currentEventID);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                numTicketsSold = resultSet.getInt("ticket_count");
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return numTicketsSold;
+    }
+
+    public int sumTotalAttendees(){
+        int currentEventID = this.getEventID(); // Get current event ID
+        int numAttendees = 0;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            DBConnection.establishConnection();
+
+            // Query to retrieve the sum of ticket counts for attendees
+            String query = "SELECT COUNT(ticket.ticket_id) AS num_attendees " +
+                        "FROM ticket " +
+                        "WHERE ticket.event_id = ? AND ticket.attended = 'yes'";
+            statement = DBConnection.getConnection().prepareStatement(query);
+            statement.setInt(1, currentEventID);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                numAttendees = resultSet.getInt("num_attendees");
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return numAttendees;
+    }
+
+
 }

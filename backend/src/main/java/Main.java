@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +14,8 @@ import spark.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
@@ -57,7 +60,8 @@ public class Main {
         /// ==================== Testing of User/TicketOfficer class
         /// =======================================
 
-        System.out.println("=============================Start OF TESTING FOR USER CLASS====================");
+        System.out
+                .println("=============================Start OF TESTING FOR USER & CUSTOMER CLASS====================");
         try {
             // Usage example: retrieve user with ID 1
             User user = User.getUserByID(1);
@@ -75,10 +79,17 @@ public class Main {
                                                                                          // username exists
                 System.out.println(User.register("Dehouhehexd", "asd", "haha")); // invalid email
 
-                if (customer instanceof Customer) {
-                    Customer c = (Customer) customer;
-                    System.out.println(c.getAmountAvail()); // class cast, testing getAmountAvail() for customer
-                }
+                System.out.println("test update user details");
+                System.out.println(User.updateUserDetails(6, "Dehouhehexd", "newPw", "haha@gmail.com"));
+
+                System.out.println("Construct Customer from User");
+                Customer cust = new Customer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail(),
+                        1000.00);
+                System.out.println(cust.toString());
+                System.out.println(cust.getAmountAvail()); // class cast, testing getAmountAvail() for customer
+                System.out.println("Test update $$");
+                cust.setAmountAvail(500.32);
+                System.out.println("New amount:" + cust.getAmountAvail());
 
             } else {
                 System.out.println("User not found.");
@@ -88,7 +99,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("=============================END OF TESTING FOR USER CLASS====================");
+        System.out.println("=============================END OF TESTING FOR USER & CUSTOMER CLASS====================");
 
         System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
         User eventManager = null;
@@ -105,15 +116,16 @@ public class Main {
                     int numTotalTickets = 1000;
                     int numTicketsAvailable = 1000;
                     String eventDetails = "A typical  Event";
-                    int ticketPrice = 90;
+                    double ticketPrice = 90;
                     double cancellationFee = 20.00;
-                    String result = em.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets,
+                    String result = EventManager.createEvent(eventType, eventName, venue, eventDateTime,
+                            numTotalTickets,
                             numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
                     System.out.println(result); // creates new event in DB, will print "event exists" if you run it a
                                                 // 2nd time
 
                     // update taylor swift event
-                    String updateResult = em.updateEvent(5, eventType, eventName, "my house", eventDateTime,
+                    String updateResult = EventManager.updateEvent(5, eventType, eventName, "my house", eventDateTime,
                             numTotalTickets, 998, eventDetails, ticketPrice, cancellationFee);
                     System.out.println(updateResult);
 
@@ -126,12 +138,13 @@ public class Main {
 
                     // ======================================= event manager adding ticket
                     // officer============================
-                    String addTicketingOfficerResult = em.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
+                    String addTicketingOfficerResult = EventManager.addTicketingOfficer("Jeremy", "123",
+                            "jeremy@hotmail.com");
                     System.out.println(addTicketingOfficerResult);
 
                     // view sale statistics test, output is in readable format for testing, will
                     // amend output next time
-                    System.out.println(em.viewSaleStatistics());
+                    System.out.println(EventManager.viewSaleStatistics());
                 }
             }
 
@@ -204,6 +217,32 @@ public class Main {
         // change getallordersbyuser method
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
+
+        System.out.println("----------------------------Testing of taking attendance for tix------------------------");
+        ArrayList<Integer> arrList = Ticket.getAllTicketIDsForEvent(1);
+        for (Integer ticketID : arrList) {
+            System.out.println(ticketID);
+        }
+
+        // hardcoding for testing
+        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
+        attendedTix.add(1);
+        attendedTix.add(4);
+        attendedTix.add(6);
+        attendedTix.add(7);
+        User toOfficer = User.login("to@tm.com", "password5");
+
+        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
+        // TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5",
+        // "to@tm.com");
+        castToOfficer.takeAttendance(1, attendedTix);
+
+        Map<Integer, Integer> purchasetest = new HashMap<>();
+        purchasetest.put(1, 2);
+        Order.createOrder(5, purchasetest);
+
+        System.out.println(
+                "----------------------------End Testing of taking attendance for tix------------------------");
 
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
@@ -328,48 +367,6 @@ public class Main {
             return outcome;
         });
 
-        /*
-         * get("/user_info", (req, res) -> {
-         * // Retrieve user information from the session
-         * User user = req.session().attribute("user");
-         * User loggedInUser=null;
-         * if (user instanceof Customer) {
-         * loggedInUser = (Customer) user;
-         * // Perform operations specific to Customer
-         * } else if (user instanceof EventManager) {
-         * loggedInUser = (EventManager) user;
-         * // Perform operations specific to EventManager
-         * } else if (user instanceof TicketOfficer) {
-         * loggedInUser = (TicketOfficer) user;
-         * // Perform operations specific to TicketOfficer
-         * }
-         * 
-         * // Read the HTML file content
-         * String htmlContent = "";
-         * try {
-         * FileInputStream fileInputStream = new
-         * FileInputStream("src/main/resources/public/user_info.html");
-         * byte[] data = new byte[fileInputStream.available()];
-         * fileInputStream.read(data);
-         * fileInputStream.close();
-         * htmlContent = new String(data, StandardCharsets.UTF_8);
-         * } catch (IOException e) {
-         * e.printStackTrace();
-         * }
-         * 
-         * // Inject user information into the HTML content
-         * htmlContent = htmlContent.replace("{{userId}}",
-         * String.valueOf(loggedInUser.getUserID()));
-         * htmlContent = htmlContent.replace("{{userEmail}}", loggedInUser.getEmail());
-         * 
-         * // Set response type to HTML
-         * res.type("text/html");
-         * 
-         * // Return the modified HTML content
-         * return htmlContent;
-         * });
-         */
-
         get("/test", (req, res) -> {
             // Retrieve user information from the session
             User user = req.session().attribute("user");
@@ -398,6 +395,28 @@ public class Main {
             User userByID = User.getUserByID(Integer.parseInt(id));
             // Gson gson = new Gson();
             return gson.toJson(userByID);
+        });
+
+        put("/update_user_details/:id", (req, res) -> {
+            int userId = Integer.parseInt(req.params(":id"));
+            String newName = req.queryParams("newName");
+            String newPassword = req.queryParams("newPassword");
+            String newEmail = req.queryParams("newEmail");
+            boolean success = User.updateUserDetails(userId, newName, newPassword, newEmail);
+            return new Gson().toJson(success);
+        });
+
+        get("/get_amount_avail_by_user_id/:id", (req, res) -> {
+            int id = Integer.parseInt(req.params(":id"));
+            double amountAvail = Customer.retrieveAmountAvailFromDB(id);
+            return new Gson().toJson(amountAvail);
+        });
+
+        put("/update_amount_avail/:id/:newAmount", (req, res) -> {
+            int userId = Integer.parseInt(req.params(":id"));
+            double newAmountAvail = Double.parseDouble(req.params(":newAmount"));
+            boolean success = Customer.updateAmountAvailInDB(userId, newAmountAvail);
+            return new Gson().toJson(success);
         });
 
         get("/get_users_by_role/:roleName", (req, res) -> {
@@ -520,6 +539,97 @@ public class Main {
             List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
             // Gson gson = new Gson();
             return gson.toJson(statistics);
+        });
+
+        post("/create_order", (req, res) -> {
+            String jsonData = req.body();
+
+            // Assuming the request body contains the user ID and events booked data in JSON
+            // format
+            JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
+            int userId = jsonObject.get("userId").getAsInt();
+            JsonObject eventsBookedJson = jsonObject.get("eventsBooked").getAsJsonObject();
+
+            // Convert events booked JSON to Map<Integer, Integer>
+            Map<Integer, Integer> eventsBooked = new HashMap<>();
+            for (Map.Entry<String, JsonElement> entry : eventsBookedJson.entrySet()) {
+                int eventId = Integer.parseInt(entry.getKey());
+                int quantity = entry.getValue().getAsInt();
+                eventsBooked.put(eventId, quantity);
+            }
+
+            // Call your Java method to create the order
+            Order.createOrder(userId, eventsBooked);
+
+            // You may return a success message or status code if needed
+            return "Order created successfully";
+        });
+
+        get("/get_orders/:userId", (req, res) -> {
+            int userId = Integer.parseInt(req.params("userId"));
+            ArrayList<Order> orders = Order.getAllOrdersByUserID(userId);
+            String jsonResult = gson.toJson(orders);
+            return jsonResult;
+        });
+
+        get("/generate_report", (req, res) -> {
+            List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
+            // Gson gson = new Gson();
+            // Generate CSV from statistics
+            String csvReport = EventManager.generateReport(statistics);
+
+            // Write the CSV report to a file
+            try (FileWriter writer = new FileWriter("sales_statistics.csv")) {
+                writer.write(csvReport);
+                System.out.println("CSV report generated successfully.");
+            } catch (IOException e) {
+                System.err.println("Error writing CSV report: " + e.getMessage());
+            }
+            return "CSV report generated successfully.";
+        });
+
+        get("/ticketids_for_event/:id", (req, res) -> {
+            String id = req.params(":id");
+            // Gson gson = new Gson();
+            ArrayList<Integer> allTicketIDsForEvent = Ticket.getAllTicketIDsForEvent(1);
+
+            return gson.toJson(allTicketIDsForEvent);
+        });
+
+        post("/take_attendance/:eventId", (req, res) -> {
+            // Extract event ID from URL
+            int eventId = Integer.parseInt(req.params(":eventId"));
+
+            // Extract data from request body
+            String jsonData = req.body();
+            JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
+            JsonArray attendedTixJson = jsonObject.get("attendedTickets").getAsJsonArray();
+
+            // Convert attendedTickets JSON to ArrayList<Integer>
+            ArrayList<Integer> attendedTickets = new ArrayList<>();
+            for (JsonElement element : attendedTixJson) {
+                attendedTickets.add(element.getAsInt());
+            }
+            User user = req.session().attribute("user");
+            User loggedInUser = null;
+            if (user instanceof Customer) {
+                loggedInUser = (Customer) user;
+                // Perform operations specific to Customer
+            } else if (user instanceof EventManager) {
+                loggedInUser = (EventManager) user;
+                // Perform operations specific to EventManager
+            } else if (user instanceof TicketOfficer) {
+                loggedInUser = (TicketOfficer) user;
+                // Perform operations specific to TicketOfficer
+            }
+
+            // Call your Java method to take attendance
+            TicketOfficer ticketOfficer = (TicketOfficer) loggedInUser; // Assuming there's a method to retrieve
+                                                                        // TicketOfficer by ID
+            ticketOfficer.takeAttendance(eventId, attendedTickets);
+
+            // You may return a success message or status code if needed
+            return "Attendance taken successfully";
         });
 
         // Stop Spark server when the program exits
