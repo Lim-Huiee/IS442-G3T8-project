@@ -35,7 +35,7 @@ public class Ticket {
         return ticketStatus;
     }
 
-    public Ticket getTicketbyID(Integer ticketID) {
+    public static Ticket getTicketbyID(Integer ticketID) {
         Ticket ticket = null;
         ResultSet resultSet = null;
         PreparedStatement statement = null;

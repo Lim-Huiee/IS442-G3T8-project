@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Refund {
-    public String processRefund(int ticketID, int userID) {
+    public static String processRefund(int ticketID, int userID) {
         try {
             // get ticket from ticket_id
             Ticket ticket = Ticket.getTicketbyID(ticketID);
@@ -42,9 +42,9 @@ public class Refund {
                 }
                 // order_id status to refunded, else do nothing
                 if (refund_flag) {
-                    PreparedStatement updateStatement = null;
+                    updateStatement = null;
                     DBConnection.establishConnection();
-                    String updateQuery = "UPDATE order SET status = 'refunded' WHERE order_id = ?";
+                    updateQuery = "UPDATE order SET status = 'refunded' WHERE order_id = ?";
                     updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
                     updateStatement.setInt(1, order_id);
                     updateStatement.executeUpdate();
@@ -52,11 +52,11 @@ public class Refund {
                 return "Success";
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "Error: " + e.getMessage();
         }
-
+        return "pls return smth here";
     }
 
 }

@@ -632,12 +632,12 @@ public class Main {
             return "Attendance taken successfully";
         });
 
-        System.out.println("----------------------START OF REFUND TEST------------------------------");
+        //System.out.println("----------------------START OF REFUND TEST------------------------------");
         post("/process_refund/:userID/:ticketID", (req, res) -> {
             // Extract event ID from URL
             int userID = Integer.parseInt(req.params(":userID"));
             int ticketID = Integer.parseInt(req.params(":ticketID"));
-            String result = Refund.process_refund(ticketID, userID);
+            String result = Refund.processRefund(ticketID, userID);
             return result;
         });
 
