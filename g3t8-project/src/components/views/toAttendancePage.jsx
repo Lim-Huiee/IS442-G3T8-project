@@ -52,24 +52,6 @@ export const TOAttendancePage = () => {
             console.error('Error fetching events:', error);
         }
     }
-
-
-        function processDateTime(datetime) {
-            const inputDate = new Date(datetime);
-
-            // Get the individual components of the date
-            const year = inputDate.getFullYear();
-            const month = String(inputDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
-            const day = String(inputDate.getDate()).padStart(2, '0');
-            const hours = String(inputDate.getHours() % 12 || 12).padStart(2, '0'); // Convert to 12-hour format
-            const minutes = String(inputDate.getMinutes()).padStart(2, '0');
-            const ampm = inputDate.getHours() >= 12 ? 'PM' : 'AM';
-
-            // Construct the formatted date string
-            const formattedDateString = `${year}/${month}/${day} ${hours}.${minutes}${ampm}`;
-
-            return formattedDateString; // Output: "2024/03/30 11.40AM"
-        }
         
         return (
             <div>
