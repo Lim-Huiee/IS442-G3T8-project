@@ -7,7 +7,7 @@ export const EMNavigation = (props) => {
     useEffect(() => {
         const sessionRole = localStorage.getItem("role");
         if (sessionRole == null || sessionRole != "event manager") {
-            navigate("/");
+            navigate("/staff");
         }
     }, [])
 

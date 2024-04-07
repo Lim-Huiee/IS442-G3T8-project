@@ -50,8 +50,17 @@ export const Login = ({ handleAction, userRole }) => {
           localStorage.setItem("name", name); 
           localStorage.setItem("email", email); 
           localStorage.setItem("role", role); 
-          // Redirect to the home page or any other page
-          window.location.href = "/";
+          // Redirect to the home page or any other page\
+          if (role=="customer"){
+            window.location.href = "/";
+          }
+          else if (role=="event manager"){
+            window.location.href = "/salesStatisticsPageEM";
+          }
+          else{
+            window.location.href="/attendanceTO"
+          }
+          
         })
         .catch((error) => {
           console.error("Login failed", error); // Handle login failure
