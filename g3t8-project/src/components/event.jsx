@@ -65,7 +65,7 @@ export const Event = ({ data, handleView }) => {
           <EventListing data={d}></EventListing>
         </div>
       ))
-    : "Loading..."}
+    : "No events found"}
 </div>
       </div>
     </div>

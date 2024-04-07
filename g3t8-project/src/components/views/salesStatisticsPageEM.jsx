@@ -120,9 +120,6 @@ export const SalesStatisticsPageEM = () => {
         saveAs(blob, 'events_report.xlsx');
     };
 
-
-
-
     const theme = useTheme(getTheme());
     
     //table sorting
