@@ -575,7 +575,7 @@ public class Main {
 		String csvReport = EventManager.generateReport(statistics);
 		
 		// Write the CSV report to a file
-		try (FileWriter writer = new FileWriter("sales_statistics.csv")) {
+		try (FileWriter writer = new FileWriter("../sales_statistics.csv")) {
 		writer.write(csvReport);
 		System.out.println("CSV report generated successfully.");
 		} catch (IOException e) {
