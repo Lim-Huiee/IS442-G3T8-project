@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Alert from './section-components/alert';
 import axios from "axios"; // Import Axios for making HTTP requests
 
 export const Login = ({ handleAction, userRole }) => {
@@ -8,6 +9,9 @@ export const Login = ({ handleAction, userRole }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+
+
 
   const handleInput = (event) => {
     setValues((prev) => ({
@@ -50,22 +54,28 @@ export const Login = ({ handleAction, userRole }) => {
           localStorage.setItem("name", name); 
           localStorage.setItem("email", email); 
           localStorage.setItem("role", role); 
-          // Redirect to the home page or any other page\
-          if (role==="customer"){
+          
+          
+          if (userRole === "customer" && role === "customer") {
             window.location.href = "/";
-          }
-          else if (role==="event manager"){
+          } else if (userRole === "staff" && role === "event manager") {
             window.location.href = "/salesStatisticsPageEM";
-          }
-          else{
-            window.location.href="/attendanceTO"
+          }else if (userRole === "staff" && role === "ticketing officer") {
+            window.location.href = "/attendanceTO";
+          } else {
+            setShowErrorAlert(true);
           }
           
         })
         .catch((error) => {
-          console.error("Login failed", error); // Handle login failure
+          console.error("Login failed", error);
+          setShowErrorAlert(true); 
         });
+
     }
+  };
+  const handleCloseAlert = () => {
+    setShowErrorAlert(false);
   };
 
   return (
@@ -128,6 +138,16 @@ export const Login = ({ handleAction, userRole }) => {
             </div>
           </div>
         </div>
+        {showErrorAlert && (
+        <div style={{width:"500px", margin: "auto", display: "flex", justifyContent: "center"}} >
+        <Alert
+          variant="danger"
+          header="Login Failed"
+          body="Invalid email or password. Please try again."
+          onClick={handleCloseAlert}
+        />
+         </div>
+      )}
       </div>
     </div>
   );
