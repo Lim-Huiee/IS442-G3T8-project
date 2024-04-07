@@ -10,6 +10,10 @@ export const EMNavigation = (props) => {
             navigate("/staff");
         }
     }, [])
+    const handleSignOut = () => {
+        localStorage.clear();
+        navigate("/staff");
+    };
 
     return (
         <nav id="menu" className="navbar navbar-default navbar-sticky-top navbar-expand-md my-0">
@@ -50,7 +54,7 @@ export const EMNavigation = (props) => {
                             <div className="dropdown-menu " aria-labelledby="navbarDropdown">
                                 {/* <a class="dropdown-item" href="#">Manage profile</a>
                                 <div class="dropdown-divider"></div> */}
-                                <a className="dropdown-item" href="#">Sign out</a>
+                                <a className="dropdown-item" href="#" onClick={handleSignOut}>Sign out</a>
                             </div>
                         </li>
                     </ul>
