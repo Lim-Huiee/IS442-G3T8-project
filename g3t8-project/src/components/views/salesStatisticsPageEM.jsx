@@ -50,7 +50,9 @@ export const SalesStatisticsPageEM = () => {
             console.error('Error fetching events:', error);
         }
     }
+
     const generateCSV = () => {
+
         if (data.nodes.length === 0) {
             console.error('No data to export.');
             return [];
@@ -61,13 +63,18 @@ export const SalesStatisticsPageEM = () => {
             csvData.push({
                 'Event ID': item.eventID,
                 'Event Name': item.eventName,
+                'Venue': item.venue,
+                'Date & Time': item.dateTime,
+                'Total no. of tickets': item.numTotalTickets,
                 'No. of Tickets Sold': item.numTicketsSold,
-                'Event Revenue': item.revenueEarned
+                'Event Revenue': "$" + item.revenueEarned,
+                'No. of attendees': item.numAttendees
             });
         });
     
         return csvData;
     };
+
     console.log(data.nodes);
 
 
@@ -137,7 +144,7 @@ export const SalesStatisticsPageEM = () => {
                         <h5 className={serverResponse!=="Event deleted successfully." ? "text-danger" : "text-success"}>{serverResponse}</h5>
                     </div>
                     <div className="col p-3 d-flex justify-content-end">
-                         <CSVLink data={generateCSV()} filename={"events_report.csv"} className="btn btn-primary">
+                        <CSVLink data={generateCSV()} filename={"events_report.csv"} className="btn btn-primary">
                             Generate report
                         </CSVLink>
                     </div>

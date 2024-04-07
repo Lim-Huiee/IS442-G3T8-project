@@ -51,10 +51,10 @@ export const Login = ({ handleAction, userRole }) => {
           localStorage.setItem("email", email); 
           localStorage.setItem("role", role); 
           // Redirect to the home page or any other page\
-          if (role=="customer"){
+          if (role==="customer"){
             window.location.href = "/";
           }
-          else if (role=="event manager"){
+          else if (role==="event manager"){
             window.location.href = "/salesStatisticsPageEM";
           }
           else{
@@ -77,7 +77,7 @@ export const Login = ({ handleAction, userRole }) => {
               <div className="card-body">
                 <h5 className="card-title">Login</h5>
                 <p className="card-text">
-                  Welcome back! {userRole=="customer"? <span>Log in to purchase your tickets!</span> : <span></span> }
+                  Welcome back! {userRole==="customer"? <span>Log in to purchase your tickets!</span> : <span></span> }
                 </p>
                 <form onSubmit={handleSubmit}>
                   <div className="input-group">
