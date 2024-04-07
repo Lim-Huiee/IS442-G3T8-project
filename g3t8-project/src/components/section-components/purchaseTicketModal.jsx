@@ -4,9 +4,9 @@ import Table from 'react-bootstrap/Table';
 import React, { useContext, useState } from 'react';
 
 
-export const PurchaseTicketModal = ({ show, handleClose, data }) => {
+export const PurchaseTicketModal = ({ show, handleClose,handleBuyTickets, data }) => {
     
-    const handleBuyTickets = () => {
+    const handlePurchase = () => {
         const userId = parseInt(localStorage.getItem("userId")); // Parse user ID to integer
         if (!userId || isNaN(userId)) {
             window.location.href = "/loginRegisterPage"; // Redirect if user ID is not valid or not logged in
@@ -25,9 +25,12 @@ export const PurchaseTicketModal = ({ show, handleClose, data }) => {
         
             // Update events in local storage
             updateEventsInLocalStorage(userId, purchasedEvent);
+            
+            handleBuyTickets();
         
             handleClose();
             
+
             return;
         }
     };
@@ -116,7 +119,7 @@ export const PurchaseTicketModal = ({ show, handleClose, data }) => {
                                         {renderTicketOptions(data.numTicketsAvailable)}
                                     </select>
                                 </td>
-                                <td> {data.numTicketsAvailable > 0 ? <Button variant="primary" onClick={handleBuyTickets}>Buy Tickets</Button> : "Sold out"}</td>
+                                <td> {data.numTicketsAvailable > 0 ? <Button variant="primary" onClick={handlePurchase}>Buy Tickets</Button> : "Sold out"}</td>
                             </tr>
                         </tbody>
                     </Table>

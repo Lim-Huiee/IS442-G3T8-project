@@ -10,10 +10,23 @@ import axios from 'axios'; // Import Axios for making HTTP requests
 
 
 export const BookingPage = () => { 
-    // const [CheckoutData, setCheckoutData] = useState({});
-    // useEffect(() => {
-    //     setCheckoutData(JsonData);
-    // }, []);
+    const [numEventsInCart, setNumEventsInCart] = useState(0);
+
+    useEffect(() => {
+        // Update cart count when component mounts
+        updateCartCount();
+    }, []);
+
+    const updateCartCount = () => {
+        const userId = localStorage.getItem("userId");
+        const userEvents = JSON.parse(localStorage.getItem("events"))?.[userId] || [];
+        setNumEventsInCart(userEvents.length);
+    };
+
+    const handleUpdateCart = () => {
+        // Callback function to update cart count
+        updateCartCount();
+    };
     return (
         <div className="container-fluid">
             <div className="row">
@@ -21,7 +34,7 @@ export const BookingPage = () => {
                 <PageTitle pageTitle={"Cart"}  />
             </div>
             <div className="row">
-                <Checkout/>
+                <Checkout handleUpdateCart={handleUpdateCart}/>
             </div>
             <div className="row">
                 <Footer></Footer>
