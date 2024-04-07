@@ -79,14 +79,14 @@ export const Navigation = (props) => {
               {/* Contact */}
               {/* </a> */}
             </li>
-            {userId && ( // Render only if user is logged in
+            {localStorage.role=="customer" && ( // Render only if user is logged in
               <li className="nav-item">
                 <Link to="/bookingPage">
                   <i className="fa fa-shopping-cart"></i> Cart({numEventsInCart})
                 </Link>
               </li>
             )}
-            {!userId && (
+            {localStorage.role!="customer" && (
               <li className="nav-item">
                 <Link to="/loginRegisterPage"> Login/Register </Link>
                 {/* <a href="#contact" className="page-scroll"> */}
@@ -94,7 +94,7 @@ export const Navigation = (props) => {
                 {/* </a> */}
               </li>
             )}
-            {!!userId && (
+            {localStorage.role=="customer"&& (
               <li
                 className="nav-item dropdown"
                 onMouseEnter={handleMouseEnter}
