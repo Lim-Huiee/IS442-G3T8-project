@@ -25,6 +25,9 @@ import com.google.gson.stream.JsonWriter; // Import the missing classes
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; */
 
+import exceptions.InsufficientFundsException;
+import exceptions.InsufficientTicketsException;
+
 import static spark.Spark.*;
 
 public class Main {
@@ -51,7 +54,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InsufficientTicketsException, InsufficientFundsException {
         // Register custom TypeAdapter for LocalDateTime with Gson
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
