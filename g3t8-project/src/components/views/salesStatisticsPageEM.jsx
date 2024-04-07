@@ -14,6 +14,8 @@ import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
 
 import { CSVLink } from "react-csv"; 
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 import { EMNavigation } from "../emNavigation";
 import { PageTitle } from "../section-components/pageTitle";
@@ -75,7 +77,50 @@ export const SalesStatisticsPageEM = () => {
         return csvData;
     };
 
-    console.log(data.nodes);
+    // Convert string to array buffer
+    const s2ab = (s)=> {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+    };
+
+    const generateXlsx = () => {
+
+        if (data.nodes.length === 0) {
+            console.error('No data to export.');
+            return [];
+        }
+    
+        const csvData = [];
+        data.nodes.forEach(item => {
+            csvData.push([
+                item.eventID,
+                item.eventName,
+                item.venue,
+                item.dateTime,
+                item.numTotalTickets,
+                item.numTicketsSold,
+                "$" + item.revenueEarned,
+                item.numAttendees
+            ]);
+        });
+
+        //create new workbook
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet([['Event ID', 'Event Name', 'Venue', 'Date & Time', 'Total no. of tickets', 'No. of Tickets Sold', 'Event Revenue', 'No. of attendees'], ...csvData]);
+
+        //add worksheet to workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        //generate xlsx file
+        const wbout  = XLSX.write(wb, {bookType: 'xlsx', type: 'binary'});
+        const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+        //save the file
+        saveAs(blob, 'events_report.xlsx');
+    };
+
+
 
 
     const theme = useTheme(getTheme());
@@ -144,8 +189,11 @@ export const SalesStatisticsPageEM = () => {
                         <h5 className={serverResponse!=="Event deleted successfully." ? "text-danger" : "text-success"}>{serverResponse}</h5>
                     </div>
                     <div className="col p-3 d-flex justify-content-end">
+                        <button type="button" className="btn btn-primary" onClick={generateXlsx}>Generate Report (XLSX) </button>
+                    </div>
+                    <div className="col p-3 d-flex justify-content-end">
                         <CSVLink data={generateCSV()} filename={"events_report.csv"} className="btn btn-primary">
-                            Generate report
+                            Generate report (CSV)
                         </CSVLink>
                     </div>
                 </div>
