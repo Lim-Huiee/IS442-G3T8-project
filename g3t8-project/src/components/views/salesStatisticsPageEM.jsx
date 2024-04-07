@@ -13,6 +13,8 @@ import {useSort,HeaderCellSort,SortIconPositions,SortToggleType} from "@table-li
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
 
+import { CSVLink } from "react-csv"; 
+
 import { EMNavigation } from "../emNavigation";
 import { PageTitle } from "../section-components/pageTitle";
 import axios from 'axios'; // Import Axios for making HTTP requests
@@ -48,6 +50,24 @@ export const SalesStatisticsPageEM = () => {
             console.error('Error fetching events:', error);
         }
     }
+    const generateCSV = () => {
+        if (data.nodes.length === 0) {
+            console.error('No data to export.');
+            return [];
+        }
+    
+        const csvData = [];
+        data.nodes.forEach(item => {
+            csvData.push({
+                'Event ID': item.eventID,
+                'Event Name': item.eventName,
+                'No. of Tickets Sold': item.numTicketsSold,
+                'Event Revenue': item.revenueEarned
+            });
+        });
+    
+        return csvData;
+    };
     console.log(data.nodes);
 
 
@@ -117,7 +137,9 @@ export const SalesStatisticsPageEM = () => {
                         <h5 className={serverResponse!=="Event deleted successfully." ? "text-danger" : "text-success"}>{serverResponse}</h5>
                     </div>
                     <div className="col p-3 d-flex justify-content-end">
-                        <Button variant="primary" >Generate report</Button>
+                         <CSVLink data={generateCSV()} filename={"events_report.csv"} className="btn btn-primary">
+                            Generate report
+                        </CSVLink>
                     </div>
                 </div>
 
