@@ -622,7 +622,7 @@ public class Main {
                 int toResponse = ticketOfficer.issueETickets(custUserId, orderID);
 
                 if (toResponse == 1) {
-                    return gson.toJson("Issue e-ticket success!");
+                    return gson.toJson(200);
                 }
             }
             return gson.toJson("Issue e-ticket failed");

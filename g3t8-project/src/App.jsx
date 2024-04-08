@@ -22,6 +22,7 @@ import { SalesStatisticsPageEM } from "./components/views/salesStatisticsPageEM"
 import { EventManagementPageEM } from "./components/views/eventManagementPageEM";
 import { ManageTicketingOfficerPageEM } from "./components/views/manageTicketingOfficerPageEM";
 import { TOAttendancePage } from "./components/views/toAttendancePage";
+import { TOIssueETicketPage } from "./components/views/toIssueETicketPage";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
@@ -55,6 +56,7 @@ const App = () => {
 
             {/* ticket officer views */}
             <Route path="/attendanceTO" element={ <TOAttendancePage/> }/>
+            <Route path="/eticketTO" element={ <TOIssueETicketPage/> }/>
             
           </Routes>
         </Router>
