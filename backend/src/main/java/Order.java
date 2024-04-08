@@ -288,6 +288,7 @@ public class Order {
                 Order order = getOrderByID(orderId);
                 int userId = order.getUserId();
                 String username = User.getUserByID(userId).getName();
+                String userMail = User.getUserByID(userId).getEmail();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String orderDateTime = order.getDateTime().format(formatter);
                 double total_paid = 0.0;
@@ -312,7 +313,7 @@ public class Order {
                 }
 
                 System.out.println(orderId + " " + username + " " + total_paid + " " + orderDateTime);
-                Mail.sendEmail(orderId, username, total_paid, orderDateTime, purchases);
+                Mail.sendEmail(orderId, username, total_price, orderDateTime, purchases, userMail);
             } else {
                 // Handle if no generated key is found
                 return;
@@ -360,13 +361,14 @@ public class Order {
                     updateStatement.close();
                     System.out.println("Amount:" + Integer.toString(amountAvail) + " Deducted: " + Double.toString(totalAmount));
                 } else {
-                    throw new InsufficientFundsException("Insufficient funds for user " + userID);
+                    System.out.println("Insufficient Funds!");
+                    // throw new InsufficientFundsException("Insufficient funds for user " + userID);
                 }
             }
 
             resultSet.close();
             statement.close();
-            DBConnection.closeConnection();
+            // DBConnection.closeConnection();
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
         }

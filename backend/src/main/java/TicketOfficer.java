@@ -195,7 +195,7 @@ public class TicketOfficer extends User {
                 eventTixData.add(eventTix);
             }
 
-            int res = Mail.sendTicketsEmail(orderID, user.getName(), eventTixData);
+            int res = Mail.sendTicketsEmail(orderID, user.getName(), eventTixData, user.getEmail());
             return res;
         }
         else {
