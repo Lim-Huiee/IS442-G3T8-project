@@ -182,5 +182,26 @@ public class TicketOfficer extends User {
         return -1;
     }
 
-    // TODO: issue eticket
+    // TODO: issue eticket, use case: user has order but lost tickets, resend email with tickets
+    public int issueETickets(int userID, int orderID) {
+        Order corOrder = Order.getOrderByID(orderID);
+        User user = User.getUserByID(userID);
+        if (corOrder != null && user != null) {
+            List<Ticket> ticketsList = corOrder.getOrderTickets();
+            ArrayList<HashMap<String, String>> eventTixData = new ArrayList<>();
+            
+            for (Ticket tix : ticketsList) {
+                HashMap<String, String> eventTix = new HashMap<>(tix.getEventID(), tix.getTicketID());
+                eventTixData.add(eventTix);
+            }
+
+            int res = Mail.sendTicketsEmail(orderID, user.getName(), eventTixData);
+            return res;
+        }
+        else {
+            return -1;
+        }
+
+    }
+
 }

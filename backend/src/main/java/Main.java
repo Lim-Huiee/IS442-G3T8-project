@@ -215,7 +215,7 @@ public class Main {
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 
-        System.out.println("----------------------------Testing of taking attendance for tix------------------------");
+        System.out.println("----------------------------Testing of taking attendance for to------------------------");
         ArrayList<Integer> arrList = Ticket.getAllTicketIDsForEvent(1);
         for (Integer ticketID : arrList) {
             System.out.println(ticketID);
@@ -237,7 +237,18 @@ public class Main {
         purchasetest.put(1, 2);
         Order.createOrder(5, purchasetest);
 
-        System.out.println("----------------------------End Testing of taking attendance for tix------------------------");
+        System.out.println("----------------------------End Testing of taking attendance for to------------------------");
+
+        System.out.println("----------------------------Testing of issue e-ticket for to------------------------");
+
+        if (castToOfficer.issueETickets(1, 1) == 1) {
+            System.out.println("Ticket Officer issue e-ticket success");
+        }
+        else {
+            System.out.println("Ticket Officer issue e-ticket failure");
+        }
+
+        System.out.println("----------------------------End Testing of issue e-ticket for to------------------------");
 
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
@@ -639,7 +650,7 @@ public class Main {
             stop(); // Stop Spark server
         }));
 
-        System.out.println("----------------------END OF PARK ROUTING TEST------------------------------");
+        System.out.println("----------------------END OF SPARK ROUTING TEST------------------------------");
         // ============================== END TESTING OF ROUTING WITH SPARK =======================================
     }
 }
