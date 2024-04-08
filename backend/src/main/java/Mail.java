@@ -42,4 +42,39 @@ public class Mail {
             e.printStackTrace();
         }
 	}
+
+    public static int sendTicketsEmail(int orderID, String username, ArrayList<HashMap<String, String>> eventTickets) {
+        return 1; // mock response success 
+        
+        // Email email = new Email();
+
+        // email.setFrom("Ticket Mistress", "info@trial-pq3enl6yj05g2vwr.mlsender.net");
+
+        // Recipient recipient = new Recipient("test", "mistressticket@gmail.com");
+        // email.AddRecipient(recipient);
+        
+        // email.setSubject("Your Purchase is Successful!");
+    
+        // MailerSend ms = new MailerSend();
+    
+        // ms.setToken("mlsn.c7e50d74154a793566ba9f6286c4dd69f76eb8e8cb08e09685678380c98fd7e2");
+
+        // // to add info
+        // email.setTemplateId(""); // ?????
+
+        // email.addPersonalization(recipient, "orderID", orderID);
+        // email.addPersonalization(recipient, "username", username);
+        // email.addPersonalization(recipient, "eventTickets", eventTickets);
+
+        // try {
+        //     MailerSendResponse response = ms.emails().send(email);
+        //     System.out.println(response.messageId);
+        //     if (response.responseStatusCode == 200 || response.responseStatusCode == 202) {
+        //         return 1;
+        //     }
+        // } catch (MailerSendException e) {
+        //     e.printStackTrace();
+        // }
+        // return -1;
+    }
 }
