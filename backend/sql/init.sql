@@ -48,20 +48,21 @@ INSERT INTO `USER` (`email`, `name`, `password`, `role`, `amount_avail`) VALUES
 ('user2@abc.com', 'User 2', 'password2', 'customer', 1500),
 ('user3@abc.com', 'User 3', 'password3', 'customer', 3000),
 ('em@tm.com', 'event man', 'password4', 'event manager', 0),
-('to@tm.com', 'ticket man', 'password5', 'ticketing officer', 0);
+('to@tm.com', 'ticket man', 'password5', 'ticketing officer', 0),
+('mistressticket@gmail.com', 'ticketmiss', 'Tick1!', 'customer', 1000.00);
 
 -- Dummy data for the ORDER table
 INSERT INTO `ORDERS` (`user_id`, `status`, `order_datetime`) VALUES
 (1, 'delivered', '2024-03-30 19:00:00'),
-(2, 'pending', '2024-02-16 20:00:00'),
-(3, 'pending', '2024-02-16 20:00:00'),
+(2, 'refunded', '2024-02-16 20:00:00'),
+(3, 'delivered', '2024-02-16 20:00:00'),
 (2, 'refunded', '2024-02-16 20:00:00'),
 (3, 'delivered', '2024-02-16 20:00:00');
 
 -- Dummy data for the EVENT table
 INSERT INTO `EVENT` (`event_name`, `event_type`,`venue`, `datetime`, `total_tickets`,`num_tickets_avail`, `event_details`,`price`, `cancellation_fee`) VALUES
-('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-03-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.', 50, 10),
-('Ed Sheeran', 'Concert','National Stadium', '2024-02-16 20:00:00', 500, 500, 'Doing Math with JJ Lin.',100, 20),
+('Kyuhyun Asia','Concert','Singapore Expo Hall 7', '2024-04-30 19:00:00', 1000, 1000, 'A Kyuhyun concert.', 50, 10),
+('Ed Sheeran', 'Concert','National Stadium', '2024-04-17 20:00:00', 500, 500, 'Doing Math with JJ Lin.',100, 20),
 ('StayC Teenfresh', 'Concert','The Star Theatre', '2024-02-16 20:00:00', 300, 300, 'A StayC concert.',70, 30),
 ('Disney On Ice', 'Musical','Singapore Indoor Stadium', '2024-03-09 21:00:00', 100, 100, 'ice ice baby.',90, 40);
 
