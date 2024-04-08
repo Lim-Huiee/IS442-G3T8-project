@@ -604,6 +604,30 @@ public class Main {
             return gson.toJson(allTicketIDsForEvent);
         });
 
+        post("/issue_eticket/:orderID/:custUserId", (req, res) -> {
+            int orderID = Integer.parseInt(req.params(":orderID"));
+            int custUserId = Integer.parseInt(req.params(":custUserId"));
+            
+            // Extract data from request body
+            String jsonData = req.body();
+            JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
+            User user = User.getUserByID(jsonObject.get("toID").getAsInt());
+
+            if (user.getRole().equals("customer")) {
+                return gson.toJson("Unauthorized user");
+            } else if (user.getRole().equals("event manager")) {
+                return gson.toJson("Unauthorized user, please sign in as Ticket Officer");
+            } else if (user.getRole().equals("ticketing officer")) {
+                TicketOfficer ticketOfficer = new TicketOfficer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail());
+                int toResponse = ticketOfficer.issueETickets(custUserId, orderID);
+
+                if (toResponse == 1) {
+                    return gson.toJson("Issue e-ticket success!");
+                }
+            }
+            return gson.toJson("Issue e-ticket failed");
+        });
+
 
         post("/take_attendance/:eventId/:custUserId", (req, res) -> {
             // System.out.printf("session id: %s", req.session().id());
@@ -622,8 +646,6 @@ public class Main {
                 attendedTickets.add(element.getAsInt());
             }
 
-            // User user = req.session().attribute("user");
-            // System.out.println(((User)req.session().attribute("user")).getName());
             User user = User.getUserByID(jsonObject.get("toID").getAsInt());
 
             if (user.getRole().equals("customer")) {
