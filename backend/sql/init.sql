@@ -15,7 +15,7 @@ CREATE TABLE `ORDERS` (
     `order_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
     `order_datetime` DATETIME NOT NULL,
-    `status` ENUM('pending', 'processing', 'delivered', 'cancelled pending refund', 'refunded') NOT NULL DEFAULT 'pending',
+    `status` ENUM('delivered', 'refunded') NOT NULL DEFAULT 'delivered',
     CONSTRAINT order_fk1 FOREIGN KEY (user_id) REFERENCES USER(`user_id`)
 );
 
