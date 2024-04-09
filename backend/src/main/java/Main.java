@@ -25,6 +25,9 @@ import com.google.gson.stream.JsonWriter; // Import the missing classes
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; */
 
+import exceptions.InsufficientFundsException;
+import exceptions.InsufficientTicketsException;
+
 import static spark.Spark.*;
 
 public class Main {
@@ -51,7 +54,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InsufficientTicketsException, InsufficientFundsException {
         // Register custom TypeAdapter for LocalDateTime with Gson
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -187,12 +190,13 @@ public class Main {
 
         // TEST CREATE ORDER AND EMAIL SENDING 
         System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST + REDUCE TICKET AVAILABILITY + REDUCE USER MONEY------------------------------");
-        Map<Integer, Integer> purchase = new HashMap<>();
-        purchase.put(1, 4);
-        purchase.put(2, 3);
-        purchase.put(3, 5);
-        purchase.put(4, 1);
-        Order.createOrder(1, purchase);
+         //UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
+        // Map<Integer, Integer> purchase = new HashMap<>();
+        // purchase.put(1, 4);
+        // purchase.put(2, 3);
+        // purchase.put(3, 5);
+        // purchase.put(4, 1);
+        // Order.createOrder(1, purchase);
         System.out.println("----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
 
         List<Integer> deleteTickets = new ArrayList<>();
@@ -238,12 +242,13 @@ public class Main {
 
         System.out.println("----------------------------Testing of issue e-ticket for to------------------------");
 
-        if (castToOfficer.issueETickets(1, 1) == 1) {
-            System.out.println("Ticket Officer issue e-ticket success");
-        }
-        else {
-            System.out.println("Ticket Officer issue e-ticket failure");
-        }
+        //UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
+        // if (castToOfficer.issueETickets(1, 1) == 1) {
+        //     System.out.println("Ticket Officer issue e-ticket success");
+        // }
+        // else {
+        //     System.out.println("Ticket Officer issue e-ticket failure");
+        // }
 
         System.out.println("----------------------------End Testing of issue e-ticket for to------------------------");
 
