@@ -60,49 +60,6 @@ public class Main {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .create();
 
-        /// ==================== Testing of User/TicketOfficer class
-        /// =======================================
-
-        System.out.println("=============================Start OF TESTING FOR USER & CUSTOMER CLASS====================");
-        try {
-            // Usage example: retrieve user with ID 1
-            User user = User.getUserByID(1);
-            User customer = null;
-
-            if (user != null) {
-                System.out.println(user.toString()); // prints object
-                customer = User.login("user 2", "password2"); // customer login, returns object
-                System.out.println(User.login("user 1", "password2")); // login fail, returns null because login()
-                                                                       // returns object
-
-                System.out.println(User.login("ticket man", "password5")); // ticket officer login, returns user object
-                System.out.println(User.register("Dehou", "pwpwpw", "Dehou@gmail.com")); // Register successfully if u
-                                                                                         // run the first time. Else,
-                                                                                         // username exists
-                System.out.println(User.register("Dehouhehexd", "asd", "haha")); // invalid email
-
-                System.out.println("test update user details");
-                System.out.println(User.updateUserDetails(6, "Dehouhehexd", "newPw", "haha@gmail.com"));
-
-                System.out.println("Construct Customer from User");
-                Customer cust = new Customer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail(), 1000.00);
-                System.out.println(cust.toString());
-                System.out.println(cust.getAmountAvail()); // class cast, testing getAmountAvail() for customer
-                System.out.println("Test update $$");
-                cust.setAmountAvail(500.32);
-                System.out.println("New amount:" + cust.getAmountAvail());
-
-            } else {
-                System.out.println("User not found.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("=============================END OF TESTING FOR USER & CUSTOMER CLASS====================");
-
-        System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
         User eventManager = null;
         try {
             eventManager = User.login("em@tm.com", "password4"); // event manager login, returns user object
@@ -147,22 +104,11 @@ public class Main {
                 }
             }
 
-            // update event parameters: int eventID, String eventName, String venue,
-            // LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String
-            // eventDetails, int ticketPrice
-
-            if (eventManager instanceof EventManager) { // FOR TESTING ONLY/ can change to check instanceof Customer, it
-                                                        // won't print "pass".
-                System.out.println("pass"); // Verifies access control, means customer wont access eventManager etc
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("=============================END OF TESTING FOR EVENT MANAGER CLASS===========");
-        // =========================== END TESTING OF EVENT MANAGER
-        // CLASS====================
-
+  
         // =============================START OF TESTING FOR EVENT
         // CLASS=========================================
 
