@@ -190,7 +190,7 @@
     "Cancellation fee applies."
   ],
   "TicketPolicy": [
-    "Limited to 4 tickets per transaction"
+    "Limited to 5 tickets per transaction (1 for youself + 4 guests)"
   ],
   "Features": [
     {
