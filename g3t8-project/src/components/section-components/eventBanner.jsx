@@ -16,12 +16,11 @@ export const EventBanner = ( props ) => {
     const handleOpen = () => {
         setToShowModal(true);
     }
-    const handleBuyTickets = () => {
-        // Update cart count or perform any other necessary actions
-        console.log("Tickets bought!");
-        // Reload the page
-        window.location.reload(true);
-      };
+    // const handleBuyTickets = () => {
+        
+    //     // Reload the page to remount nav bar, update cart number
+    //     window.location.reload(true);
+    //   };
     useEffect(() => {
         // Fetch events when the component mounts
         fetchEventStatus();
@@ -90,7 +89,7 @@ export const EventBanner = ( props ) => {
                     </div>
                 </div>
             </div>
-            <PurchaseTicketModal show={toShowModal} handleBuyTickets={handleBuyTickets}  handleClose={handleClose} data={props.data}/>
+            <PurchaseTicketModal show={toShowModal} handleClose={handleClose}  data={props.data}/>
         </div>
     )
 }

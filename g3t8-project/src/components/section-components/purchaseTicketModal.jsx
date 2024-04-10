@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import React, { useContext, useState } from 'react';
 
 
-export const PurchaseTicketModal = ({ show, handleClose,handleBuyTickets, data }) => {
+export const PurchaseTicketModal = ({ show, handleClose, data }) => {
     
     const handlePurchase = () => {
         const userId = parseInt(localStorage.getItem("userId")); // Parse user ID to integer
@@ -26,8 +26,7 @@ export const PurchaseTicketModal = ({ show, handleClose,handleBuyTickets, data }
             // Update events in local storage
             updateEventsInLocalStorage(userId, purchasedEvent);
             
-            handleBuyTickets();
-        
+
             handleClose();
             
 
@@ -44,27 +43,31 @@ export const PurchaseTicketModal = ({ show, handleClose,handleBuyTickets, data }
     const updateEventsInLocalStorage = (userId, eventData) => {
         // Retrieve existing events for the user from local storage or initialize an empty object
         const storedEvents = JSON.parse(localStorage.getItem("events")) || {};
-    
         // Check if the user already has events stored
         if (storedEvents[userId]) {
             // Find the index of the event with the same ID if it exists
-            const index = storedEvents[userId].findIndex(event => event.id === eventData.id);
-    
+            const index = storedEvents[userId].findIndex(event => event.eventId === eventData.eventId);
             // If the event with the same ID exists, update its data
             if (index !== -1) {
+                console.log('Event already exists')
                 storedEvents[userId][index] = eventData;
             } else {
                 // If the event with the same ID doesn't exist, push the new event data
+                console.log('Event does not exist yet')
+                //console.log((storedEvents[userId]));
                 storedEvents[userId].push(eventData);
+               
             }
         } else {
             // Initialize an array for the user's events and push the new event data
+            console.log('No events stored yet')
             storedEvents[userId] = [eventData];
         }
-    
+        
         // Store the updated events back in local storage
         localStorage.setItem("events", JSON.stringify(storedEvents));
         console.log("Added:", eventData);
+        window.dispatchEvent(new StorageEvent("storage")); // Trigger the storage event to update the cart count
     };
     
       
@@ -119,7 +122,7 @@ export const PurchaseTicketModal = ({ show, handleClose,handleBuyTickets, data }
                                         {renderTicketOptions(data.numTicketsAvailable)}
                                     </select>
                                 </td>
-                                <td> {data.numTicketsAvailable > 0 ? <Button variant="primary" onClick={handlePurchase}>Buy Tickets</Button> : "Sold out"}</td>
+                                <td> {data.numTicketsAvailable > 0 ? <Button variant="primary" onClick={handlePurchase}>Add to Cart</Button> : "Sold out"}</td>
                             </tr>
                         </tbody>
                     </Table>

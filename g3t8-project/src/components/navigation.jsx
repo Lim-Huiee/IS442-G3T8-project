@@ -16,6 +16,19 @@ export const Navigation = (props) => {
     setNumEventsInCart(userEvents.length);
   }, [userEvents]);
 
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const updatedUserEvents = JSON.parse(localStorage.getItem("events"))?.[userId] || [];
+      setNumEventsInCart(updatedUserEvents.length);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [userId]);
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload(true); //reload when logging out
