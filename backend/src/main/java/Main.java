@@ -21,9 +21,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter; // Import the missing classes
-/* import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException; */
 
 import exceptions.InsufficientFundsException;
 import exceptions.InsufficientTicketsException;
@@ -440,23 +437,7 @@ public class Main {
             return jsonResult;
         });
 
-        get("/generate_report", (req, res) -> {
-		List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
-		//Gson gson = new Gson();
-		// Generate CSV from statistics
-		String csvReport = EventManager.generateReport(statistics);
-		
-		// Write the CSV report to a file
-		try (FileWriter writer = new FileWriter("../sales_statistics.csv")) {
-		writer.write(csvReport);
-		System.out.println("CSV report generated successfully.");
-		} catch (IOException e) {
-		System.err.println("Error writing CSV report: " + e.getMessage());
-		}
-		return "CSV report generated successfully.";
-		});
-
-
+     
         get("/ticketids_for_event/:id", (req, res) -> {
             String id = req.params(":id");
             //Gson gson = new Gson();
