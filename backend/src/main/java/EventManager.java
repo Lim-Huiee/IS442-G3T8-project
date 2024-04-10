@@ -206,7 +206,7 @@ public class EventManager extends User{
                 insertStatement.setString(1, name);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
-                insertStatement.setInt(4, amountAvail); // setting amount_avail to 0
+                insertStatement.setInt(4, 100000); // setting amount_avail to 0
                 insertStatement.setString(5, addTicketOfficerRole); // setting role to 'ticketing officer'
                 insertStatement.executeUpdate();
 

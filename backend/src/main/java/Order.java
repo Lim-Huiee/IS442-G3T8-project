@@ -238,14 +238,15 @@ public class Order {
                 Event event = Event.getEventByID(eventId);
                 int tickets_avail  = event.getTicketsAvailable();
                 double price = event.getTicketPrice();
-                total_price += price;
                 int quantity = entry.getValue();
-
+                double prices = price* (double) quantity;
+                total_price += prices;
+                
                 if (quantity > tickets_avail) {
                     throw new InsufficientTicketsException("Not enough tickets available for event " + eventId);
                 }
             }
-
+            
             //minus user's money by userid
             deductPaymentForCheckout(userID, total_price);
 
