@@ -42,6 +42,44 @@ code {
   background-color: #f2f6f8;
   transition: background-color 0.7s ease; /* Adjust the duration and easing function for a slower transition */
 }
+.success-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #28a745;
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 9999;
+}
+.success-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #28a745;
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.close-btn {
+  background-color: #fff;
+  color: #28a745;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+
+
 
 @media screen and (max-width: 700px) {
   body {

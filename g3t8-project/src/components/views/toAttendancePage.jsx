@@ -40,7 +40,7 @@ export const TOAttendancePage = () => {
         // }
 
         try {
-            const response = await axios.post('http://localhost:4567/take_attendance/' + event.target.custUserID.value + "/" + event.target.eventID.value, {
+            const response = await axios.post('http://localhost:4567/take_attendance/' + event.target.eventID.value + "/" + event.target.custUserID.value, {
                 "attendedTickets": Object.values(ticketData),
                 "toID": localStorage.getItem("userId")
             });
