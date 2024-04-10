@@ -15,7 +15,7 @@ export const TopPicks = (props) => {
         </div>
         <div className="row">
           <div className="portfolio-items">
-            {props.data
+            {props.data.length > 0
               ? props.data.map((d, i) => (
                   <div
                     key={`${d.title}-${i}`}
@@ -23,7 +23,7 @@ export const TopPicks = (props) => {
                     <EventListing data={d}></EventListing>
                   </div>
                 ))
-              : "Loading..."}
+              : "No events found"}
           </div>
         </div>
       </div>
