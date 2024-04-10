@@ -60,79 +60,6 @@ public class Main {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .create();
 
-        User eventManager = null;
-        try {
-            eventManager = User.login("em@tm.com", "password4"); // event manager login, returns user object
-
-            if (eventManager != null) {
-                if (eventManager instanceof EventManager) {
-                    EventManager em = (EventManager) eventManager;
-                    String eventType = "Concert";
-                    String eventName = "Taylor Swift Concert";
-                    String venue = "National Stadium";
-                    LocalDateTime eventDateTime = LocalDateTime.of(2024, 12, 31, 20, 0); // Example datetime
-                    int numTotalTickets = 1000;
-                    int numTicketsAvailable = 1000;
-                    String eventDetails = "A typical  Event";
-                    double ticketPrice = 90;
-                    double cancellationFee = 20.00;
-                    String result = EventManager.createEvent(eventType, eventName, venue, eventDateTime, numTotalTickets,
-                            numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
-                    System.out.println(result); // creates new event in DB, will print "event exists" if you run it a
-                                                // 2nd time
-
-                    // update taylor swift event
-                    String updateResult = EventManager.updateEvent(5, eventType, eventName, "my house", eventDateTime,
-                            numTotalTickets, 998, eventDetails, ticketPrice, cancellationFee);
-                    System.out.println(updateResult);
-
-                    /*
-                     * // delete taylor swift event ==================== uncomment this part to test
-                     * delete =============
-                     * String deleteResult = em.deleteEvent(5);
-                     * System.out.println(deleteResult);
-                     */
-
-                    // ======================================= event manager adding ticket
-                    // officer============================
-                    String addTicketingOfficerResult = EventManager.addTicketingOfficer("Jeremy", "123", "jeremy@hotmail.com");
-                    System.out.println(addTicketingOfficerResult);
-
-                    // view sale statistics test, output is in readable format for testing, will
-                    // amend output next time
-                    System.out.println(EventManager.viewSaleStatistics());
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("=============================END OF TESTING FOR EVENT MANAGER CLASS===========");
-  
-        // =============================START OF TESTING FOR EVENT
-        // CLASS=========================================
-
-        System.out.println("=============================START OF TESTING FOR EVENT CLASS================");
-        Event testEvent = Event.getEventByID(4);
-        System.out.println(testEvent);
-        System.out.println(testEvent.getEventID());
-
-        System.out.println("------ Start of testing get Alll bookable events-------");
-        ArrayList<Event> allEvents = Event.getAllBookableEvents();
-        for (Event event : allEvents) {
-            System.out.println(event.getEventName());
-            System.out.println("Number of tickets sold is " + event.numTicketsSold());
-            System.out.println("Revenue is " + event.revenueEarned() + "\n");
-        }
-
-        System.out.println("------ Start of testing get upcoming bookable events-------");
-        ArrayList<Event> upcomingEvents = Event.getUpcomingEvents();
-        for (Event event : upcomingEvents) {
-            System.out.println(event.getEventName());
-        }
-
-        // ==============================END TESTING FOR EVENT CLASS
-        // =========================================
 
         // TEST CREATE ORDER AND EMAIL SENDING 
         System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST + REDUCE TICKET AVAILABILITY + REDUCE USER MONEY------------------------------");
@@ -162,24 +89,7 @@ public class Main {
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 
-        System.out.println("----------------------------Testing of taking attendance for to------------------------");
-        ArrayList<Integer> arrList = Ticket.getAllTicketIDsForEvent(1);
-        for (Integer ticketID : arrList) {
-            System.out.println(ticketID);
-        }
-
-        // hardcoding for testing
-        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
-        attendedTix.add(1);
-        attendedTix.add(6);
-        attendedTix.add(7);
-        User toOfficer= User.login("to@tm.com", "password5");
-        
-        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
-        //TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5", "to@tm.com");
-        System.out.println(castToOfficer.takeAttendance(1,attendedTix, 1));
-
-
+      
         Map<Integer, Integer> purchasetest = new HashMap<>();
         purchasetest.put(1, 2);
         Order.createOrder(5, purchasetest);
