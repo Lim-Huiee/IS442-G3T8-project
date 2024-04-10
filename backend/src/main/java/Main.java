@@ -89,7 +89,7 @@ public class Main {
       
         Map<Integer, Integer> purchasetest = new HashMap<>();
         purchasetest.put(1, 2);
-        Order.createOrder(5, purchasetest);
+        //Order.createOrder(5, purchasetest);
 
         System.out.println("----------------------------End Testing of taking attendance for to------------------------");
 

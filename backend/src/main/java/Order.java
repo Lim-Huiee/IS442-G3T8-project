@@ -363,7 +363,7 @@ public class Order {
                     System.out.println("Amount:" + Integer.toString(amountAvail) + " Deducted: " + Double.toString(totalAmount));
                 } else {
                     System.out.println("Insufficient Funds!");
-                    // throw new InsufficientFundsException("Insufficient funds for user " + userID);
+                    throw new InsufficientFundsException("Insufficient funds for user " + userID);
                 }
             }
 
