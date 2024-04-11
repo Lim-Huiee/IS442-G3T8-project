@@ -123,28 +123,30 @@ export const Login = ({ handleAction, userRole }) => {
                     Login
                   </button>
                 </form>
-                {userRole==="customer"?
-                   <p>
-                    Don't have an account yet?{" "}
-                      <span
-                        onClick={() => handleAction("register")}
-                        style={{ cursor: "default" }}>
-                      <u>Register here</u>
-                      </span>
-                  </p> 
+                {userRole === "customer" ? (
+  <div>
+    <p>
+      Don't have an account yet?{" "}
+      <span onClick={() => handleAction("register")} style={{ cursor: "default" }}>
+        <u>Register here</u>
+      </span>
+    </p>
+    <p>
+      Are you a staff?{" "}
+      <span
+        onClick={() => {
+          window.location.href = "/staff";
+        }}
+        style={{ cursor: "pointer" }}>
+        <u>Login here</u>
+      </span>
+    </p>
+  </div>
+) : (
+  <p></p>
+)}
+
                   
-                 : <p></p> }
-                 <p>
-                    Are you a staff?{" "}
-                    <span
-                      onClick={() => {
-                        handleAction("register");
-                        window.location.href = "/staff";
-                      }}
-                      style={{ cursor: "pointer" }}>
-                      <u>Login here</u>
-                    </span>
-                  </p> 
                 
               </div>
             </div>
