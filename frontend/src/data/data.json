@@ -1,0 +1,256 @@
+{
+  "Header": {
+    "title": "Ticketmistress",
+    "paragraph": "We sell tickets.",
+    "images": [
+      "img/carousel/carousel1.jpg",
+      "img/carousel/carousel2.jpg",
+      "img/carousel/carousel3.jpg",
+      "img/carousel/carousel4.jpg"
+    ]
+  },
+  "About": {
+    "paragraph": "At Ticketmistress, we are dedicated to offer you seamless access to the best events. Our user-friendly interface, comprehensive listings, transparent pricing, and secure transactions ensure hassle-free ticket purchases.",
+    "Why": [
+      "Transparent Pricing",
+      "Secre Payment Processing",
+      "Hassle-free transaction"
+    ],
+    "Why2": [
+      "24/7 customer service",
+      "Comprehensive listing",
+      "User-friendly interface"
+    ]
+  },
+  "images": {
+    "1": "img/carousel/carousel2.jpg",
+    "2": "img/carousel/carousel1.jpg",
+    "3": "img/carousel/carousel3.jpg",
+    "4": "img/carousel/carousel4.jpg",
+    "5": ""
+
+  },
+  "views": {
+    "All Events": "get_all_events",
+    "Bookable Events": "get_all_bookable_events",
+    "Upcoming events (available after 6 months)":"get_upcoming_events",
+    "Immediate events (happening in 24 hours)":"get_immediate_events"
+  },
+  "TopPicks": [
+    {
+      "title": "Ed Sheeren +-=÷x tour",
+      "image": "img/carousel/carousel1.jpg",
+      "shows": [
+        {
+          "date": "16 Feb 2024",
+          "venue": "National Stadium, Singapore",
+          "price": "$128",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "title": "2024 Kyuhyun Asia Tour",
+      "image": "img/carousel/carousel2.jpg",
+      "shows": [
+        {
+          "date": "30 Mar 2024",
+          "venue": "National Stadium, Singapore",
+          "price": "$258",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "title": "StayC 1st World Tour | TenFresh",
+      "image": "img/carousel/carousel3.jpg",
+      "shows": [
+        {
+          "date": "16 Feb 2024",
+          "venue": "National Indoor Stadium, Singapore",
+          "price": "$258",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "title": "Disney on Ice",
+      "image": "img/carousel/carousel4.jpg",
+      "shows": [
+        {
+          "date": "9 Mar 2024",
+          "venue": "National Stadium, Singapore",
+          "price": "$300",
+          "status": "active"
+        },
+        {
+          "date": "10 Mar 2024",
+          "venue": "National Indoor Stadium, Singapore",
+          "price": "$300",
+          "status": "inactive"
+        }
+      ]
+    }
+  ],
+  "Services": [
+    {
+      "icon": "fa fa-wordpress",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-cart-arrow-down",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-cloud-download",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-language",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-plane",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-pie-chart",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    }
+  ],
+  "Testimonials": [
+    {
+      "img": "img/testimonials/01.jpg",
+      "text": "Amazing platform! The user-friendly interface made finding and purchasing tickets a breeze. Highly recommend!",
+      "name": "John Doe"
+    },
+    {
+      "img": "img/testimonials/02.jpg",
+      "text": "Hassle-free and smooth process! Will definitely recommend it to my friends and family!",
+      "name": "Yu Sar Ding"
+    },
+    {
+      "img": "img/testimonials/03.jpg",
+      "text": "Impressed with the wide selection of events available on this platform! Ticket prices were reasonable and the digital delivery option was convenient!",
+      "name": "Anonymous"
+    }
+  ],
+  "Team": [
+    {
+      "img": "img/team/01.jpg",
+      "name": "Jeremy",
+      "job": "Backend developer"
+    },
+    {
+      "img": "img/team/02.jpg",
+      "name": "Dehou",
+      "job": "Backend developer"
+    },
+    {
+      "img": "img/team/03.jpg",
+      "name": "Kyla",
+      "job": "Backend developer"
+    },
+    {
+      "img": "img/team/04.jpg",
+      "name": "Pei Shyan",
+      "job": "Frontend developer"
+    },
+    {
+      "img": "img/team/04.jpg",
+      "name": "Meryl",
+      "job": "Frontend developer"
+    },
+    {
+      "img": "img/team/04.jpg",
+      "name": "Hui Ee",
+      "job": "Frontend developer"
+    }
+  ],
+  "Contact": {
+    "address": "80 Stamford Rd, Singapore 178902 ",
+    "phone": "6808 7960",
+    "email": "weSellTickets@ticketmistress.com"
+  },
+  "AdmissionPolicy": [
+    "Admission to show/venue by full ticket only. Printed/electronic tickets must be produced for admission.",
+    "There will be no admission for infants in arms and children below 12 years old.",
+    "Individuals aged 12 years old and above will be required to purchase a ticket for admission.",
+    "No professional photography and videography is allowed.",
+    "No outside food and beverages are allowed into the venue."
+  ],
+  "CancellationPolicy": [
+    "Customers can cancel their booking up to 48 hours before the event.",
+    "Cancellation fee applies."
+  ],
+  "TicketPolicy": [
+    "Limited to 5 tickets per transaction (1 for youself + 4 guests)"
+  ],
+  "Features": [
+    {
+      "icon": "fa fa-comments-o",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-bullhorn",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-group",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    },
+    {
+      "icon": "fa fa-magic",
+      "title": "Lorem ipsum",
+      "text": "Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam."
+    }
+    
+  ],
+  "Faq":[
+    {
+      "category": "Ticketing & Delivery",
+      "items": [
+          {
+              "qn": "Am I able to choose specific seats when purchasing online?",
+              "ans": "To ensure fans are able to navigate our online purchase process as quickly and efficiently as possible, our system automatically assign the 'Best available' option to each fan for the price category they have selected unless the Event Organizers have specifically allowed fans to select their own seats through a 'Pick Your Own (PYO) seat' function."
+            },
+            {
+              "qn": "What ticket delivery options do TicketMistress offer? How much are the charges?",
+              "ans": "TicketMistress offers several different delivery options so that you can receive your tickets in a way that is most convenient for you. Please note that available delivery options vary between events, and some delivery options may not be available for certain events. "
+            }
+      ]
+  },
+  {
+      "category": "Payments & Refunds",
+      "items": [
+          {
+              "qn":"What happens if an event is cancelled or postponed?",
+              "ans":"If an event is cancelled, you will be contacted by the Event Organizer to arrange a refund. If the event is postponed, your tickets will be valid for the rescheduled date. If you are unable to attend the rescheduled date, you will be contacted by the Event Organizer to arrange a refund."
+          },
+          {
+              "qn":"I cannot attend the event. Can I get a refund?",
+              "ans":"Unfortunately, we are unable to offer refunds or exchanges unless the event has been cancelled or postponed. Please refer to our Terms and Conditions for more information."
+          },
+          {
+              "qn":"How can I contact TicketMistress?",
+              "ans":"You can contact us via our Contact Us page or email us at weSellTickets@ticketmistress.com."
+          }
+      ]
+  }
+  ],
+  "Checkout":[
+    {
+      "img": "img/carousel/carousel1.jpg"
+    }
+  ]
+  
+}
