@@ -132,7 +132,19 @@ export const Login = ({ handleAction, userRole }) => {
                       <u>Register here</u>
                       </span>
                   </p> 
+                  
                  : <p></p> }
+                 <p>
+                    Are you a staff?{" "}
+                    <span
+                      onClick={() => {
+                        handleAction("register");
+                        window.location.href = "/staff";
+                      }}
+                      style={{ cursor: "pointer" }}>
+                      <u>Login here</u>
+                    </span>
+                  </p> 
                 
               </div>
             </div>
