@@ -10,21 +10,22 @@ import com.mailersend.sdk.exceptions.MailerSendException;
 
 public class Mail {
 
-	public static void sendEmail(int orderId, String username, double total_paid, String orderDatetime, ArrayList<HashMap<String, String>> purchase){
+	public static void sendEmail(int orderId, String username, double total_paid, String orderDatetime, ArrayList<HashMap<String, String>> purchase, String userMail){
         Email email = new Email();
 
-        email.setFrom("Ticket Mistress", "info@trial-pq3enl6yj05g2vwr.mlsender.net");
+        email.setFrom("Ticket Mistress", "info@trial-v69oxl5yyrx4785k.mlsender.net");
 
-        Recipient recipient = new Recipient("test", "mistressticket@gmail.com");
+        // Recipient recipient = new Recipient("test", "mistressticket@gmail.com");
+        Recipient recipient = new Recipient("test", userMail);
         email.AddRecipient(recipient);
         
         email.setSubject("Your Purchase is Successful!");
     
         MailerSend ms = new MailerSend();
     
-        ms.setToken("mlsn.c7e50d74154a793566ba9f6286c4dd69f76eb8e8cb08e09685678380c98fd7e2");
+        ms.setToken("mlsn.295ce4f2e416a4b81b047d8996312099a2f19dab6b1d3fe9def73d66fd34bd7f");
     
-        email.setTemplateId("z3m5jgrnwk0ldpyo");
+        email.setTemplateId("pq3enl6nxrm42vwr");
 
         email.addPersonalization(recipient, "orderId", orderId);
         
@@ -42,4 +43,39 @@ public class Mail {
             e.printStackTrace();
         }
 	}
+
+    public static int sendTicketsEmail(int orderID, String username, ArrayList<HashMap<String, String>> eventTickets, String userMail) {
+        
+        Email email = new Email();
+
+        email.setFrom("Ticket Mistress", "info@trial-v69oxl5yyrx4785k.mlsender.net");
+
+        // Recipient recipient = new Recipient("test", "mistressticket@gmail.com");
+        Recipient recipient = new Recipient("test", userMail);
+        email.AddRecipient(recipient);
+        
+        email.setSubject("Your Purchase is Successful!");
+    
+        MailerSend ms = new MailerSend();
+    
+        ms.setToken("mlsn.295ce4f2e416a4b81b047d8996312099a2f19dab6b1d3fe9def73d66fd34bd7f");
+
+        // to add info
+        email.setTemplateId("0r83ql3x2dvlzw1j");
+
+        email.addPersonalization(recipient, "orderID", orderID);
+        email.addPersonalization(recipient, "username", username);
+        email.addPersonalization(recipient, "eventTickets", eventTickets);
+
+        try {
+            MailerSendResponse response = ms.emails().send(email);
+            System.out.println(response.messageId);
+            if (response.responseStatusCode == 200 || response.responseStatusCode == 202) {
+                return 1;
+            }
+        } catch (MailerSendException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

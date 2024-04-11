@@ -21,9 +21,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter; // Import the missing classes
-/* import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException; */
+
+import exceptions.InsufficientFundsException;
+import exceptions.InsufficientTicketsException;
 
 import static spark.Spark.*;
 
@@ -51,153 +51,22 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InsufficientTicketsException, InsufficientFundsException {
         // Register custom TypeAdapter for LocalDateTime with Gson
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .create();
 
-        /// ==================== Testing of User/TicketOfficer class
-        /// =======================================
-
-        System.out
-                .println("=============================Start OF TESTING FOR USER & CUSTOMER CLASS====================");
-        try {
-            // Usage example: retrieve user with ID 1
-            User user = User.getUserByID(1);
-            User customer = null;
-
-            if (user != null) {
-                System.out.println(user.toString()); // prints object
-                customer = User.login("user 2", "password2"); // customer login, returns object
-                System.out.println(User.login("user 1", "password2")); // login fail, returns null because login()
-                                                                       // returns object
-
-                System.out.println(User.login("ticket man", "password5")); // ticket officer login, returns user object
-                System.out.println(User.register("Dehou", "pwpwpw", "Dehou@gmail.com")); // Register successfully if u
-                                                                                         // run the first time. Else,
-                                                                                         // username exists
-                System.out.println(User.register("Dehouhehexd", "asd", "haha")); // invalid email
-
-                System.out.println("test update user details");
-                System.out.println(User.updateUserDetails(6, "Dehouhehexd", "newPw", "haha@gmail.com"));
-
-                System.out.println("Construct Customer from User");
-                Customer cust = new Customer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail(),
-                        1000.00);
-                System.out.println(cust.toString());
-                System.out.println(cust.getAmountAvail()); // class cast, testing getAmountAvail() for customer
-                System.out.println("Test update $$");
-                cust.setAmountAvail(500.32);
-                System.out.println("New amount:" + cust.getAmountAvail());
-
-            } else {
-                System.out.println("User not found.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("=============================END OF TESTING FOR USER & CUSTOMER CLASS====================");
-
-        System.out.println("=============================START OF TESTING FOR EVENT MANAGER CLASS===========");
-        User eventManager = null;
-        try {
-            eventManager = User.login("em@tm.com", "password4"); // event manager login, returns user object
-
-            if (eventManager != null) {
-                if (eventManager instanceof EventManager) {
-                    EventManager em = (EventManager) eventManager;
-                    String eventType = "Concert";
-                    String eventName = "Taylor Swift Concert";
-                    String venue = "National Stadium";
-                    LocalDateTime eventDateTime = LocalDateTime.of(2024, 12, 31, 20, 0); // Example datetime
-                    int numTotalTickets = 1000;
-                    int numTicketsAvailable = 1000;
-                    String eventDetails = "A typical  Event";
-                    double ticketPrice = 90;
-                    double cancellationFee = 20.00;
-                    String result = EventManager.createEvent(eventType, eventName, venue, eventDateTime,
-                            numTotalTickets,
-                            numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
-                    System.out.println(result); // creates new event in DB, will print "event exists" if you run it a
-                                                // 2nd time
-
-                    // update taylor swift event
-                    String updateResult = EventManager.updateEvent(5, eventType, eventName, "my house", eventDateTime,
-                            numTotalTickets, 998, eventDetails, ticketPrice, cancellationFee);
-                    System.out.println(updateResult);
-
-                    /*
-                     * // delete taylor swift event ==================== uncomment this part to test
-                     * delete =============
-                     * String deleteResult = em.deleteEvent(5);
-                     * System.out.println(deleteResult);
-                     */
-
-                    // ======================================= event manager adding ticket
-                    // officer============================
-                    String addTicketingOfficerResult = EventManager.addTicketingOfficer("Jeremy", "123",
-                            "jeremy@hotmail.com");
-                    System.out.println(addTicketingOfficerResult);
-
-                    // view sale statistics test, output is in readable format for testing, will
-                    // amend output next time
-                    System.out.println(EventManager.viewSaleStatistics());
-                }
-            }
-
-            // update event parameters: int eventID, String eventName, String venue,
-            // LocalDateTime dateTime, int numTotalTickets, int numTicketsAvailable, String
-            // eventDetails, int ticketPrice
-
-            if (eventManager instanceof EventManager) { // FOR TESTING ONLY/ can change to check instanceof Customer, it
-                                                        // won't print "pass".
-                System.out.println("pass"); // Verifies access control, means customer wont access eventManager etc
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("=============================END OF TESTING FOR EVENT MANAGER CLASS===========");
-        // =========================== END TESTING OF EVENT MANAGER
-        // CLASS====================
-
-        // =============================START OF TESTING FOR EVENT
-        // CLASS=========================================
-
-        System.out.println("=============================START OF TESTING FOR EVENT CLASS================");
-        Event testEvent = Event.getEventByID(4);
-        System.out.println(testEvent);
-        System.out.println(testEvent.getEventID());
-
-        System.out.println("------ Start of testing get Alll bookable events-------");
-        ArrayList<Event> allEvents = Event.getAllBookableEvents();
-        for (Event event : allEvents) {
-            System.out.println(event.getEventName());
-            System.out.println("Number of tickets sold is " + event.numTicketsSold());
-            System.out.println("Revenue is " + event.revenueEarned() + "\n");
-        }
-
-        System.out.println("------ Start of testing get upcoming bookable events-------");
-        ArrayList<Event> upcomingEvents = Event.getUpcomingEvents();
-        for (Event event : upcomingEvents) {
-            System.out.println(event.getEventName());
-        }
-
-        // ==============================END TESTING FOR EVENT CLASS
-        // =========================================
-
         // TEST CREATE ORDER AND EMAIL SENDING
         System.out.println(
-                "----------------------START OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
-        Map<Integer, Integer> purchase = new HashMap<>();
-        purchase.put(1, 4);
-        purchase.put(2, 3);
-        purchase.put(3, 5);
-        purchase.put(4, 1);
-        Order.createOrder(1, purchase);
+                "----------------------START OF CREATING ORDER & SENDING EMAIL TEST + REDUCE TICKET AVAILABILITY + REDUCE USER MONEY------------------------------");
+        // UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
+        // Map<Integer, Integer> purchase = new HashMap<>();
+        // purchase.put(1, 4);
+        // purchase.put(2, 3);
+        // purchase.put(3, 5);
+        // purchase.put(4, 1);
+        // Order.createOrder(1, purchase);
         System.out.println(
                 "----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
 
@@ -218,31 +87,24 @@ public class Main {
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 
-        System.out.println("----------------------------Testing of taking attendance for tix------------------------");
-        ArrayList<Integer> arrList = Ticket.getAllTicketIDsForEvent(1);
-        for (Integer ticketID : arrList) {
-            System.out.println(ticketID);
-        }
-
-        // hardcoding for testing
-        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
-        attendedTix.add(1);
-        attendedTix.add(4);
-        attendedTix.add(6);
-        attendedTix.add(7);
-        User toOfficer = User.login("to@tm.com", "password5");
-
-        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
-        // TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5",
-        // "to@tm.com");
-        castToOfficer.takeAttendance(1, attendedTix);
-
         Map<Integer, Integer> purchasetest = new HashMap<>();
         purchasetest.put(1, 2);
-        Order.createOrder(5, purchasetest);
+        // Order.createOrder(5, purchasetest);
 
-        System.out.println(
-                "----------------------------End Testing of taking attendance for tix------------------------");
+        System.out
+                .println("----------------------------End Testing of taking attendance for to------------------------");
+
+        System.out.println("----------------------------Testing of issue e-ticket for to------------------------");
+
+        // UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
+        // if (castToOfficer.issueETickets(1, 1) == 1) {
+        // System.out.println("Ticket Officer issue e-ticket success");
+        // }
+        // else {
+        // System.out.println("Ticket Officer issue e-ticket failure");
+        // }
+
+        System.out.println("----------------------------End Testing of issue e-ticket for to------------------------");
 
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
         // Set up Spark server on port 4567
@@ -301,15 +163,20 @@ public class Main {
             System.out.println("Password: " + password);
 
             User user = User.login(email, password);
+            JsonObject responseData = new JsonObject();
+
             if (user instanceof Customer) {
                 Customer c = (Customer) user;
                 req.session().attribute("user", c);
+                responseData.addProperty("role", "customer");
             } else if (user instanceof EventManager) {
                 EventManager em = (EventManager) user;
                 req.session().attribute("user", em);
+                responseData.addProperty("role", "event manager");
             } else {
                 TicketOfficer to = (TicketOfficer) user;
                 req.session().attribute("user", to);
+                responseData.addProperty("role", "ticketing officer");
             }
 
             if (user == null) {
@@ -317,8 +184,9 @@ public class Main {
                 return "Invalid username or password";
             }
 
-            // Create a JSON object to send back as the response
-            JsonObject responseData = new JsonObject();
+            System.out.printf("User has logged in on BE, session ID: %s%n", req.session().id());
+            System.out.println(((User) req.session().attribute("user")).getName());
+
             responseData.addProperty("message", "Login successful");
             responseData.addProperty("userId", user.getUserID()); // Add user ID to the response
             responseData.addProperty("email", user.getEmail()); // Add email to the response
@@ -368,6 +236,7 @@ public class Main {
         });
 
         get("/test", (req, res) -> {
+            System.out.printf("session id: %s", req.session().id());
             // Retrieve user information from the session
             User user = req.session().attribute("user");
             // Check if the user is logged in
@@ -572,22 +441,6 @@ public class Main {
             return jsonResult;
         });
 
-        get("/generate_report", (req, res) -> {
-            List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
-            // Gson gson = new Gson();
-            // Generate CSV from statistics
-            String csvReport = EventManager.generateReport(statistics);
-
-            // Write the CSV report to a file
-            try (FileWriter writer = new FileWriter("sales_statistics.csv")) {
-                writer.write(csvReport);
-                System.out.println("CSV report generated successfully.");
-            } catch (IOException e) {
-                System.err.println("Error writing CSV report: " + e.getMessage());
-            }
-            return "CSV report generated successfully.";
-        });
-
         get("/ticketids_for_event/:id", (req, res) -> {
             String id = req.params(":id");
             // Gson gson = new Gson();
@@ -596,9 +449,11 @@ public class Main {
             return gson.toJson(allTicketIDsForEvent);
         });
 
-        post("/take_attendance/:eventId", (req, res) -> {
+        post("/take_attendance/:eventId/:custUserId", (req, res) -> {
+            // System.out.printf("session id: %s", req.session().id());
             // Extract event ID from URL
             int eventId = Integer.parseInt(req.params(":eventId"));
+            int custUserId = Integer.parseInt(req.params(":custUserId"));
 
             // Extract data from request body
             String jsonData = req.body();
@@ -610,29 +465,28 @@ public class Main {
             for (JsonElement element : attendedTixJson) {
                 attendedTickets.add(element.getAsInt());
             }
-            User user = req.session().attribute("user");
-            User loggedInUser = null;
-            if (user instanceof Customer) {
-                loggedInUser = (Customer) user;
-                // Perform operations specific to Customer
-            } else if (user instanceof EventManager) {
-                loggedInUser = (EventManager) user;
-                // Perform operations specific to EventManager
-            } else if (user instanceof TicketOfficer) {
-                loggedInUser = (TicketOfficer) user;
-                // Perform operations specific to TicketOfficer
+
+            // User user = req.session().attribute("user");
+            // System.out.println(((User)req.session().attribute("user")).getName());
+            User user = User.getUserByID(jsonObject.get("toID").getAsInt());
+
+            if (user.getRole().equals("customer")) {
+                return gson.toJson("Unauthorized user");
+            } else if (user.getRole().equals("event manager")) {
+                return gson.toJson("Unauthorized user, please sign in as Ticket Officer");
+            } else if (user.getRole().equals("ticketing officer")) {
+                TicketOfficer ticketOfficer = new TicketOfficer(user.getUserID(), user.getName(), user.getPassword(),
+                        user.getEmail());
+                String toResponse = ticketOfficer.takeAttendance(eventId, attendedTickets, custUserId);
+
+                return gson.toJson(toResponse);
             }
 
-            // Call your Java method to take attendance
-            TicketOfficer ticketOfficer = (TicketOfficer) loggedInUser; // Assuming there's a method to retrieve
-                                                                        // TicketOfficer by ID
-            ticketOfficer.takeAttendance(eventId, attendedTickets);
-
-            // You may return a success message or status code if needed
-            return "Attendance taken successfully";
+            return gson.toJson("Attendance taking failed");
         });
 
-        //System.out.println("----------------------START OF REFUND TEST------------------------------");
+        // System.out.println("----------------------START OF REFUND
+        // TEST------------------------------");
         post("/process_refund/:userID/:ticketID", (req, res) -> {
             // Extract event ID from URL
             int userID = Integer.parseInt(req.params(":userID"));
@@ -647,7 +501,7 @@ public class Main {
             stop(); // Stop Spark server
         }));
 
-        System.out.println("----------------------END OF PARK ROUTING TEST------------------------------");
+        System.out.println("----------------------END OF SPARK ROUTING TEST------------------------------");
         // ============================== END TESTING OF ROUTING WITH SPARK
         // =======================================
     }
