@@ -35,10 +35,6 @@ public class Ticket {
         return ticketStatus;
     }
 
-    public String toString() {
-        return String.format("ticketID %s, eventID %s", ticketID, eventID);
-    }
-
     public static Ticket getTicketbyID(Integer ticketID) {
         Ticket ticket = null;
         ResultSet resultSet = null;
