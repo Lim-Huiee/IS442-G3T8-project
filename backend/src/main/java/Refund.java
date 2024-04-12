@@ -49,14 +49,22 @@ public class Refund {
                     updateStatement.setInt(1, order_id);
                     updateStatement.executeUpdate();
                 }
-                return "Success";
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             return "Error: " + e.getMessage();
         }
-        return "pls return smth here";
+        return "Success";
+    }
+
+    public static void main(String[] args) {
+        // int userID = Integer.parseInt(req.params(":userID"));
+        int userID = 1;
+        // int ticketID = Integer.parseInt(req.params(":ticketID"));
+        int ticketID = 1;
+        String result = Refund.processRefund(1, 1);
+        System.out.println(result);
     }
 
 }

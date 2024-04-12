@@ -485,15 +485,15 @@ public class Main {
             return gson.toJson("Attendance taking failed");
         });
 
-        // System.out.println("----------------------START OF REFUND
-        // TEST------------------------------");
+        System.out.println("----------------------START OF REFUND TEST------------------------------");
         post("/process_refund/:userID/:ticketID", (req, res) -> {
             // Extract event ID from URL
             int userID = Integer.parseInt(req.params(":userID"));
             int ticketID = Integer.parseInt(req.params(":ticketID"));
-            String result = Refund.processRefund(ticketID, userID);
+            String result = Refund.processRefund(1, 1);
             return result;
         });
+        System.out.println("----------------------END OF REFUND TEST------------------------------");
 
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
