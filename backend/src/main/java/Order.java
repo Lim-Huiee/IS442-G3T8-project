@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import exceptions.InsufficientFundsException;
+import exceptions.InsufficientTicketsException;
+
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -220,13 +224,33 @@ public class Order {
         return orders;
     }
 
-    public static void createOrder(int userID, Map<Integer, Integer> eventsBooked) {
+    public static void createOrder(int userID, Map<Integer, Integer> eventsBooked) throws InsufficientTicketsException, InsufficientFundsException {
         PreparedStatement insertStatement = null;
         ResultSet generatedKeys = null;
         try {
             // Check if the email already exists
             DBConnection.establishConnection();
 
+            //check if user has enough money / there are enough tickets per event still available
+            double total_price = 0.0;
+            for (Map.Entry<Integer, Integer> entry : eventsBooked.entrySet()) {
+                int eventId = entry.getKey();
+                Event event = Event.getEventByID(eventId);
+                int tickets_avail  = event.getTicketsAvailable();
+                double price = event.getTicketPrice();
+                int quantity = entry.getValue();
+                double prices = price* (double) quantity;
+                total_price += prices;
+                
+                if (quantity > tickets_avail) {
+                    throw new InsufficientTicketsException("Not enough tickets available for event " + eventId);
+                }
+            }
+            
+            //minus user's money by userid
+            deductPaymentForCheckout(userID, total_price);
+
+            //create order in db
             String insertQuery = "INSERT INTO orders (user_id, order_datetime, status) VALUES (?, ?, ?)";
             insertStatement = DBConnection.getConnection().prepareStatement(insertQuery,
                     Statement.RETURN_GENERATED_KEYS);
@@ -265,6 +289,7 @@ public class Order {
                 Order order = getOrderByID(orderId);
                 int userId = order.getUserId();
                 String username = User.getUserByID(userId).getName();
+                String userMail = User.getUserByID(userId).getEmail();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String orderDateTime = order.getDateTime().format(formatter);
                 double total_paid = 0.0;
@@ -289,10 +314,7 @@ public class Order {
                 }
 
                 System.out.println(orderId + " " + username + " " + total_paid + " " + orderDateTime);
-                Mail.sendEmail(orderId, username, total_paid, orderDateTime, purchases);
-
-                //minus user's money by userid
-                deductPaymentForCheckout(userID, total_paid);
+                Mail.sendEmail(orderId, username, total_price, orderDateTime, purchases, userMail);
             } else {
                 // Handle if no generated key is found
                 return;
@@ -321,7 +343,7 @@ public class Order {
         }
     }
 
-    public static void deductPaymentForCheckout(int userID, double totalAmount) { // do secured payment instead
+    public static void deductPaymentForCheckout(int userID, double totalAmount) throws InsufficientFundsException { // do secured payment instead
         try {
             DBConnection.establishConnection();
             String sqlQuery = "SELECT amount_avail FROM user WHERE user_id = ?";
@@ -340,13 +362,14 @@ public class Order {
                     updateStatement.close();
                     System.out.println("Amount:" + Integer.toString(amountAvail) + " Deducted: " + Double.toString(totalAmount));
                 } else {
-                    System.out.println("Insufficient funds!");
+                    System.out.println("Insufficient Funds!");
+                    throw new InsufficientFundsException("Insufficient funds for user " + userID);
                 }
             }
 
             resultSet.close();
             statement.close();
-            DBConnection.closeConnection();
+            // DBConnection.closeConnection();
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
         }

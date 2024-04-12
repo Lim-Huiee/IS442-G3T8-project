@@ -1,13 +1,9 @@
 Main$CorsFilter.class
-Mail.class
 Purchase.class
-Cors.class
 Main$LocalDateTimeTypeAdapter.class
 DBConnection.class
-EventManager.class
-TicketOfficer.class
 Ticket.class
-Customer.class
+TicketOfficer.class
 Main.class
 Event.class
 User.class

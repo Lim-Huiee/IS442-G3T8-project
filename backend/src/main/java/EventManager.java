@@ -206,7 +206,7 @@ public class EventManager extends User{
                 insertStatement.setString(1, name);
                 insertStatement.setString(2, password);
                 insertStatement.setString(3, email);
-                insertStatement.setInt(4, amountAvail); // setting amount_avail to 0
+                insertStatement.setInt(4, 100000); // setting amount_avail to 0
                 insertStatement.setString(5, addTicketOfficerRole); // setting role to 'ticketing officer'
                 insertStatement.executeUpdate();
 
@@ -331,6 +331,7 @@ public class EventManager extends User{
                 Map<String, String> oneEvent = new HashMap<>();
                 oneEvent.put("eventID", String.valueOf(event.getEventID()));
                 oneEvent.put("eventName", event.getEventName());
+                oneEvent.put("numTotalTickets", String.valueOf(event.getTotalTickets()));
                 oneEvent.put("numTicketsSold", String.valueOf(event.numTicketsSold()));
                 oneEvent.put("numTicketsSoldByTicketingOfficer", String.valueOf(event.getNumTicketsSoldByTicketOfficer()));
                 oneEvent.put("revenueEarned", String.valueOf(event.revenueEarned()));
@@ -347,29 +348,5 @@ public class EventManager extends User{
         return salesStats;
     }
 
-    public static String generateReport(List<Map<String, String>> salesStats) {
-        StringBuilder csv = new StringBuilder();
-        try {
-            ArrayList<Event> events = Event.getAllEvents();
-            
-            csv.append("Event ID,Event Name,Total Tickets Sold,Number of Tickets Sold by Ticketing Officer,Revenue Earned,Date and Time,Venue,Number of  Attendees\n");
-            for (Map<String, String> eventStats : salesStats) {
-                csv.append(eventStats.get("eventID")).append(",")
-                   .append(eventStats.get("eventName")).append(",")
-                   .append(eventStats.get("numTicketsSold")).append(",")
-                   .append(eventStats.get("numTicketsSoldByTicketingOfficer")).append(",")
-                   .append(eventStats.get("revenueEarned")).append(",")
-                   .append(eventStats.get("dateTime")).append(",")
-                   .append(eventStats.get("venue")).append(",")
-                   .append(eventStats.get("numAttendees")).append("\n");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return csv.toString();
-    }
-
-    
 }
 
