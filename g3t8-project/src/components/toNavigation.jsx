@@ -44,6 +44,9 @@ export const TONavigation = (props) => {
                         <li className="nav-item">
                             <Link to="/eticketTO"> Issue E-Tickets </Link>
                         </li>
+                        <li className="nav-item">
+                            <Link to="/onsitetixTO"> On-Site Ticket Sales </Link>
+                        </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded=" true">
                                 Your profile

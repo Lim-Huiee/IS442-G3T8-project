@@ -228,7 +228,6 @@ public class Order {
         PreparedStatement insertStatement = null;
         ResultSet generatedKeys = null;
         try {
-            // Check if the email already exists
             DBConnection.establishConnection();
 
             //check if user has enough money / there are enough tickets per event still available

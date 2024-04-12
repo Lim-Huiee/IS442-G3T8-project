@@ -32,7 +32,7 @@ export const TOIssueETicketPage = () => {
             }
             
         } catch (error) {
-            console.error('Error fetching events:', error);
+            console.error('Error issuing E-Tickets:', error);
             setShowFailAlert(true);
         }
     }

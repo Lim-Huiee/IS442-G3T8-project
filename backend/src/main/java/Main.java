@@ -87,6 +87,16 @@ public class Main {
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 
+        // hardcoding for testing
+        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
+        attendedTix.add(6);
+        attendedTix.add(7);
+        User toOfficer= User.login("to@tm.com", "password5");
+        
+        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
+        //TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5", "to@tm.com");
+        System.out.println(castToOfficer.takeAttendance(1,attendedTix, 5));
+
         Map<Integer, Integer> purchasetest = new HashMap<>();
         purchasetest.put(1, 2);
         // Order.createOrder(5, purchasetest);
@@ -94,8 +104,19 @@ public class Main {
         System.out
                 .println("----------------------------End Testing of taking attendance for to------------------------");
 
-        System.out.println("----------------------------Testing of issue e-ticket for to------------------------");
+        System.out.println("----------------------------Testing of on site tix sales for to------------------------");
+        int orderNum = castToOfficer.processOnSiteTicketSale(1, 2);
+        if (orderNum > 0) {
+            System.out.println("Ticket Officer process on site ticket sales success, orderID: " + orderNum);
+        }
+        else {
+            System.out.println("Ticket Officer process on site ticket sales failure");
+        }
 
+        System.out.println("----------------------------End Testing of on site tix sales for to------------------------");
+
+        System.out.println("----------------------------Testing of issue e-ticket for to------------------------");
+        System.out.println("NOTE: UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT");
         // UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
         // if (castToOfficer.issueETickets(1, 1) == 1) {
         // System.out.println("Ticket Officer issue e-ticket success");
@@ -468,6 +489,30 @@ public class Main {
 
                 if (toResponse == 1) {
                     return gson.toJson(200);
+                }
+            }
+            return gson.toJson("Issue e-ticket failed");
+        });
+
+        post("/onsite_tickets/:eventID/:numTix", (req, res) -> {
+            int eventID = Integer.parseInt(req.params(":eventID"));
+            int numTix = Integer.parseInt(req.params(":numTix"));
+            
+            // Extract data from request body
+            String jsonData = req.body();
+            JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
+            User user = User.getUserByID(jsonObject.get("toID").getAsInt());
+
+            if (user.getRole().equals("customer")) {
+                return gson.toJson("Unauthorized user");
+            } else if (user.getRole().equals("event manager")) {
+                return gson.toJson("Unauthorized user, please sign in as Ticket Officer");
+            } else if (user.getRole().equals("ticketing officer")) {
+                TicketOfficer ticketOfficer = new TicketOfficer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail());
+                int toResponse = ticketOfficer.processOnSiteTicketSale(eventID, numTix);
+
+                if (toResponse > 0) {
+                    return gson.toJson(toResponse);
                 }
             }
             return gson.toJson("Issue e-ticket failed");

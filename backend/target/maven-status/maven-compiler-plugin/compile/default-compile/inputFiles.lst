@@ -1,15 +1,15 @@
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Refund.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Order.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\User.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Event.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\EventManager.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Customer.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Ticket.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\DBConnection.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\exceptions\InsufficientFundsException.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Cors.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\exceptions\InsufficientTicketsException.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Purchase.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Main.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\TicketOfficer.java
-C:\Users\coura\Dropbox\PC\Desktop\Records\Uni\Y3 S2\IS442 OOP G3\Project\IS442-G3T8-project\backend\src\main\java\Mail.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Event.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/EventManager.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/User.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Mail.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Main.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Order.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Refund.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Customer.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/DBConnection.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/exceptions/InsufficientFundsException.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Cors.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Purchase.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/exceptions/InsufficientTicketsException.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/Ticket.java
+/Users/meryllow/Documents/GitHub/IS442-G3T8-project/backend/src/main/java/TicketOfficer.java
