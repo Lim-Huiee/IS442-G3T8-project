@@ -198,7 +198,7 @@ public class TicketOfficer extends User {
     public int issueETickets(int userID, int orderID) {
         Order corOrder = Order.getOrderByID(orderID);
         User user = User.getUserByID(userID);
-        if (corOrder != null && user != null) {
+        if (corOrder != null && user != null && corOrder.getUserID() == userID) {
             List<Ticket> ticketsList = corOrder.getOrderTickets();
             ArrayList<HashMap<String, String>> eventTixData = new ArrayList<>();
             
