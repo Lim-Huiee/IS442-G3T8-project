@@ -135,6 +135,7 @@ export const EventManagementPageEM = () => {
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching events:', error);
+                alert(error);
             }
         }
 
