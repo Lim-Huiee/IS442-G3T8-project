@@ -1,6 +1,8 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,40 +35,99 @@ public class Ticket {
         return ticketStatus;
     }
 
-    public static ArrayList<Integer> getAllTicketIDsForEvent(int eventID) {
-    ArrayList<Integer> ticketIDs = new ArrayList<>();
-    ResultSet resultSet = null;
-    PreparedStatement statement = null;
-    try {
-        DBConnection.establishConnection();
-        String sqlQuery = "SELECT ticket_id FROM Ticket WHERE event_id=?";
-        statement = DBConnection.getConnection().prepareStatement(sqlQuery);
-        statement.setInt(1, eventID);
-        resultSet = statement.executeQuery();
-        
-        // Loop through the result set and add ticket IDs to the list
-        while (resultSet.next()) {
-            ticketIDs.add(resultSet.getInt("ticket_id"));
-        }
-    } catch (SQLException | ClassNotFoundException se) {
-        se.printStackTrace();
-    } finally {
+    public static Ticket getTicketbyID(Integer ticketID) {
+        Ticket ticket = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
         try {
-            if (resultSet != null) {
-                resultSet.close();
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT * FROM ticket WHERE ticket_id = ?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setInt(1, ticketID);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int retrievedTicketID = resultSet.getInt("ticket_id");
+                int retrievedOrderID = resultSet.getInt("order_id");
+                int retrievedEventID = resultSet.getInt("event_id");
+                String retrieveTicketStatus = resultSet.getString("status");
+
+                ticket = new Ticket(retrievedTicketID, retrievedOrderID, retrievedEventID, retrieveTicketStatus);
             }
-            if (statement != null) {
-                statement.close();
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            DBConnection.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        return ticket;
+    }
+
+    public void cancelTickets(Integer ticketID) {
+        PreparedStatement updateStatement = null;
+        try {
+            DBConnection.establishConnection();
+            String updateQuery = "UPDATE ticket SET status = 'refunded' WHERE ticket_id = ?";
+            updateStatement = DBConnection.getConnection().prepareStatement(updateQuery);
+
+            // Update statement
+            updateStatement.setInt(1, ticketID);
+            updateStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-    return ticketIDs;
-}
 
+    public static ArrayList<Integer> getAllTicketIDsForEvent(int eventID) {
+        ArrayList<Integer> ticketIDs = new ArrayList<>();
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            DBConnection.establishConnection();
+            String sqlQuery = "SELECT ticket_id FROM Ticket WHERE event_id=?";
+            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+            statement.setInt(1, eventID);
+            resultSet = statement.executeQuery();
 
+            // Loop through the result set and add ticket IDs to the list
+            while (resultSet.next()) {
+                ticketIDs.add(resultSet.getInt("ticket_id"));
+            }
+        } catch (SQLException | ClassNotFoundException se) {
+            se.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                DBConnection.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ticketIDs;
+    }
 
     public static void cancelTickets(List<Integer> ticketIDs) {
         PreparedStatement updateStatement = null;

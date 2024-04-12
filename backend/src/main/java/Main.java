@@ -57,17 +57,18 @@ public class Main {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .create();
 
-
-        // TEST CREATE ORDER AND EMAIL SENDING 
-        System.out.println("----------------------START OF CREATING ORDER & SENDING EMAIL TEST + REDUCE TICKET AVAILABILITY + REDUCE USER MONEY------------------------------");
-         //UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
+        // TEST CREATE ORDER AND EMAIL SENDING
+        System.out.println(
+                "----------------------START OF CREATING ORDER & SENDING EMAIL TEST + REDUCE TICKET AVAILABILITY + REDUCE USER MONEY------------------------------");
+        // UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
         // Map<Integer, Integer> purchase = new HashMap<>();
         // purchase.put(1, 4);
         // purchase.put(2, 3);
         // purchase.put(3, 5);
         // purchase.put(4, 1);
         // Order.createOrder(1, purchase);
-        System.out.println("----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
+        System.out.println(
+                "----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
 
         List<Integer> deleteTickets = new ArrayList<>();
         deleteTickets.add(6);
@@ -86,21 +87,21 @@ public class Main {
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
 
-      
         Map<Integer, Integer> purchasetest = new HashMap<>();
         purchasetest.put(1, 2);
-        //Order.createOrder(5, purchasetest);
+        // Order.createOrder(5, purchasetest);
 
-        System.out.println("----------------------------End Testing of taking attendance for to------------------------");
+        System.out
+                .println("----------------------------End Testing of taking attendance for to------------------------");
 
         System.out.println("----------------------------Testing of issue e-ticket for to------------------------");
 
-        //UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
+        // UNCOMMENT IF NEED TO TEST, EMAILS HAVE LIMIT
         // if (castToOfficer.issueETickets(1, 1) == 1) {
-        //     System.out.println("Ticket Officer issue e-ticket success");
+        // System.out.println("Ticket Officer issue e-ticket success");
         // }
         // else {
-        //     System.out.println("Ticket Officer issue e-ticket failure");
+        // System.out.println("Ticket Officer issue e-ticket failure");
         // }
 
         System.out.println("----------------------------End Testing of issue e-ticket for to------------------------");
@@ -182,21 +183,21 @@ public class Main {
                 res.status(401);
                 return "Invalid username or password";
             }
-            
+
             System.out.printf("User has logged in on BE, session ID: %s%n", req.session().id());
-            System.out.println(((User)req.session().attribute("user")).getName());
-            
+            System.out.println(((User) req.session().attribute("user")).getName());
+
             responseData.addProperty("message", "Login successful");
             responseData.addProperty("userId", user.getUserID()); // Add user ID to the response
             responseData.addProperty("email", user.getEmail()); // Add email to the response
             responseData.addProperty("name", user.getName()); // Add name to the response
-            
+
             // Set response type to JSON
             res.type("application/json");
 
             // Return the JSON object directly
             return responseData;
-            });
+        });
 
         post("/register", (req, res) -> {
             System.out.println("Request: " + req.body());
@@ -261,7 +262,7 @@ public class Main {
         get("/get_user_by_id/:id", (req, res) -> {
             String id = req.params(":id");
             User userByID = User.getUserByID(Integer.parseInt(id));
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(userByID);
         });
 
@@ -286,18 +287,18 @@ public class Main {
             boolean success = Customer.updateAmountAvailInDB(userId, newAmountAvail);
             return new Gson().toJson(success);
         });
-        
+
         get("/get_users_by_role/:roleName", (req, res) -> {
             String roleName = req.params(":roleName");
             List<User> usersByRole = User.getUsersByRole(roleName);
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(usersByRole);
         });
 
         get("/get_event_by_id/:id", (req, res) -> {
             String id = req.params(":id");
             Event event = Event.getEventByID(Integer.parseInt(id));
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(event);
         });
 
@@ -346,7 +347,8 @@ public class Main {
             double ticketPrice = eventData.getTicketPrice();
             double cancellationFee = eventData.getCancellationFee();
 
-            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
+            String eventCreated = EventManager.createEvent(eventType, eventName, venue, dateTime, numTotalTickets,
+                    numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
             return eventCreated;
         });
 
@@ -365,7 +367,8 @@ public class Main {
             double ticketPrice = eventData.getTicketPrice();
             double cancellationFee = eventData.getCancellationFee();
 
-            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime, numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
+            String eventCreated = EventManager.updateEvent(eventID, eventType, eventName, venue, dateTime,
+                    numTotalTickets, numTicketsAvailable, eventDetails, ticketPrice, cancellationFee);
             return eventCreated;
         });
 
@@ -397,20 +400,21 @@ public class Main {
         delete("/delete_event/:id", (req, res) -> {
             String id = req.params(":id");
             String eventDeleted = EventManager.deleteEvent(Integer.parseInt(id));
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return eventDeleted;
         });
 
         get("/view_sales_statistics", (req, res) -> {
             List<Map<String, String>> statistics = EventManager.viewSaleStatistics();
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             return gson.toJson(statistics);
         });
 
         post("/create_order", (req, res) -> {
             String jsonData = req.body();
 
-            // Assuming the request body contains the user ID and events booked data in JSON format
+            // Assuming the request body contains the user ID and events booked data in JSON
+            // format
             JsonObject jsonObject = JsonParser.parseString(jsonData).getAsJsonObject();
             int userId = jsonObject.get("userId").getAsInt();
             JsonObject eventsBookedJson = jsonObject.get("eventsBooked").getAsJsonObject();
@@ -437,22 +441,20 @@ public class Main {
             return jsonResult;
         });
 
-     
         get("/ticketids_for_event/:id", (req, res) -> {
             String id = req.params(":id");
-            //Gson gson = new Gson();
+            // Gson gson = new Gson();
             ArrayList<Integer> allTicketIDsForEvent = Ticket.getAllTicketIDsForEvent(1);
-            
+
             return gson.toJson(allTicketIDsForEvent);
         });
-
 
         post("/take_attendance/:eventId/:custUserId", (req, res) -> {
             // System.out.printf("session id: %s", req.session().id());
             // Extract event ID from URL
             int eventId = Integer.parseInt(req.params(":eventId"));
             int custUserId = Integer.parseInt(req.params(":custUserId"));
-            
+
             // Extract data from request body
             String jsonData = req.body();
             JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
@@ -473,15 +475,37 @@ public class Main {
             } else if (user.getRole().equals("event manager")) {
                 return gson.toJson("Unauthorized user, please sign in as Ticket Officer");
             } else if (user.getRole().equals("ticketing officer")) {
-                TicketOfficer ticketOfficer = new TicketOfficer(user.getUserID(), user.getName(), user.getPassword(), user.getEmail());
+                TicketOfficer ticketOfficer = new TicketOfficer(user.getUserID(), user.getName(), user.getPassword(),
+                        user.getEmail());
                 String toResponse = ticketOfficer.takeAttendance(eventId, attendedTickets, custUserId);
 
                 return gson.toJson(toResponse);
             }
-            
+
             return gson.toJson("Attendance taking failed");
         });
 
+        System.out.println("----------------------START OF REFUND TEST------------------------------");
+        String result = Refund.processRefund(1, 1);
+        System.out.println(result);
+        String test = Refund.processRefundInOrder(3, 3);
+        System.out.println(test);
+        post("/process_refund/:userID/:ticketID", (req, res) -> {
+            // Extract event ID from URL
+            int userID = Integer.parseInt(req.params(":userID"));
+            int ticketID = Integer.parseInt(req.params(":ticketID"));
+            String end = Refund.processRefund(userID, ticketID);
+            return end;
+        });
+
+        post("/process_refund_order/:userID/:orderID", (req, res) -> {
+            // Extract event ID from URL
+            int userID = Integer.parseInt(req.params(":userID"));
+            int orderID = Integer.parseInt(req.params(":orderID"));
+            String end = Refund.processRefundInOrder(userID, orderID);
+            return end;
+        });
+        System.out.println("----------------------END OF REFUND TEST------------------------------");
 
         // Stop Spark server when the program exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -490,6 +514,7 @@ public class Main {
         }));
 
         System.out.println("----------------------END OF SPARK ROUTING TEST------------------------------");
-        // ============================== END TESTING OF ROUTING WITH SPARK =======================================
+        // ============================== END TESTING OF ROUTING WITH SPARK
+        // =======================================
     }
 }
