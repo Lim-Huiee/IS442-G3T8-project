@@ -486,12 +486,24 @@ public class Main {
         });
 
         System.out.println("----------------------START OF REFUND TEST------------------------------");
+        String result = Refund.processRefund(1, 1);
+        System.out.println(result);
+        String test = Refund.processRefundInOrder(3, 3);
+        System.out.println(test);
         post("/process_refund/:userID/:ticketID", (req, res) -> {
             // Extract event ID from URL
             int userID = Integer.parseInt(req.params(":userID"));
             int ticketID = Integer.parseInt(req.params(":ticketID"));
-            String result = Refund.processRefund(1, 1);
-            return result;
+            String end = Refund.processRefund(userID, ticketID);
+            return end;
+        });
+
+        post("/process_refund_order/:userID/:orderID", (req, res) -> {
+            // Extract event ID from URL
+            int userID = Integer.parseInt(req.params(":userID"));
+            int orderID = Integer.parseInt(req.params(":orderID"));
+            String end = Refund.processRefundInOrder(userID, orderID);
+            return end;
         });
         System.out.println("----------------------END OF REFUND TEST------------------------------");
 
