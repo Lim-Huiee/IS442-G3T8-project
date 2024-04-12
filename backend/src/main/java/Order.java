@@ -340,13 +340,13 @@ public class Order {
                 Mail.sendEmail(orderId, username, total_price, orderDateTime, purchases, userMail);
             } else {
                 // Handle if no generated key is found
-                return;
+                throw new SQLException("No generated key found for order");
             }
 
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
             // Handle exception, maybe return an error message
-            return;
+            throw new RuntimeException("Failed to create order", se);
 
         } finally {
             try {
@@ -361,7 +361,6 @@ public class Order {
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                // Handle exception, maybe log it
             }
         }
     }
