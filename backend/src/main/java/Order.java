@@ -229,7 +229,7 @@ public class Order {
         ResultSet generatedKeys = null;
         try {
             DBConnection.establishConnection();
-
+        
             //check if user has enough money / there are enough tickets per event still available
             double total_price = 0.0;
             for (Map.Entry<Integer, Integer> entry : eventsBooked.entrySet()) {
@@ -240,10 +240,33 @@ public class Order {
                 int quantity = entry.getValue();
                 double prices = price* (double) quantity;
                 total_price += prices;
-                
+                int ticketCount=0;
                 if (quantity > tickets_avail) {
                     throw new InsufficientTicketsException("Not enough tickets available for event " + eventId);
                 }
+                try {
+                    DBConnection.establishConnection();
+                    String countQuery = "SELECT COUNT(*) AS ticket_count FROM ticket WHERE order_id IN (SELECT order_id FROM orders WHERE user_id = ?) AND event_id = ?";
+                    PreparedStatement countStatement = DBConnection.getConnection().prepareStatement(countQuery);
+                    countStatement.setInt(1, userID);
+                    countStatement.setInt(2, eventId);
+                    ResultSet resultSet = countStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        ticketCount = resultSet.getInt("ticket_count");
+                    }
+                } catch (SQLException | ClassNotFoundException se) {
+                    se.printStackTrace();
+                } finally {
+                    DBConnection.closeConnection();
+                }
+                if (ticketCount>5){
+                    throw new InsufficientTicketsException("You have already bought 5 tickets for event " + eventId);
+                }
+                if (quantity+ticketCount>5){
+                    throw new InsufficientTicketsException("You cannot buy more than 5 tickets for event " + eventId);
+                }
+
             }
             
             //minus user's money by userid
