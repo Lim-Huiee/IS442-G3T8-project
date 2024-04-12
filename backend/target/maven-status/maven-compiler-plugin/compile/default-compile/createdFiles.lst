@@ -1,4 +1,5 @@
 Main$CorsFilter.class
+exceptions\ExceedTicketsException.class
 Purchase.class
 Main$LocalDateTimeTypeAdapter.class
 DBConnection.class

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import exceptions.InsufficientFundsException;
 import exceptions.InsufficientTicketsException;
+import exceptions.ExceedTicketsException;
 
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -224,7 +225,7 @@ public class Order {
         return orders;
     }
 
-    public static void createOrder(int userID, Map<Integer, Integer> eventsBooked) throws InsufficientTicketsException, InsufficientFundsException {
+    public static void createOrder(int userID, Map<Integer, Integer> eventsBooked) throws InsufficientTicketsException, InsufficientFundsException, ExceedTicketsException {
         PreparedStatement insertStatement = null;
         ResultSet generatedKeys = null;
         try {
@@ -261,10 +262,10 @@ public class Order {
                     DBConnection.closeConnection();
                 }
                 if (ticketCount>5){
-                    throw new InsufficientTicketsException("You have already bought 5 tickets for event " + eventId);
+                    throw new ExceedTicketsException("You have already bought 5 tickets for event " + eventId);
                 }
                 if (quantity+ticketCount>5){
-                    throw new InsufficientTicketsException("You cannot buy more than 5 tickets for event " + eventId);
+                    throw new ExceedTicketsException("You cannot buy more than 5 tickets for event " + eventId);
                 }
 
             }
