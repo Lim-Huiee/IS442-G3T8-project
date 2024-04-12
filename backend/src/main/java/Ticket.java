@@ -52,7 +52,7 @@ public class Ticket {
                 int retrievedEventID = resultSet.getInt("event_id");
                 String retrieveTicketStatus = resultSet.getString("status");
 
-                ticket = new Ticket(retrievedTicketID, retrievedOrderID, retrievedEventID, retrieveTicketStatus);
+                ticket = new Ticket(retrievedEventID, retrievedOrderID, retrievedTicketID, retrieveTicketStatus);
             }
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
