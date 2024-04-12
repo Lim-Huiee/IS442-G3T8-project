@@ -35,6 +35,10 @@ public class Ticket {
         return ticketStatus;
     }
 
+    public String toString() {
+        return String.format("ticketID %s, eventID %s", ticketID, eventID);
+    }
+
     public static Ticket getTicketbyID(Integer ticketID) {
         Ticket ticket = null;
         ResultSet resultSet = null;
@@ -52,7 +56,7 @@ public class Ticket {
                 int retrievedEventID = resultSet.getInt("event_id");
                 String retrieveTicketStatus = resultSet.getString("status");
 
-                ticket = new Ticket(retrievedTicketID, retrievedOrderID, retrievedEventID, retrieveTicketStatus);
+                ticket = new Ticket(retrievedEventID, retrievedOrderID, retrievedTicketID, retrieveTicketStatus);
             }
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();

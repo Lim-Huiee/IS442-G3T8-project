@@ -151,24 +151,48 @@ public class EventManager extends User{
         PreparedStatement statement = null;
     
         try {
-            DBConnection.establishConnection(); // 
-    
-            String sqlQuery = "DELETE FROM event WHERE event_id=?";
-            statement = DBConnection.getConnection().prepareStatement(sqlQuery);
-    
-            // Set parameter for the SQL statement
-            statement.setInt(1, eventID);
-    
-            // Execute the SQL statement
-            int rowsAffected = statement.executeUpdate();
-    
-            // Close the statement
-            statement.close();
-    
-            if (rowsAffected > 0) {
-                return "Event deleted successfully.";
+            DBConnection.establishConnection();
+
+            //retrieve all ticketID from eventID
+            ArrayList<Integer> allTicketIDsList = Ticket.getAllTicketIDsForEvent(eventID);
+            int successCount = 0;
+
+            for (int ticketID : allTicketIDsList) {
+                Ticket oneTicket = Ticket.getTicketbyID(ticketID);
+                int orderID = oneTicket.getOrderID();
+                Order oneOrder = Order.getOrderByID(orderID);
+                int userID = oneOrder.getUserID();
+                
+                //call processRefund(int ticketID, int userID)
+                System.out.println(ticketID);
+                String status = Refund.processRefund(ticketID, userID);
+                System.out.println(status);
+
+                if (status == "Success") {
+                    successCount += 1;
+                }
+            }
+
+            if (successCount == allTicketIDsList.size()) {
+                String sqlQuery = "DELETE FROM event WHERE event_id=?";
+                statement = DBConnection.getConnection().prepareStatement(sqlQuery);
+        
+                // Set parameter for the SQL statement
+                statement.setInt(1, eventID);
+        
+                // Execute the SQL statement
+                int rowsAffected = statement.executeUpdate();
+        
+                // Close the statement
+                statement.close();
+        
+                if (rowsAffected > 0) {
+                    return "Event deleted successfully.";
+                } else {
+                    return "No event found with the given ID.";
+                }
             } else {
-                return "No event found with the given ID.";
+                return "Failed to delete event due to refund problem";
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
