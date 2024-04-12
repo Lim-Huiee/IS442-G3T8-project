@@ -261,7 +261,7 @@ public class Order {
                 } finally {
                     DBConnection.closeConnection();
                 }
-                if (ticketCount>5){
+                if (ticketCount==5){
                     throw new ExceedTicketsException("You have already bought 5 tickets for event " + eventId);
                 }
                 if (quantity+ticketCount>5){
