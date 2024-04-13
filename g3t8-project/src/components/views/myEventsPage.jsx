@@ -115,6 +115,14 @@ export const MyEventsPage = () => {
     // }
   };
 
+  const isRefundDisabled = (eventDateTime) => {
+    const eventDateTimeObject = new Date(eventDateTime);
+    const currentDateTime = new Date();
+    const timeDifference = eventDateTimeObject - currentDateTime;
+    const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)); // Convert milliseconds to hours
+    return hoursDifference < 48;
+  };
+
   return (
     <div>
       <Navigation />
@@ -141,8 +149,13 @@ export const MyEventsPage = () => {
                   <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, -1, event.qty)}>-</Button>
                   <span style={{ margin: "0 10px" }}>{refundQty[event.eventID] || 1}</span>
                   <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, 1, event.qty)}>+</Button>
-                  <Button variant="outline-primary" onClick={() => handleRefund(userId, event.tickets[0].orderID, event.eventID, refundQty[event.eventID] || 1, event.qty)} style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginLeft: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }}>Refund</Button>
+                  <Button variant="outline-primary" disabled={isRefundDisabled(event.eventDateTime)} onClick={() => handleRefund(userId, event.tickets[0].orderID, event.eventID, refundQty[event.eventID] || 1, event.qty)} style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginLeft: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }}>Refund</Button>
                 </div>
+                {isRefundDisabled(event.eventDateTime) && (
+                    <small style={{ color: "red", marginLeft: "10px", marginTop: "10px" }}>
+                      You cannot refund tickets ≤ 48 hours before the event.
+                    </small>
+                  )}
               </td>
               <td>
                   <table border="1" style={{ marginLeft: "auto", marginRight: "auto", width: 400}}>
