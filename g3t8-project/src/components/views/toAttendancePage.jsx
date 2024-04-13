@@ -1,25 +1,23 @@
 import React, { useState } from "react";
-
 import { TONavigation } from "../toNavigation";
 import { PageTitle } from "../section-components/pageTitle";
-import axios from 'axios'; // Import Axios for making HTTP requests
+import axios from 'axios';
 import "./../../App.css";
 
 export const TOAttendancePage = () => {
-    // role checked in navigation
-
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
     const [numTix, setNumTix] = useState([]);
+    const [ticketData, setTicketData] = useState({});
 
     const numTixChange = event => {
         event.preventDefault();
         setNumTix(Array(Number(event.target.value)).fill(0));
     };
-    
-    const [ticketData, setTicketData] = useState({});
+
     const handleTicketIDChange = (val, idx) => {
         let input = Number(val.target.value);
-        // let idx = idx;
-        if (input != 0) {
+        if (input !== 0) {
             setTicketData({
                 ...ticketData,
                 [idx]: input
@@ -29,34 +27,36 @@ export const TOAttendancePage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(Object.values(ticketData));
-
-        // try {
-        //     const response = await axios.get('http://localhost:4567/test');
-        //     console.log("Response from server test", response.data);
-        // }
-        // catch(error) {
-        //     console.error("error testing", error);
-        // }
-
         try {
             const response = await axios.post('http://localhost:4567/take_attendance/' + event.target.eventID.value + "/" + event.target.custUserID.value, {
                 "attendedTickets": Object.values(ticketData),
                 "toID": localStorage.getItem("userId")
             });
-            console.log('Response from server:', response.data); // Log the response data
+            console.log("data is" + response.data);
+            if (response.data=="Ticket verification failed, either ticket does not exist, database check failed, or userID provided does not match the user in Order"){
+                setPopupMessage("Error taking attendance. Either ticket does not exist, database check failed, or userID provided does not match the user in Order");
+                setShowPopup(true);
+                console.error('Error taking attendance:');
+            } 
+            else {
+                setPopupMessage("Attendance taken successfully.");
+                setShowPopup(true);
+            }
+            // If attendance is taken successfully
             
+            //console.log('Response from server1:', response.data); // Log the response data
         } catch (error) {
-            console.error('Error fetching events:', error);
+            // If there's an error in taking attendance
+            setPopupMessage("Error taking attendance. Please try again later.");
+            //setShowPopup(true);
+            console.error('Error taking attendance:', error);
         }
     }
-        
-        return (
-            <div>
-            <TONavigation/>
 
+    return (
+        <div>
+            <TONavigation/>
             <PageTitle pageTitle={"Ticket Attendance & Verification"} pageView="" filterShow={"false"} />
-            
             <div className="container mt-5">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
@@ -92,6 +92,14 @@ export const TOAttendancePage = () => {
                     </div>
                 </form>
             </div>
+            {showPopup && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <span className="close" onClick={() => setShowPopup(false)}>&times;</span>
+                        <p>{popupMessage}</p>
+                    </div>
+                </div>
+            )}
         </div>
-    )
+    );
 };
