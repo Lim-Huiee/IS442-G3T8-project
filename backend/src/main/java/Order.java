@@ -8,6 +8,7 @@ import java.util.Map;
 
 import exceptions.InsufficientFundsException;
 import exceptions.InsufficientTicketsException;
+import exceptions.ExceedTicketsException;
 
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -224,12 +225,12 @@ public class Order {
         return orders;
     }
 
-    public static void createOrder(int userID, Map<Integer, Integer> eventsBooked) throws InsufficientTicketsException, InsufficientFundsException {
+    public static void createOrder(int userID, Map<Integer, Integer> eventsBooked) throws InsufficientTicketsException, InsufficientFundsException, ExceedTicketsException {
         PreparedStatement insertStatement = null;
         ResultSet generatedKeys = null;
         try {
             DBConnection.establishConnection();
-
+        
             //check if user has enough money / there are enough tickets per event still available
             double total_price = 0.0;
             for (Map.Entry<Integer, Integer> entry : eventsBooked.entrySet()) {
@@ -240,10 +241,33 @@ public class Order {
                 int quantity = entry.getValue();
                 double prices = price* (double) quantity;
                 total_price += prices;
-                
+                int ticketCount=0;
                 if (quantity > tickets_avail) {
                     throw new InsufficientTicketsException("Not enough tickets available for event " + eventId);
                 }
+                try {
+                    DBConnection.establishConnection();
+                    String countQuery = "SELECT COUNT(*) AS ticket_count FROM ticket WHERE order_id IN (SELECT order_id FROM orders WHERE user_id = ?) AND event_id = ?";
+                    PreparedStatement countStatement = DBConnection.getConnection().prepareStatement(countQuery);
+                    countStatement.setInt(1, userID);
+                    countStatement.setInt(2, eventId);
+                    ResultSet resultSet = countStatement.executeQuery();
+
+                    if (resultSet.next()) {
+                        ticketCount = resultSet.getInt("ticket_count");
+                    }
+                } catch (SQLException | ClassNotFoundException se) {
+                    se.printStackTrace();
+                } finally {
+                    DBConnection.closeConnection();
+                }
+                if (ticketCount==5){
+                    throw new ExceedTicketsException("You have already bought 5 tickets for event " + eventId);
+                }
+                if (quantity+ticketCount>5){
+                    throw new ExceedTicketsException("You cannot buy more than 5 tickets for event " + eventId);
+                }
+
             }
             
             //minus user's money by userid
@@ -316,13 +340,13 @@ public class Order {
                 Mail.sendEmail(orderId, username, total_price, orderDateTime, purchases, userMail);
             } else {
                 // Handle if no generated key is found
-                return;
+                throw new SQLException("No generated key found for order");
             }
 
         } catch (SQLException | ClassNotFoundException se) {
             se.printStackTrace();
             // Handle exception, maybe return an error message
-            return;
+            throw new RuntimeException("Failed to create order", se);
 
         } finally {
             try {
@@ -337,7 +361,6 @@ public class Order {
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                // Handle exception, maybe log it
             }
         }
     }

@@ -1,9 +1,10 @@
 Main$CorsFilter.class
+exceptions\ExceedTicketsException.class
 Purchase.class
 Main$LocalDateTimeTypeAdapter.class
 DBConnection.class
-TicketOfficer.class
 Ticket.class
+TicketOfficer.class
 Main.class
 Event.class
 User.class
