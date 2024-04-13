@@ -24,24 +24,28 @@ export const MyEventsPage = () => {
       try {
         const response = await axios.get(`http://localhost:4567/get_orders/${userId}`);
         console.log('Response from server:', response.data);
-
+  
         const compiledEvents = {};
-
+  
         response.data.forEach(order => {
           const eventsBooked = order.eventsBooked;
+          const tickets = order.orderTickets;
           Object.keys(eventsBooked).forEach(eventId => {
-              const quantity = eventsBooked[eventId];
-              if (compiledEvents[eventId]) {
-                  compiledEvents[eventId] += quantity;
-              } else {
-                  compiledEvents[eventId] = quantity;
-              }
+            const quantity = eventsBooked[eventId];
+            if (!compiledEvents[eventId]) {
+              compiledEvents[eventId] = {}; // Initialize the object if it doesn't exist
+            }
+            if (!compiledEvents[eventId]['qty']) {
+              compiledEvents[eventId]['qty'] = 0; // Initialize 'qty' if it doesn't exist
+            }
+            compiledEvents[eventId]['qty'] += quantity;
+            compiledEvents[eventId]['tickets'] = tickets;
           });
-      });
-
+        });
+  
         setMyEvents(compiledEvents);
         console.log(compiledEvents);
-
+  
       } catch (error) {
         console.error('Error fetching events:', error);
       }
@@ -54,19 +58,20 @@ export const MyEventsPage = () => {
   useEffect(() => {
     const fetchEventDetails = async () => {
       const details = [];
-      for (const [eventId, quantity] of Object.entries(myEvents)) {
+      for (const [eventId, eventData] of Object.entries(myEvents)) {
         try {
           const response = await axios.get(`http://localhost:4567/get_event_by_id/${eventId}`);
           console.log('Response from server:', response.data);
-          const eventDataWithQty = { ...response.data, qty: quantity };
+          const eventDataWithQty = { ...response.data, qty: eventData.qty, tickets: eventData.tickets };
           details.push(eventDataWithQty);
         } catch (error) {
           console.error('Error fetching events details:', error);
         }
       }
+      console.log(details);
       setEventDetails(details);
     };
-  
+
     fetchEventDetails();
   }, [myEvents]);
 
@@ -83,38 +88,85 @@ export const MyEventsPage = () => {
     });
   };
 
+  const handleRefund = async (userId, orderId) => {
+    console.log(refundQty[event.eventID]);
+    eventDetails.find(event => console.log(event.qty))
+    const event = eventDetails.find(event => refundQty[event.eventID] === event.qty);
+    if (event) {
+      try {
+        const response = await axios.post(`http://localhost:4567/process_refund_order/${userId}/${orderId}`);
+        console.log('Refund processed:', response.data);
+        // Optionally, update state or UI to reflect the refund status
+      } catch (error) {
+        console.error('Error processing refund:', error);
+      }
+    } else {
+      console.log('Refund quantity does not match event quantity');
+      // Optionally, display an error message to the user
+      for (var i = 1; i<=refundQty[event.eventID]; i++) {
+        try {
+          // Get the latest ordered ticket ID from the tickets array
+          const latestOrderedTicketID = event.tickets[event.tickets.length - 1].ticketID;
+          
+          // Call the route to process the refund for the last ordered ticket
+          const response = await axios.post(`http://localhost:4567/process_refund/${userId}/${latestOrderedTicketID}`);
+          console.log('Refund processed:', response.data);
+          // Optionally, update state or UI to reflect the refund status
+        } catch (error) {
+          console.error('Error processing refund:', error);
+        }
+      }
+    }
+  };
+
   return (
     <div>
-        <Navigation/>
-        <table>
+      <Navigation />
+      <table>
         <tr>
-        <th style={{fontSize: 20, textAlign: 'center', width: '500px', padding: 20, paddingLeft: 200}}>My Events</th>
-        <th style={{fontSize: 20, textAlign: 'center', width: '500px', padding: 20}}>Quantity of Tickets Purchased</th>
+          <th style={{ fontSize: 20, textAlign: 'center', width: '500px', padding: 20, paddingLeft: 100 }}>My Events</th>
+          <th style={{ fontSize: 20, textAlign: 'center', width: '500px', padding: 20 }}>Quantity of Tickets Purchased</th>
+          <th style={{ fontSize: 20, textAlign: 'center', width: '500px', padding: 20 }}>My Tickets</th>
         </tr>
         {eventDetails.map(event => (
-          <tr>
-            <td>
-            <div style={{width: '500px', height: '60px', marginLeft: 250, paddingBottom: 100, marginBottom: 120}}>
-              <EventListing data={event} />
-            </div>
+          <React.Fragment key={event.eventID}>
+            <tr>
+              <td>
+                <div style={{ width: '500px', height: '60px', marginLeft: 90, paddingBottom: 100, marginBottom: 120 }}>
+                  <EventListing data={event} />
+                </div>
+              </td>
+              <td style={{ width: '200px', textAlign: 'center', fontSize: "15px" }}>
+                {event.qty}
+                <br /><br />
+                Request Refund:
+                <br />
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, -1, event.qty)}>-</Button>
+                  <span style={{ margin: "0 10px" }}>{refundQty[event.eventID] || 1}</span>
+                  <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, 1, event.qty)}>+</Button>
+                  <Button variant="outline-primary" onClick={() => handleRefund(userId, event.orderID)} style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginLeft: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }}>Refund</Button>
+                </div>
+              </td>
+              <td>
+                  <table border="1" style={{ marginLeft: "auto", marginRight: "auto", width: 400}}>
+                    <tr>
+                      <th style={{ textAlign: 'center', width: '50px', padding: 10, border:"ridge" }}>Ticket ID</th>
+                      <th style={{ textAlign: 'center', width: '50px', padding: 10, border:"ridge" }}>Ticket Status</th>
+                    </tr>
+                  {event.tickets.map(ticket => (
+                  <tr key={ticket.ticketID}>
+                    <td style={{ textAlign: 'center', width: '50px', padding: 10, border:"ridge" }}>{ticket.ticketID}</td>
+                    <td style={{ textAlign: 'center', width: '50px', padding: 10, border:"ridge" }}>{ticket.ticketStatus}</td>
+                  </tr>
+                ))}
+                </table>
             </td>
-            <td style={{width: '200px', textAlign: 'center', fontSize: "15px"}}>
-            {event.qty}
-            <br/><br/>
-            Request Refund:
-            <br/>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, -1, event.qty)}>-</Button>
-            <span style={{ margin: "0 10px" }}>{refundQty[event.eventID] || 1}</span>
-            <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, 1, event.qty)}>+</Button>
-              
-            <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginLeft: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }}>Refund</Button>
-            </div>
-            </td>
-          </tr>
+            </tr>
+          </React.Fragment>
         ))}
-        </table>
-        <Footer/>
+      </table>
+      <Footer />
     </div>
   );
 };
