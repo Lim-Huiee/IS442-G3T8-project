@@ -62,8 +62,14 @@ export const MyEventsPage = () => {
         try {
           const response = await axios.get(`http://localhost:4567/get_event_by_id/${eventId}`);
           console.log('Response from server:', response.data);
-          const eventDataWithQty = { ...response.data, qty: eventData.qty, tickets: eventData.tickets };
-          details.push(eventDataWithQty);
+          const tickets = eventData.tickets;
+          // Calculate the quantity based on the total quantity of tickets with status "delivered"
+          const deliveredTicketsQty = tickets.filter(ticket => ticket.ticketStatus === "delivered").length;
+          if (deliveredTicketsQty != 0) {
+            const eventDataWithQty = { ...response.data, qty: deliveredTicketsQty, tickets };
+            details.push(eventDataWithQty);
+          }
+          console.log(details);
         } catch (error) {
           console.error('Error fetching events details:', error);
         }
@@ -71,7 +77,7 @@ export const MyEventsPage = () => {
       console.log(details);
       setEventDetails(details);
     };
-
+  
     fetchEventDetails();
   }, [myEvents]);
 
@@ -88,35 +94,25 @@ export const MyEventsPage = () => {
     });
   };
 
-  const handleRefund = async (userId, orderId) => {
-    console.log(refundQty[event.eventID]);
-    eventDetails.find(event => console.log(event.qty))
-    const event = eventDetails.find(event => refundQty[event.eventID] === event.qty);
-    if (event) {
+  const handleRefund = async (userId, orderId, eventId, quantity, maxqty) => {
+    // if (quantity == maxqty) {
+    //   try {
+    //     const response = await axios.post(`http://localhost:4567/process_refund_order/${userId}/${orderId}`);
+    //     console.log('Refund processed:', response.data);
+    //     // Optionally, update state or UI to reflect the refund status
+    //   } catch (error) {
+    //     console.error('Error processing refund:', error);
+    //   }
+    // } else {
+      console.log('Refund quantity does not match event quantity');
       try {
-        const response = await axios.post(`http://localhost:4567/process_refund_order/${userId}/${orderId}`);
+        const response = await axios.post(`http://localhost:4567/process_refund_quantity/${eventId}/${quantity}/${userId}`);
         console.log('Refund processed:', response.data);
-        // Optionally, update state or UI to reflect the refund status
+        window.location.reload();
       } catch (error) {
         console.error('Error processing refund:', error);
       }
-    } else {
-      console.log('Refund quantity does not match event quantity');
-      // Optionally, display an error message to the user
-      for (var i = 1; i<=refundQty[event.eventID]; i++) {
-        try {
-          // Get the latest ordered ticket ID from the tickets array
-          const latestOrderedTicketID = event.tickets[event.tickets.length - 1].ticketID;
-          
-          // Call the route to process the refund for the last ordered ticket
-          const response = await axios.post(`http://localhost:4567/process_refund/${userId}/${latestOrderedTicketID}`);
-          console.log('Refund processed:', response.data);
-          // Optionally, update state or UI to reflect the refund status
-        } catch (error) {
-          console.error('Error processing refund:', error);
-        }
-      }
-    }
+    // }
   };
 
   return (
@@ -145,7 +141,7 @@ export const MyEventsPage = () => {
                   <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, -1, event.qty)}>-</Button>
                   <span style={{ margin: "0 10px" }}>{refundQty[event.eventID] || 1}</span>
                   <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }} onClick={() => handleQuantityChange(event.eventID, 1, event.qty)}>+</Button>
-                  <Button variant="outline-primary" onClick={() => handleRefund(userId, event.orderID)} style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginLeft: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }}>Refund</Button>
+                  <Button variant="outline-primary" onClick={() => handleRefund(userId, event.tickets[0].orderID, event.eventID, refundQty[event.eventID] || 1, event.qty)} style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", marginLeft: "10px", marginTop: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none" }}>Refund</Button>
                 </div>
               </td>
               <td>

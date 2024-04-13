@@ -236,6 +236,7 @@ public class Order {
             for (Map.Entry<Integer, Integer> entry : eventsBooked.entrySet()) {
                 int eventId = entry.getKey();
                 Event event = Event.getEventByID(eventId);
+                String eventName = event.getEventName();
                 int tickets_avail  = event.getTicketsAvailable();
                 double price = event.getTicketPrice();
                 int quantity = entry.getValue();
@@ -262,10 +263,10 @@ public class Order {
                     DBConnection.closeConnection();
                 }
                 if (ticketCount==5){
-                    throw new ExceedTicketsException("You have already bought 5 tickets for event " + eventId);
+                    throw new ExceedTicketsException("You have already bought 5 tickets for event " + eventName);
                 }
                 if (quantity+ticketCount>5){
-                    throw new ExceedTicketsException("You cannot buy more than 5 tickets for event " + eventId);
+                    throw new ExceedTicketsException("You cannot buy more than 5 tickets for event " + eventName);
                 }
 
             }
