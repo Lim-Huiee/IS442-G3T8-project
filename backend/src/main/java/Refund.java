@@ -60,6 +60,41 @@ public class Refund {
         return "Success";
     }
 
+    public static String processRefundByQuantity (int eventID, int quantity, int userID){
+        ArrayList <Order> allOrders = Order.getAllOrdersByUserID(userID);
+        int counter = 0;
+        for (Order o : allOrders){
+            List<Ticket> ticketsInOrder = o.getOrderTickets();
+
+            for (Ticket t : ticketsInOrder){
+                if (counter >= quantity) {
+                // Break out of the loop if the required quantity of refunds is reached
+                    break;
+                }
+                    int ticketEventID = t.getEventID();
+                    int ticketID = t.getTicketID();
+                    if (ticketEventID == eventID){
+                        System.out.println("OID IS " + String.valueOf(o.getOrderID()));
+                        String ticketStatus = t.getTicketStatus();
+                        
+                        if (ticketStatus.equals("delivered")){
+                            System.out.println("TICKET ID IS "  + ticketID);
+                            String s = Refund.processRefund(ticketID,userID);
+                            //System.out.println(s);
+                            counter++;
+                        }
+                    }
+                }
+                
+            if (counter >= quantity) {
+                // Break out of the outer loop if the required quantity of refunds is reached
+                break;
+            }
+
+        }
+        return "success";
+    }
+
     public static String processRefundInOrder(int orderID, int userID) {
         try {
             Order refund_order = Order.getOrderByID(orderID);
@@ -82,7 +117,8 @@ public class Refund {
         // int ticketID = Integer.parseInt(req.params(":ticketID"));
         int ticketID = 1;
         String result = Refund.processRefund(1, 1);
-        System.out.println(result);
+        System.out.println(" RESULT IS " + result);
+        System.out.println(Refund.processRefundByQuantity(1,2,5));  //event id, qty, user id
     }
 
 }

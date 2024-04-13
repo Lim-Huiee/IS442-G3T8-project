@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import spark.ExceptionHandler;
+import spark.Spark;
 import spark.Filter;
 import spark.Request;
 import spark.Response;
@@ -24,6 +26,7 @@ import com.google.gson.stream.JsonWriter; // Import the missing classes
 
 import exceptions.InsufficientFundsException;
 import exceptions.InsufficientTicketsException;
+import exceptions.MyExceptionHandler;
 import exceptions.ExceedTicketsException;
 
 import static spark.Spark.*;
@@ -53,6 +56,11 @@ public class Main {
     }
 
     public static void main(String[] args) throws InsufficientTicketsException, InsufficientFundsException, ExceedTicketsException {
+        // exception handler
+        // Define your exception handler
+        spark.ExceptionHandler<ExceedTicketsException> exceptionHandler = new MyExceptionHandler();
+        spark.Spark.exception(ExceedTicketsException.class, exceptionHandler);
+    
         // Register custom TypeAdapter for LocalDateTime with Gson
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -125,7 +133,6 @@ public class Main {
         // else {
         // System.out.println("Ticket Officer issue e-ticket failure");
         // }
-
         System.out.println("----------------------------End Testing of issue e-ticket for to------------------------");
 
         System.out.println("---------------------------SPARK ROUTING TEST------------------------------");
@@ -574,6 +581,20 @@ public class Main {
             String end = Refund.processRefundInOrder(userID, orderID);
             return end;
         });
+
+        System.out.println("ASD REFSULT" + Refund.processRefundByQuantity(1,2,5));
+
+        post("/process_refund_quantity/:eventID/:quantity/:userID", (req, res) -> {
+            // Extract parameters from URL
+            int eventID = Integer.parseInt(req.params(":eventID"));
+            int quantity = Integer.parseInt(req.params(":quantity"));
+            int userID = Integer.parseInt(req.params(":userID"));
+            
+            String end = Refund.processRefundByQuantity(eventID, quantity, userID);
+            
+            return end;
+        });
+
         System.out.println("----------------------END OF REFUND TEST------------------------------");
 
         // Stop Spark server when the program exits

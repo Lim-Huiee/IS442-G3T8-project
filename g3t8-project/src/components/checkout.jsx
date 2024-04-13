@@ -10,6 +10,7 @@ const Checkout = ({handleUpdateCart}) => {
 
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailAlert, setShowFailAlert] = useState(false);
+  const [failMessage, setFailMessage] = useState('');
   const [eventsInCart, setEventsInCart] = useState([]);
   const [userInfo, setUserInfo] = useState({
     userId: localStorage.getItem("userId") || "",
@@ -25,29 +26,33 @@ const Checkout = ({handleUpdateCart}) => {
     }
     
   }, []);
+
+  useEffect(() => {
+    console.log(eventsInCart);
+    
+  }, [eventsInCart]);
   
   const increaseQuantity = (eventId) => {
     const updatedEvents = eventsInCart.map(event => {
-        if (event.eventID === eventId && event.numTickets < 5) {
+        if (event.eventId === eventId && event.numTickets < 5) {
             return { ...event, numTickets: event.numTickets + 1 };
         }
         return event;
     });
-    console.log(localStorage)
     setEventsInCart(updatedEvents);
     updateEventsInLocalStorage(updatedEvents);
 };
 
-    const decreaseQuantity = (eventId) => {
-        const updatedEvents = eventsInCart.map(event => {
-            if (event.eventID === eventId && event.numTickets > 1) {
-                return { ...event, numTickets: event.numTickets - 1 };
-            }
-            return event;
-        });
-        setEventsInCart(updatedEvents);
-        updateEventsInLocalStorage(updatedEvents);
-    };
+const decreaseQuantity = (eventId) => {
+    const updatedEvents = eventsInCart.map(event => {
+        if (event.eventId === eventId && event.numTickets > 1) {
+            return { ...event, numTickets: event.numTickets - 1 };
+        }
+        return event;
+    });
+    setEventsInCart(updatedEvents);
+    updateEventsInLocalStorage(updatedEvents);
+};
 
     const updateEventsInLocalStorage = (updatedEvents) => {
         const userId = localStorage.getItem("userId");
@@ -94,10 +99,13 @@ const Checkout = ({handleUpdateCart}) => {
         localStorage.removeItem("events");
     
       } catch (error) {
-        console.error('Error creating order:', error.message);
+        if (error.response && error.response.data && error.response.data.message) {
+            setFailMessage(error.response.data.message);
+          } else {
+            setFailMessage("An error occurred. Please try again later.");
+          }
         setShowFailAlert(true);
-        
-      }
+    }
   };
 
   return (
@@ -124,9 +132,9 @@ const Checkout = ({handleUpdateCart}) => {
                             </div>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "space-between" }}>
                                 <div style={{ display: "flex", alignItems: "center" }}>
-                                    <Button variant="outline-primary" onClick={() => decreaseQuantity(event.id)} style={{ fontSize: "20px", padding: "5px 10px" }}>-</Button>
+                                    <Button variant="outline-primary" onClick={() => decreaseQuantity(event.eventId)} style={{ fontSize: "20px", padding: "5px 10px" }}>-</Button>
                                     <span style={{ margin: "0 10px", fontSize: "1.2rem", fontWeight: "bold" }}>{event.numTickets}</span>
-                                    <Button variant="outline-primary" onClick={() => increaseQuantity(event.id)} style={{ fontSize: "20px", padding: "5px 10px" }}>+</Button>
+                                    <Button variant="outline-primary" onClick={() => increaseQuantity(event.eventId)} style={{ fontSize: "20px", padding: "5px 10px" }}>+</Button>
                                     <FaTrash onClick={() => handleRemoveFromCart(event.eventId)} style={{ cursor: "pointer", fontSize: "20px", color: "red" }} />
                                 </div>
                                 <p style={{ fontSize: "16px" }}>Total Price: ${calculateEventTotal(event)}</p>
@@ -150,7 +158,7 @@ const Checkout = ({handleUpdateCart}) => {
             </div>
         </div>
         {showSuccessAlert && <Alert variant="success" header="Order created successfully!" body="Check your email for confirmation. See you there!"/>}
-        {showFailAlert && <Alert variant="danger" header="Order was not processed" body="Please try again later, or contact us if you have any issues."/>}
+        {showFailAlert && <Alert variant="danger" header="Order was not processed" body={failMessage}/>}
     </div>
 );
 };
