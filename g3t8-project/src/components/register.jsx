@@ -68,8 +68,10 @@ export const Register = ({ handleAction }) => {
       axios
         .post("http://localhost:4567/register", values) // Modify URL to match your backend endpoint
         .then((response) => {
-          console.log("Registration successful"); // Handle successful registration
-          setShowSuccessPopup(true); // Show success pop-up
+          if (response.data=="Registered successfully!"){
+            setShowSuccessPopup(true);
+          }
+          
         })
         .catch((error) => {
           console.error("Registration failed", error); // Handle registration failure
