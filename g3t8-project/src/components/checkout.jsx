@@ -3,11 +3,13 @@ import Button from "react-bootstrap/Button";
 import JsonData from "../data/data.json";
 import axios from 'axios';
 import Alert from './section-components/alert';
+import { CheckoutModal } from './section-components/checkoutModal';
 import { FaTrash } from 'react-icons/fa'; // Import trash icon from react-icons/fa
 
 
 const Checkout = ({handleUpdateCart}) => {
 
+  const [modalShow, setModalShow] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showFailAlert, setShowFailAlert] = useState(false);
   const [failMessage, setFailMessage] = useState('');
@@ -80,6 +82,7 @@ const decreaseQuantity = (eventId) => {
       return eventsInCart.reduce((total, event) => total + calculateEventTotal(event), 0);
   };
 
+
   const handleCheckout = async () => {
     try {
         const userId = userInfo.userId;
@@ -97,6 +100,7 @@ const decreaseQuantity = (eventId) => {
         setEventsInCart([]);
         setShowSuccessAlert(true);
         localStorage.removeItem("events");
+        setModalShow(false);
     
       } catch (error) {
         if (error.response && error.response.data && error.response.data.message) {
@@ -153,7 +157,15 @@ const decreaseQuantity = (eventId) => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
                     <div style={{ fontWeight: "bold", color: "rgba(0,0,0,0.8)", fontSize: "18px" }}>Total Price: ${calculateTotalPrice()}</div>
-                    <Button variant="outline-primary" onClick={handleCheckout} style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none", fontSize: "20px" }}>Checkout</Button>
+                    <Button variant="outline-primary" style={{ backgroundColor: " #608dfd", color: "white", padding: "10px", borderRadius: "5px", cursor: "pointer", border: "none", outline: "none", fontSize: "20px" }} onClick={() => setModalShow(true)}>
+                        Checkout
+                    </Button>
+
+                    <CheckoutModal
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        handleCheckout={handleCheckout}
+                    />
                 </div>
             </div>
         </div>
