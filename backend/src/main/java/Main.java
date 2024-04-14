@@ -506,7 +506,7 @@ public class Main {
         post("/onsite_tickets/:eventID/:numTix", (req, res) -> {
             int eventID = Integer.parseInt(req.params(":eventID"));
             int numTix = Integer.parseInt(req.params(":numTix"));
-            
+            System.out.println(eventID);
             // Extract data from request body
             String jsonData = req.body();
             JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
