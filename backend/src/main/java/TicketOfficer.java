@@ -203,7 +203,9 @@ public class TicketOfficer extends User {
             ArrayList<HashMap<String, String>> eventTixData = new ArrayList<>();
             
             for (Ticket tix : ticketsList) {
-                HashMap<String, String> eventTix = new HashMap<>(tix.getEventID(), tix.getTicketID());
+                HashMap<String, String> eventTix = new HashMap<>();
+                eventTix.put("eventName", Event.getEventByID(tix.getEventID()).getEventName());
+                eventTix.put("ticketId", String.valueOf(tix.getTicketID()));
                 eventTixData.add(eventTix);
             }
 

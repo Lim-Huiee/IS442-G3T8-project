@@ -54,7 +54,7 @@ public class Mail {
         Recipient recipient = new Recipient("test", userMail);
         email.AddRecipient(recipient);
         
-        email.setSubject("Your Purchase is Successful!");
+        email.setSubject("Re-Issue of Your Tickets");
     
         MailerSend ms = new MailerSend();
     
@@ -63,7 +63,7 @@ public class Mail {
         // to add info
         email.setTemplateId("neqvygmojrzl0p7w");
 
-        email.addPersonalization(recipient, "orderID", orderID);
+        email.addPersonalization(recipient, "orderId", orderID);
         email.addPersonalization(recipient, "username", username);
         email.addPersonalization(recipient, "eventTickets", eventTickets);
 
