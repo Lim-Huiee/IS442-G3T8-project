@@ -162,17 +162,18 @@ public class EventManager extends User{
                 int orderID = oneTicket.getOrderID();
                 Order oneOrder = Order.getOrderByID(orderID);
                 int userID = oneOrder.getUserID();
-                
+                String ticketStatus = oneTicket.getTicketStatus();
+                String status="";
                 //call processRefund(int ticketID, int userID)
-                System.out.println(ticketID);
-                String status = Refund.processRefund(ticketID, userID);
-                System.out.println(status);
-
-                if (status == "Success") {
-                    successCount += 1;
+                if ("delivered".equals(ticketStatus)){
+                    System.out.println(ticketID);
+                    status = Refund.processRefundFromDeleteEvent(ticketID, userID);
+                    System.out.println(status);
                 }
+                if (status.equals("Success")) {
+                        successCount += 1;
+                    }   
             }
-
             if (successCount == allTicketIDsList.size()) {
                 String sqlQuery = "DELETE FROM event WHERE event_id=?";
                 statement = DBConnection.getConnection().prepareStatement(sqlQuery);
