@@ -219,7 +219,7 @@ export const EventManagementPageEM = () => {
                                         <Button variant="warning" onClick={() => handleOpen("Update", item.eventID)}>Update</Button>
                                     </Cell>
                                 </Row>
-                                )): "Loading..."}
+                                )): "No events found"}
                             </Body>
                             </>
                         )}
