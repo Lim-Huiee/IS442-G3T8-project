@@ -33,6 +33,8 @@ export const TOOnSiteTicketPage = () => {
                     console.log('success');
                     setOrderID("Order ID: " + response.data);
                     setShowSuccessAlert(true);
+                    event.target.eventID.value = "";
+                    event.target.numTix.value = "";
                 }
                 else {
                     setShowFailAlert1(true);

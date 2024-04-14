@@ -26,6 +26,8 @@ export const TOIssueETicketPage = () => {
             if (response.data == 200) {
                 console.log('success');
                 setShowSuccessAlert(true);
+                event.target.orderID.value = "";
+                event.target.custUserID.value = "";
             }
             else {
                 setShowFailAlert(true);
