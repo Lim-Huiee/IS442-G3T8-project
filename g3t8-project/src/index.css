@@ -114,3 +114,10 @@ code {
     transition: width 10s ease; /* Adjust the duration and easing function for a smoother width transition */
   }
 }
+
+.fade {
+  opacity: 100; 
+  -webkit-transition: opacity .3s ease; 
+  -o-transition: opacity .3s ease;
+  transition: opacity .3s ease;
+}
