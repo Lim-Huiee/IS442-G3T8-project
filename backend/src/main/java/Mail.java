@@ -13,7 +13,7 @@ public class Mail {
 	public static void sendEmail(int orderId, String username, double total_paid, String orderDatetime, ArrayList<HashMap<String, String>> purchase, String userMail){
         Email email = new Email();
 
-        email.setFrom("Ticket Mistress", "info@trial-v69oxl5yyrx4785k.mlsender.net");
+        email.setFrom("Ticket Mistress", "info@trial-zr6ke4neq694on12.mlsender.net");
 
         // Recipient recipient = new Recipient("test", "mistressticket@gmail.com");
         Recipient recipient = new Recipient("test", userMail);
@@ -23,9 +23,9 @@ public class Mail {
     
         MailerSend ms = new MailerSend();
     
-        ms.setToken("mlsn.295ce4f2e416a4b81b047d8996312099a2f19dab6b1d3fe9def73d66fd34bd7f");
+        ms.setToken("mlsn.388edb8f791dc2235616a0835f573baf24a5d07df29db2d76b8df479034606fd");
     
-        email.setTemplateId("pq3enl6nxrm42vwr");
+        email.setTemplateId("z3m5jgrdn8o4dpyo");
 
         email.addPersonalization(recipient, "orderId", orderId);
         
@@ -48,7 +48,7 @@ public class Mail {
         
         Email email = new Email();
 
-        email.setFrom("Ticket Mistress", "info@trial-v69oxl5yyrx4785k.mlsender.net");
+        email.setFrom("Ticket Mistress", "info@trial-zr6ke4neq694on12.mlsender.net");
 
         // Recipient recipient = new Recipient("test", "mistressticket@gmail.com");
         Recipient recipient = new Recipient("test", userMail);
@@ -58,10 +58,10 @@ public class Mail {
     
         MailerSend ms = new MailerSend();
     
-        ms.setToken("mlsn.295ce4f2e416a4b81b047d8996312099a2f19dab6b1d3fe9def73d66fd34bd7f");
+        ms.setToken("mlsn.388edb8f791dc2235616a0835f573baf24a5d07df29db2d76b8df479034606fd");
 
         // to add info
-        email.setTemplateId("0r83ql3x2dvlzw1j");
+        email.setTemplateId("neqvygmojrzl0p7w");
 
         email.addPersonalization(recipient, "orderID", orderID);
         email.addPersonalization(recipient, "username", username);
