@@ -56,7 +56,7 @@ INSERT INTO `ORDERS` (`user_id`, `status`, `order_datetime`) VALUES
 (1, 'delivered', '2024-03-30 19:00:00'),
 (2, 'refunded', '2024-02-16 20:00:00'),
 (3, 'delivered', '2024-02-16 20:00:00'),
-(2, 'refunded', '2024-02-16 20:00:00'),
+(2, 'delivered', '2024-02-16 20:00:00'),
 (3, 'delivered', '2024-02-16 20:00:00');
 
 -- Dummy data for the EVENT table
@@ -71,5 +71,5 @@ INSERT INTO `TICKET` (`event_id`, `order_id`,`status`) VALUES
 (1, 1, 'delivered'),
 (2, 2, 'delivered'),
 (3, 3, 'delivered'),
-(1, 4, 'refunded'),
+(1, 4, 'delivered'),
 (2, 5, 'delivered');

@@ -114,13 +114,13 @@ public class Main {
                 .println("----------------------------End Testing of taking attendance for to------------------------");
 
         System.out.println("----------------------------Testing of on site tix sales for to------------------------");
-        int orderNum = castToOfficer.processOnSiteTicketSale(1, 2);
+        /* int orderNum = castToOfficer.processOnSiteTicketSale(1, 2);
         if (orderNum > 0) {
             System.out.println("Ticket Officer process on site ticket sales success, orderID: " + orderNum);
         }
         else {
             System.out.println("Ticket Officer process on site ticket sales failure");
-        }
+        } */
 
         System.out.println("----------------------------End Testing of on site tix sales for to------------------------");
 
@@ -260,6 +260,7 @@ public class Main {
             System.out.println("Password: " + password);
 
             outcome = User.register(name, password, email);
+            System.out.println(outcome);
 
             return outcome;
         });
@@ -562,10 +563,10 @@ public class Main {
         });
 
         System.out.println("----------------------START OF REFUND TEST------------------------------");
-        String result = Refund.processRefund(1, 1);
+        /* String result = Refund.processRefund(1, 1);
         System.out.println(result);
         String test = Refund.processRefundInOrder(3, 3);
-        System.out.println(test);
+        System.out.println(test); */
         post("/process_refund/:userID/:ticketID", (req, res) -> {
             // Extract event ID from URL
             int userID = Integer.parseInt(req.params(":userID"));
@@ -582,7 +583,7 @@ public class Main {
             return end;
         });
 
-        System.out.println("ASD REFSULT" + Refund.processRefundByQuantity(1,2,5));
+        /* System.out.println("ASD REFSULT" + Refund.processRefundByQuantity(1,2,5)); */
 
         post("/process_refund_quantity/:eventID/:quantity/:userID", (req, res) -> {
             // Extract parameters from URL
