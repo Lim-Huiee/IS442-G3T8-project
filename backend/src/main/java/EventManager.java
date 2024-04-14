@@ -151,30 +151,34 @@ public class EventManager extends User{
         PreparedStatement statement = null;
     
         try {
-            DBConnection.establishConnection();
-
+            
             //retrieve all ticketID from eventID
             ArrayList<Integer> allTicketIDsList = Ticket.getAllTicketIDsForEvent(eventID);
             int successCount = 0;
-
-            for (int ticketID : allTicketIDsList) {
-                Ticket oneTicket = Ticket.getTicketbyID(ticketID);
-                int orderID = oneTicket.getOrderID();
-                Order oneOrder = Order.getOrderByID(orderID);
-                int userID = oneOrder.getUserID();
-                String ticketStatus = oneTicket.getTicketStatus();
-                String status="";
-                //call processRefund(int ticketID, int userID)
-                if ("delivered".equals(ticketStatus)){
-                    System.out.println(ticketID);
-                    status = Refund.processRefundFromDeleteEvent(ticketID, userID);
-                    System.out.println(status);
-                }
-                if (status.equals("Success")) {
+            
+            if (allTicketIDsList.size() > 0) {
+                for (int ticketID : allTicketIDsList) {
+                    Ticket oneTicket = Ticket.getTicketbyID(ticketID);
+                    int orderID = oneTicket.getOrderID();
+                    Order oneOrder = Order.getOrderByID(orderID);
+                    int userID = oneOrder.getUserID();
+                    String ticketStatus = oneTicket.getTicketStatus();
+                    System.out.println(ticketStatus);
+                    String status="";
+                    //call processRefund(int ticketID, int userID)
+                    if ("delivered".equals(ticketStatus)){
+                        // System.out.println("ticketID: " + ticketID);
+                        status = Refund.processRefundFromDeleteEvent(ticketID, userID);
+                        // System.out.println("ticketStatus: " + status);
+                    }
+                    if (status.equals("Success")) {
                         successCount += 1;
                     }   
+                }
             }
             if (successCount == allTicketIDsList.size()) {
+                DBConnection.establishConnection();
+                
                 String sqlQuery = "DELETE FROM event WHERE event_id=?";
                 statement = DBConnection.getConnection().prepareStatement(sqlQuery);
         
@@ -183,10 +187,10 @@ public class EventManager extends User{
         
                 // Execute the SQL statement
                 int rowsAffected = statement.executeUpdate();
-        
+
                 // Close the statement
                 statement.close();
-        
+                
                 if (rowsAffected > 0) {
                     return "Event deleted successfully.";
                 } else {

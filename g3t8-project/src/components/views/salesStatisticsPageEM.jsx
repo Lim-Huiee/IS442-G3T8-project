@@ -153,14 +153,14 @@ export const SalesStatisticsPageEM = () => {
         const cancelEvent = (eventID) => {
             cancelSelectedEvent(eventID);
             setServerResponse(""); // Clear serverResponse state
-            window.location.reload(); // Reload the window
+            setTimeout(() => {  window.location.reload(); }, 1000);
         };
+
         async function cancelSelectedEvent(eventID) {
             try {
                 const response = await axios.delete('http://localhost:4567/delete_event/' + eventID);
                 console.log('Response from server:', response.data); // Log the response data
                 setServerResponse(response.data);
-
             } catch (error) {
                 console.error('Error fetching events:', error);
             }
