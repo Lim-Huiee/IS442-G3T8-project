@@ -39,7 +39,11 @@ export const MyEventsPage = () => {
               compiledEvents[eventId]['qty'] = 0; // Initialize 'qty' if it doesn't exist
             }
             compiledEvents[eventId]['qty'] += quantity;
-            compiledEvents[eventId]['tickets'] = tickets;
+            if ('tickets' in compiledEvents[eventId]) {
+              compiledEvents[eventId]['tickets'].push(...tickets);
+            } else {
+              compiledEvents[eventId]['tickets'] = tickets;
+            }
           });
         });
   
