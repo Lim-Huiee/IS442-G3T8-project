@@ -79,39 +79,8 @@ public class Main {
         System.out.println(
                 "----------------------END OF CREATING ORDER & SENDING EMAIL TEST------------------------------");
 
-        List<Integer> deleteTickets = new ArrayList<>();
-        deleteTickets.add(6);
-        deleteTickets.add(7);
-
-        Ticket.cancelTickets(deleteTickets);
-
-        Order a = Order.getOrderByID(5);
-
-        List<Ticket> ticketsInOrder = a.getOrderTickets();
-        for (Ticket m : ticketsInOrder) {
-            System.out.println("Tickets in order" + m);
-            System.out.println(m.getTicketStatus());
-        }
-        // change getallordersbyuser method
 
         System.out.println("------------------------------End Testing of CHECKOUT ORDER------------------------");
-
-        // hardcoding for testing
-        ArrayList<Integer> attendedTix = new ArrayList<Integer>();
-        attendedTix.add(6);
-        attendedTix.add(7);
-        User toOfficer= User.login("to@tm.com", "password5");
-        
-        TicketOfficer castToOfficer = (TicketOfficer) toOfficer;
-        //TicketOfficer toOfficer = new TicketOfficer(5, "ticket man", "password5", "to@tm.com");
-        System.out.println(castToOfficer.takeAttendance(1,attendedTix, 5));
-
-        Map<Integer, Integer> purchasetest = new HashMap<>();
-        purchasetest.put(1, 2);
-        // Order.createOrder(5, purchasetest);
-
-        System.out
-                .println("----------------------------End Testing of taking attendance for to------------------------");
 
         System.out.println("----------------------------Testing of on site tix sales for to------------------------");
         /* int orderNum = castToOfficer.processOnSiteTicketSale(1, 2);
@@ -506,7 +475,7 @@ public class Main {
         post("/onsite_tickets/:eventID/:numTix", (req, res) -> {
             int eventID = Integer.parseInt(req.params(":eventID"));
             int numTix = Integer.parseInt(req.params(":numTix"));
-            System.out.println(eventID);
+    
             // Extract data from request body
             String jsonData = req.body();
             JsonObject jsonObject = new Gson().fromJson(jsonData, JsonObject.class);
